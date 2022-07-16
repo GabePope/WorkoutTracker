@@ -22,10 +22,15 @@ def query_db(query, args=(), one=False):
 
 
 @app.route("/")
-def hello_world():
+def home_page():
     rows = query_db('select * from TopSet')
     print(rows[0]['TopSetId'])
     return render_template('index.html', name='peter')
+
+
+@app.route("/person/<int:person_id>")
+def display_workouts_for_person(person_id):
+    return render_template('workouts.html', name='peter')
 
 
 @app.teardown_appcontext
