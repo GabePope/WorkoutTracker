@@ -1,4 +1,4 @@
-from flask import Flask, render_template, g
+from flask import Flask, render_template, g, redirect, url_for
 import sqlite3
 
 app = Flask(__name__)
@@ -35,7 +35,13 @@ def display_workouts_for_person(person_id):
 
 @app.route("/person/<int:person_id>/new_workout")
 def new_workout_for_person(person_id):
-    return render_template('new_workout.html', name='peter')
+    # hardcoded workout_id, need to create record in Workout table and return workout_id
+    return redirect(url_for('show_workout_for_person', person_id=person_id, workout_id=1))
+
+
+@app.route("/person/<int:person_id>/workout/<int:workout_id>")
+def show_workout_for_person(person_id, workout_id):
+    return render_template('workout.html', person_id=person_id, workout_id=workout_id)
 
 
 @app.teardown_appcontext
