@@ -44,6 +44,11 @@ def show_workout_for_person(person_id, workout_id):
     return render_template('workout.html', person_id=person_id, workout_id=workout_id)
 
 
+@app.route("/person/<int:person_id>/workout/<int:workout_id>/topset/<int:topset_id>")
+def show_topset_from_workout_for_person(person_id, workout_id, topset_id):
+    return render_template('topset.html', person_id=person_id, workout_id=workout_id, topset_id=topset_id)
+
+
 @app.teardown_appcontext
 def close_connection(exception):
     db = getattr(g, '_database', None)
