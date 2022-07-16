@@ -22,7 +22,7 @@ def query_db(query, args=(), one=False):
 
 
 @app.route("/")
-def home_page():
+def dashboard():
     rows = query_db('select * from TopSet')
     print(rows[0]['TopSetId'])
     return render_template('index.html', name='peter')
@@ -30,7 +30,12 @@ def home_page():
 
 @app.route("/person/<int:person_id>")
 def display_workouts_for_person(person_id):
-    return render_template('workouts.html', name='peter')
+    return render_template('workouts.html', person_id=person_id)
+
+
+@app.route("/person/<int:person_id>/new_workout")
+def new_workout_for_person(person_id):
+    return render_template('new_workout.html', name='peter')
 
 
 @app.teardown_appcontext
