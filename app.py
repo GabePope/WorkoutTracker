@@ -46,7 +46,29 @@ def show_workout_for_person(person_id, workout_id):
 
 @app.route("/person/<int:person_id>/workout/<int:workout_id>/topset/<int:topset_id>")
 def show_topset_from_workout_for_person(person_id, workout_id, topset_id):
-    return render_template('topset.html', person_id=person_id, workout_id=workout_id, topset_id=topset_id)
+    topset = query_db("""
+        SELECT
+            P.Name,
+            W.StartDate,
+            E.ExcerciseId,
+            E.Name,
+            T.Repetitions,
+            T.Weight
+        FROM
+            Person P
+            LEFT JOIN Workout W ON P.PersonId = W.PersonId
+            INNER JOIN TopSet T ON W.WorkoutId = T.WorkoutId
+            INNER JOIN Excercise E ON T.ExcerciseId = E.ExcerciseId
+        WHERE
+            P.PersonId = ?
+            AND W.WorkoutId = ?
+            AND T.TopSetId = ?""",
+                      [person_id, workout_id, topset_id], one=True)
+
+    if topset is None:
+        return render_template('error.html', error='404', message=f'Unable to find TopSet({topset_id}) in Workout({workout_id}) completed by Person({person_id})')
+
+    return render_template('topset.html', topset=topset, exercises=query_db('select * from Excercise'))
 
 
 @app.teardown_appcontext
