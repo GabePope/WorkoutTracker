@@ -57,10 +57,9 @@
                 <div class="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
                     <div class="flex-1 px-3 bg-white divide-y space-y-1">
                         <ul class="space-y-2 pb-2">
-
                             <li>
                                 <a href="{{ url_for('dashboard') }}"
-                                    class="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group">
+                                    class="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group {{ is_selected_page(url_for('dashboard')) }}">
                                     <svg class="w-6 h-6 text-gray-500 group-hover:text-gray-900 transition duration-75"
                                         fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
@@ -70,34 +69,24 @@
                                 </a>
                             </li>
 
+                            {% for p in get_list_of_people_and_workout_count() %}
                             <li>
-                                <a href="{{ url_for('display_workouts_for_person' ,person_id=1) }}"
-                                    class="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group ">
+                                <a href="{{ url_for('display_workouts_for_person' ,person_id=p['PersonId']) }}"
+                                    class="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group {% if p['IsActive']==1 %} bg-gray-200 {% endif %}">
                                     <svg class="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75"
                                         fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd"
                                             d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd">
                                         </path>
                                     </svg>
-                                    <span class="ml-3 flex-1 whitespace-nowrap">Gabe</span>
+                                    <span class="ml-3 flex-1 whitespace-nowrap">{{ p['Name']}}</span>
                                     <span
-                                        class="bg-gray-200 text-gray-800 ml-3 text-sm font-medium inline-flex items-center justify-center px-2 rounded-full">5</span>
+                                        class="bg-gray-200 text-gray-800 ml-3 text-sm font-medium inline-flex items-center justify-center px-2 rounded-full">{{
+                                        p['NumberOfWorkouts'] }}</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="{{ url_for('display_workouts_for_person' ,person_id=2) }}"
-                                    class="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group ">
-                                    <svg class="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75"
-                                        fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd"
-                                            d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd">
-                                        </path>
-                                    </svg>
-                                    <span class="ml-3 flex-1 whitespace-nowrap">Michael</span>
-                                    <span
-                                        class="bg-gray-200 text-gray-800 ml-3 text-sm font-medium inline-flex items-center justify-center px-2 rounded-full">0</span>
-                                </a>
-                            </li>
+                            {% endfor %}
+
                         </ul>
                         <div class="space-y-2 pt-2">
                             <a href="https://github.com/themesberg/windster-tailwind-css-dashboard/issues"
