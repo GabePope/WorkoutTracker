@@ -76,3 +76,49 @@ def close_connection(exception):
     db = getattr(g, '_database', None)
     if db is not None:
         db.close()
+
+
+    return "<p>Hello, test!</p>"
+
+
+def get_name_from_rows(rows):
+    return "gabe"
+
+
+def transform_data(rows):
+    res = {
+        "name": get_name_from_rows(rows),
+        "workouts": [
+            {
+                "StartDate": "bkah",
+                "TopSets": [
+                    {
+                        "ExerciseName": "Squat",
+                        "Weight": 60,
+                        "Repetitions": 4
+                    },
+                    {
+                        "ExerciseName": "Bench",
+                        "Weight": 60,
+                        "Repetitions": 4
+                    }
+                ]
+            },
+            {
+                "StartDate": "bkah",
+                "TopSets": [
+                    {
+                        "ExerciseName": "Squat",
+                        "Weight": 60,
+                        "Repetitions": 4
+                    },
+                    {
+                        "ExerciseName": "Bench",
+                        "Weight": 60,
+                        "Repetitions": 4
+                    }
+                ]
+            }
+        ]
+    };
+    return res;
