@@ -9,7 +9,8 @@
             <h3 class="text-xl font-bold text-gray-900 mb-2">{{ topset['Name'] }}</h3>
             <span class="text-base font-normal text-gray-500">{{ topset['StartDate'] }}</span>
         </div>
-        <a href="#" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+        <a href="{{ url_for('delete_topset_from_workout_for_person', person_id=person_id, workout_id=workout_id, topset_id=topset_id)}}"
+            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
             Delete topset
         </a>
     </div>

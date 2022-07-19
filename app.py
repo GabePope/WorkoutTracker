@@ -1,8 +1,30 @@
-from flask import Flask, render_template, g, redirect, request, url_for
+from flask import Flask, jsonify, render_template, g, redirect, request, url_for
+from flasgger import Swagger
 import sqlite3
 import datetime
 
+template = {
+    "swagger": "2.0",
+    "info": {
+        "title": "WorkoutTracker API",
+        "description": "API for tracking topsets of workouts",
+        "contact": {
+            "responsibleOrganization": "ME",
+            "responsibleDeveloper": "Me",
+            "email": "me@me.com",
+            "url": "www.me.com",
+        },
+        "version": "0.0.1"
+    },
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "operationId": "getmyData"
+}
+
 app = Flask(__name__)
+swagger = Swagger(app, template=template)
 
 DATABASE = 'workout.db'
 
@@ -25,11 +47,35 @@ def query_db(query, args=(), one=False):
 
 @app.route("/")
 def dashboard():
+    """Dashboard page
+    Displays stats and a list of all people and there rep maxes for each exercise
+    ---
+    tags:
+      - Dashboard
+    responses:
+      200:
+        description: A list of all people and there rep maxes for each exercise
+    """
     return render_template('index.html')
 
 
 @app.route("/person/<int:person_id>")
 def display_workouts_for_person(person_id):
+    """Display all workouts for a person
+    Displays stats and a list of all people and there rep maxes for each exercise
+    ---
+    tags:
+      - Person
+    parameters:
+      - name: person_id
+        in: path
+        type: number
+        required: true
+
+    responses:
+      200:
+        description: A list of all people and there rep maxes for each exercise
+    """
     person = query_db('SELECT * FROM Person WHERE PersonId=?',
                       [person_id], one=True)
 
@@ -77,8 +123,23 @@ def display_workouts_for_person(person_id):
     return render_template('workouts.html', person_id=person_id, person=person, workouts=transformed_workouts, exercises=exercises)
 
 
-@app.route("/person/<int:person_id>/new_workout")
+@app.route("/person/<int:person_id>/workout", methods=['POST'])
 def new_workout_for_person(person_id):
+    """Create new workout
+    Creates a workout with current date and then redirects to newly created workout
+    ---
+    tags:
+      - Workout
+    parameters:
+      - name: person_id
+        in: path
+        type: number
+        required: true
+
+    responses:
+      200:
+        description: View of newly created workout
+    """
     person = query_db('SELECT * FROM Person WHERE PersonId=?',
                       [person_id], one=True)
 
@@ -98,6 +159,24 @@ def new_workout_for_person(person_id):
 
 @app.route("/person/<int:person_id>/workout/<int:workout_id>")
 def show_workout_for_person(person_id, workout_id):
+    """Display a workout
+    Displays a selected workout with options to edit/delete existing and add new topsets
+    ---
+    tags:
+      - Workout
+    parameters:
+      - name: person_id
+        in: path
+        type: number
+        required: true
+      - name: workout_id
+        in: path
+        type: number
+        required: true
+    responses:
+       200:
+         description: A list of topsets in a selected workout
+    """
     workout_info = query_db("""
         SELECT
             P.Name,
@@ -134,6 +213,25 @@ def show_workout_for_person(person_id, workout_id):
 
 @app.route("/person/<int:person_id>/workout/<int:workout_id>/delete", methods=['GET', 'DELETE'])
 def delete_workout_from_person(person_id, workout_id):
+    """Delete workout
+    Deletes selected workout completed by a person
+    ---
+    tags:
+      - Workout
+    parameters:
+      - name: person_id
+        in: path
+        type: number
+        required: true
+      - name: workout_id
+        in: path
+        type: number
+        required: true
+    responses:
+       200:
+         description: Redirect to workouts list page for person
+    """
+
     workout_info = query_db("""
         SELECT
             P.Name,
@@ -158,6 +256,28 @@ def delete_workout_from_person(person_id, workout_id):
 
 @app.route("/person/<int:person_id>/workout/<int:workout_id>/topset/<int:topset_id>", methods=['GET', 'POST'])
 def show_topset_from_workout_for_person(person_id, workout_id, topset_id):
+    """Display/Create new top set
+    Displays stats and a list of all people and there rep maxes for each exercise
+    ---
+    tags:
+      - Topset
+    parameters:
+      - name: person_id
+        in: path
+        type: number
+        required: true
+      - name: workout_id
+        in: path
+        type: number
+        required: true
+      - name: topset_id
+        in: path
+        type: number
+        required: true
+    responses:
+       200:
+         description: A list of topsets in a selected workout
+    """
     topset = query_db("""
         SELECT
             P.Name,
@@ -190,11 +310,29 @@ def show_topset_from_workout_for_person(person_id, workout_id, topset_id):
 
         return redirect(url_for('show_workout_for_person', person_id=person_id, workout_id=workout_id))
 
-    return render_template('topset.html', topset=topset, exercises=query_db('select * from Excercise'))
+    return render_template('topset.html', person_id=person_id, workout_id=workout_id, topset_id=topset_id, topset=topset, exercises=query_db('select * from Excercise'))
 
 
 @app.route("/person/<int:person_id>/workout/<int:workout_id>/topset", methods=['POST'])
 def add_topset_to_workout_for_person(person_id, workout_id):
+    """Add top set to workout
+    Add a topset to a workout completed by a person
+    ---
+    tags:
+      - Topset
+    parameters:
+      - name: person_id
+        in: path
+        type: number
+        required: true
+      - name: workout_id
+        in: path
+        type: number
+        required: true
+    responses:
+       200:
+         description: A list of topsets in a selected workout
+    """
     workout_info = query_db("""
         SELECT
             P.Name,
@@ -223,6 +361,28 @@ def add_topset_to_workout_for_person(person_id, workout_id):
 
 @app.route("/person/<int:person_id>/workout/<int:workout_id>/topset/<int:topset_id>/delete", methods=['GET', 'DELETE'])
 def delete_topset_from_workout_for_person(person_id, workout_id, topset_id):
+    """Delete top set
+    Add a topset to a workout completed by a person
+    ---
+    tags:
+      - Topset
+    parameters:
+      - name: person_id
+        in: path
+        type: number
+        required: true
+      - name: workout_id
+        in: path
+        type: number
+        required: true
+      - name: topset_id
+        in: path
+        type: number
+        required: true
+    responses:
+       200:
+         description: A list of topsets in a selected workout
+    """
     topset = query_db("""
         SELECT
             P.Name,
