@@ -38,8 +38,11 @@ def get_top_sets_from_rows_with_workout_id(rows, workout_id):
         topsets.append(get_reps_and_weight_from_topset_id(reps, weight));
     return topsets
 
-#def get_reps_and_weight_from_topset_id(reps, weight):
-    
+def get_reps_and_weight_from_topset_id(reps, weight):
+    reps = T.WorkoutId[4];
+    weight = TopSetId[5];
+    topset = [reps, weight];
+    return topset
 
 def transform_data(rows):
     res = {
