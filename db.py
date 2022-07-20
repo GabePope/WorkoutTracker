@@ -19,8 +19,8 @@ class DataBase():
         return (rv[0] if rv else None) if one else rv
 
     def get_exercises(self):
-        exercises = self.execute('SELECT * FROM Excercise')
-        return [{"ExcerciseId": e['ExcerciseId'], "Name": e['Name']} for e in exercises]
+        exercises = self.execute('SELECT * FROM Exercise')
+        return [{"ExerciseId": e['ExerciseId'], "Name": e['Name']} for e in exercises]
 
     def get_person(self, person_id):
         person = self.execute(
@@ -45,11 +45,11 @@ class DataBase():
                      [workout_id], commit=True)
 
     def update_topset(self, exercise_id, repetitions, weight, topset_id):
-        self.execute('UPDATE TopSet SET ExcerciseId=?, Repetitions=?, Weight=? WHERE TopSetId=?', [
+        self.execute('UPDATE TopSet SET ExerciseId=?, Repetitions=?, Weight=? WHERE TopSetId=?', [
             exercise_id, repetitions, weight, topset_id], commit=True)
 
     def create_topset(self, workout_id, exercise_id, repetitions, weight):
-        self.execute('INSERT INTO TopSet (WorkoutId, ExcerciseId, Repetitions, Weight) VALUES (?, ?, ?, ?)', [
+        self.execute('INSERT INTO TopSet (WorkoutId, ExerciseId, Repetitions, Weight) VALUES (?, ?, ?, ?)', [
             workout_id, exercise_id, repetitions, weight], commit=True)
 
     def delete_topset(self, topset_id):
@@ -91,14 +91,14 @@ class DataBase():
                 W.WorkoutId, 
                 W.StartDate, 
                 T.TopSetId, 
-                E.ExcerciseId, 
+                E.ExerciseId, 
                 E.Name AS ExerciseName, 
                 T.Repetitions, 
                 T.Weight
             FROM Person P
                 LEFT JOIN Workout W ON P.PersonId=W.PersonId
                 LEFT JOIN TopSet T ON W.WorkoutId=T.WorkoutId
-                LEFT JOIN Excercise E ON T.ExcerciseId=E.ExcerciseId
+                LEFT JOIN Exercise E ON T.ExerciseId=E.ExerciseId
             WHERE P.PersonId=?""", [person_id])
 
         return {
@@ -116,14 +116,14 @@ class DataBase():
                 W.WorkoutId, 
                 W.StartDate, 
                 T.TopSetId, 
-                E.ExcerciseId, 
+                E.ExerciseId, 
                 E.Name AS ExerciseName, 
                 T.Repetitions, 
                 T.Weight
             FROM Person P
                 LEFT JOIN Workout W ON P.PersonId=W.PersonId
                 LEFT JOIN TopSet T ON W.WorkoutId=T.WorkoutId
-                LEFT JOIN Excercise E ON T.ExcerciseId=E.ExcerciseId
+                LEFT JOIN Exercise E ON T.ExerciseId=E.ExerciseId
             WHERE P.PersonId=?
                 AND W.WorkoutId = ?""", [person_id, workout_id])
 
@@ -133,7 +133,7 @@ class DataBase():
             'WorkoutId': workout_id,
             'StartDate': next((t['StartDate'] for t in topsets), 'Unknown'),
             'Exercises': self.get_exercises(),
-            'TopSets': [{"TopSetId": t['TopSetId'], "ExcerciseId": t['ExcerciseId'], "ExerciseName": t['ExerciseName'], "Weight": t['Weight'], "Repetitions": t['Repetitions']} for t in topsets if t['TopSetId'] is not None]
+            'TopSets': [{"TopSetId": t['TopSetId'], "ExerciseId": t['ExerciseId'], "ExerciseName": t['ExerciseName'], "Weight": t['Weight'], "Repetitions": t['Repetitions']} for t in topsets if t['TopSetId'] is not None]
         }
 
     def get_topset_final(self, person_id, workout_id, topset_id):
@@ -144,14 +144,14 @@ class DataBase():
                 W.WorkoutId, 
                 W.StartDate, 
                 T.TopSetId, 
-                E.ExcerciseId, 
+                E.ExerciseId, 
                 E.Name AS ExerciseName, 
                 T.Repetitions, 
                 T.Weight
             FROM Person P
                 INNER JOIN Workout W ON P.PersonId=W.PersonId
                 INNER JOIN TopSet T ON W.WorkoutId=T.WorkoutId
-                INNER JOIN Excercise E ON T.ExcerciseId=E.ExcerciseId
+                INNER JOIN Exercise E ON T.ExerciseId=E.ExerciseId
             WHERE P.PersonId=?
                 AND W.WorkoutId = ?
                 AND T.TopSetId = ?""", [person_id, workout_id, topset_id], one=True)
@@ -163,7 +163,7 @@ class DataBase():
             'StartDate': topset['StartDate'],
             'Exercises': self.get_exercises(),
             "TopSetId": topset['TopSetId'],
-            "ExcerciseId": topset['ExcerciseId'],
+            "ExerciseId": topset['ExerciseId'],
             "ExerciseName": topset['ExerciseName'],
             "Weight": topset['Weight'],
             "Repetitions": topset['Repetitions']

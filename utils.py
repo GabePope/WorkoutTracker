@@ -11,18 +11,18 @@ def get_workouts(topsets):
         workouts.append({
             'WorkoutId': workout_id,
             'StartDate': topsets_in_workout[0]['StartDate'],
-            'TopSets': [{"TopSetId": t['TopSetId'], "ExcerciseId": t['ExcerciseId'], "ExerciseName": t['ExerciseName'], "Weight": t['Weight'], "Repetitions": t['Repetitions']} for t in topsets_in_workout]
+            'TopSets': [{"TopSetId": t['TopSetId'], "ExerciseId": t['ExerciseId'], "ExerciseName": t['ExerciseName'], "Weight": t['Weight'], "Repetitions": t['Repetitions']} for t in topsets_in_workout]
         })
     return workouts
 
 
 def get_all_exercises_from_topsets(topsets):
-    exercise_ids = set([t['ExcerciseId']
-                       for t in topsets if t['ExcerciseId'] is not None])
+    exercise_ids = set([t['ExerciseId']
+                       for t in topsets if t['ExerciseId'] is not None])
     exercises = []
     for exercise_id in exercise_ids:
         exercises.append({
-            'ExcerciseId': exercise_id,
-            'ExerciseName': next((t['ExerciseName'] for t in topsets if t['ExcerciseId'] == exercise_id), 'Unknown')
+            'ExerciseId': exercise_id,
+            'ExerciseName': next((t['ExerciseName'] for t in topsets if t['ExerciseId'] == exercise_id), 'Unknown')
         })
     return exercises

@@ -44,8 +44,8 @@
                                 {% for e in person['Exercises'] %}
                                 <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
                                     {% set topset_exercise =
-                                    get_first_element_from_list_with_matching_attribute(w['TopSets'], 'ExcerciseId',
-                                    e['ExcerciseId']) %}
+                                    get_first_element_from_list_with_matching_attribute(w['TopSets'], 'ExerciseId',
+                                    e['ExerciseId']) %}
                                     {% if topset_exercise %}
                                     {{ topset_exercise['Repetitions'] }} x {{ topset_exercise['Weight'] }}kg
                                     {% endif %}
