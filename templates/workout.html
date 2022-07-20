@@ -6,10 +6,10 @@
 
     <div class="mb-4 flex items-center justify-between">
         <div>
-            <h3 class="text-xl font-bold text-gray-900 mb-2">{{ workout_info['Name'] }}</h3>
-            <span class="text-base font-normal text-gray-500">{{ workout_info['StartDate'] }}</span>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">{{ workout['PersonName'] }}</h3>
+            <span class="text-base font-normal text-gray-500">{{ workout['StartDate'] }}</span>
         </div>
-        <form action="{{ url_for('delete_workout_from_person', person_id=person_id, workout_id=workout_id) }}"
+        <form action="{{ url_for('delete_workout', person_id=workout['PersonId'], workout_id=workout['WorkoutId']) }}"
             method="delete">
             <button
                 class="sm:inline-flex text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center items-center mt-6"
@@ -41,19 +41,19 @@
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-100">
-                {% for t in top_sets %}
+                {% for t in workout['TopSets'] %}
                 <tr class="text-gray-500">
                     <th class="border-t-0 px-4 align-middle text-l font-normal whitespace-nowrap p-4 text-left">
-                        {{ t['Name'] }}
+                        {{ t['ExerciseName'] }}</th>
                     </th>
                     <td class="border-t-0 px-4 align-middle text-l font-medium text-gray-900 whitespace-nowrap p-4">
-                        {{ t['TopSet'] }}</td>
+                        {{ t['Repetitions'] }} x {{ t['Weight'] }}kg</td>
                     <td class="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
-                        <a href="{{ url_for('show_topset_from_workout_for_person', person_id=person_id, workout_id=workout_id, topset_id=t['TopSetId']) }}"
+                        <a href="{{ url_for('get_topset', person_id=workout['PersonId'], workout_id=workout['WorkoutId'], topset_id=t['TopSetId']) }}"
                             class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
                             Edit
                         </a>
-                        <a href="{{ url_for('delete_topset_from_workout_for_person', person_id=person_id, workout_id=workout_id, topset_id=t['TopSetId'])}}"
+                        <a href="{{ url_for('delete_topset', person_id=workout['PersonId'], workout_id=workout['WorkoutId'], topset_id=t['TopSetId'])}}"
                             class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
                             Delete
                         </a>
@@ -68,7 +68,7 @@
 <div class="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8  2xl:col-span-2 mt-4">
     <div class=" ">
         <form class="w-full max-w-lg"
-            action="{{ url_for('add_topset_to_workout_for_person', person_id=person_id, workout_id=workout_id) }}"
+            action="{{ url_for('create_topset', person_id=workout['PersonId'], workout_id=workout['WorkoutId']) }}"
             method="post">
 
             <div class="flex flex-wrap -mx-3 mb-2">
@@ -80,7 +80,7 @@
                         <select
                             class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                             id="grid-state" name="exercise_id">
-                            {% for e in exercises %}
+                            {% for e in workout['Exercises'] %}
                             <option value="{{ e['ExcerciseId'] }}">{{
                                 e['Name']}}</option>
                             {% endfor %}

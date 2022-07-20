@@ -86,7 +86,7 @@
 
                             {% for p in get_list_of_people_and_workout_count() %}
                             <li>
-                                <a href="{{ url_for('display_workouts_for_person' ,person_id=p['PersonId']) }}"
+                                <a href="{{ url_for('get_person' ,person_id=p['PersonId']) }}"
                                     class="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 flex items-center p-2 group {% if p['IsActive']==1 %} bg-gray-200 {% endif %}">
                                     <svg class="w-6 h-6 text-gray-500 flex-shrink-0 group-hover:text-gray-900 transition duration-75"
                                         fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">

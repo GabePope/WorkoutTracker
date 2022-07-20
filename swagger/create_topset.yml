@@ -1,0 +1,17 @@
+Add top set to workout
+Add a topset to a workout completed by a person
+---
+tags:
+  - Topset
+parameters:
+  - name: person_id
+    in: path
+    type: number
+    required: true
+  - name: workout_id
+    in: path
+    type: number
+    required: true
+responses:
+  200:
+    description: A list of topsets in a selected workout

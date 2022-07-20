@@ -6,7 +6,7 @@
 
     <div class="mb-4 flex items-center justify-between">
         <div>
-            <h3 class="text-xl font-bold text-gray-900 mb-2">{{ person['Name'] }}</h3>
+            <h3 class="text-xl font-bold text-gray-900 mb-2">{{ person['PersonName'] }}</h3>
             <span class="text-base font-normal text-gray-500">List of workouts</span>
         </div>
     </div>
@@ -22,10 +22,10 @@
                                     class="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Date
                                 </th>
-                                {% for e in exercises %}
+                                {% for e in person['Exercises'] %}
                                 <th scope="col"
                                     class="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    {{ e['Name'] }}
+                                    {{ e['ExerciseName'] }}
                                 </th>
                                 {% endfor %}
                                 <th scope="col"
@@ -35,28 +35,31 @@
                         </thead>
                         <tbody class="bg-white">
 
-                            {% for w in workouts %}
+                            {% for w in person['Workouts'] %}
                             <tr>
                                 <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                    {{ w['start_date'] }}
+                                    {{ w['StartDate'] }}
                                 </td>
 
-                                {% for e in exercises %}
+                                {% for e in person['Exercises'] %}
                                 <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                    {% if e['ExcerciseId'] in w['topset_exercises'] %}
-                                    {{ w['topset_exercises'][e['ExcerciseId']] }}
+                                    {% set topset_exercise =
+                                    get_first_element_from_list_with_matching_attribute(w['TopSets'], 'ExcerciseId',
+                                    e['ExcerciseId']) %}
+                                    {% if topset_exercise %}
+                                    {{ topset_exercise['Repetitions'] }} x {{ topset_exercise['Weight'] }}kg
                                     {% endif %}
                                 </td>
                                 {% endfor %}
 
                                 <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                    <a href="{{ url_for('show_workout_for_person' ,person_id=person_id, workout_id=w['workout_id']) }}"
+                                    <a href="{{ url_for('get_workout' ,person_id=person['PersonId'], workout_id=w['WorkoutId']) }}"
                                         class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
                                         Edit
                                     </a>
 
                                     <form
-                                        action="{{ url_for('delete_workout_from_person', person_id=person_id, workout_id=w['workout_id']) }}"
+                                        action="{{ url_for('delete_workout', person_id=person['PersonId'], workout_id=w['WorkoutId']) }}"
                                         method="delete" class="inline">
                                         <button
                                             class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2"
@@ -69,7 +72,7 @@
                         </tbody>
                     </table>
 
-                    <form action="{{ url_for('new_workout_for_person', person_id=person_id) }}" method="post">
+                    <form action="{{ url_for('create_workout', person_id=person['PersonId']) }}" method="post">
                         <button
                             class="sm:inline-flex text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center items-center mt-6">New
                             workout</button>

@@ -1,0 +1,13 @@
+Create new workout
+Creates a workout with current date and then redirects to newly created workout
+---
+tags:
+  - Workout
+parameters:
+  - name: person_id
+    in: path
+    type: number
+    required: true
+responses:
+  200:
+    description: View of newly created workout
