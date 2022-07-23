@@ -41,6 +41,8 @@ class DataBase():
         return topset
 
     def delete_workout(self, workout_id):
+        self.execute('DELETE FROM TopSet WHERE WorkoutId=?',
+                     [workout_id], commit=True)
         self.execute('DELETE FROM Workout WHERE WorkoutId=?',
                      [workout_id], commit=True)
 

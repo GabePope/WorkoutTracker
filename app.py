@@ -1,34 +1,12 @@
-from flask import Flask, abort, render_template, g, redirect, request, url_for
+from flask import Flask, render_template, redirect, request, url_for
 from flasgger import Swagger, swag_from
-from functools import wraps
-import sqlite3
 
 from db import DataBase
 from decorators import validate_person, validate_topset, validate_workout
 
-template = {
-    "swagger": "2.0",
-    "info": {
-        "title": "WorkoutTracker API",
-        "description": "API for tracking topsets of workouts",
-        "contact": {
-            "responsibleOrganization": "ME",
-            "responsibleDeveloper": "Me",
-            "email": "me@me.com",
-            "url": "www.me.com",
-        },
-        "version": "0.0.1"
-    },
-    "schemes": [
-        "http",
-        "https"
-    ],
-    "operationId": "getmyData"
-}
-
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
-swagger = Swagger(app, template=template)
+swagger = Swagger(app, template_file='swagger/base.json')
 
 db = DataBase(app)
 
@@ -44,7 +22,7 @@ def dashboard():
 @ validate_person
 def get_person(person_id):
     person = db.get_person_final(person_id)
-    return render_template('workouts.html', person=person)
+    return render_template('person.html', person=person)
 
 
 @ app.route("/person/<int:person_id>/workout", methods=['POST'])
@@ -117,10 +95,7 @@ def my_utility_processor():
         return ''
 
     def get_list_of_people_and_workout_count():
-        person_id = -1
-        if 'person_id' in request.view_args:
-            person_id = request.view_args['person_id']
-
+        person_id = request.view_args.get('person_id')
         return db.get_people_and_workout_count(person_id)
 
     def get_first_element_from_list_with_matching_attribute(list, attribute, value):
