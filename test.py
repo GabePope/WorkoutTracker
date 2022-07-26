@@ -17,20 +17,22 @@ def get_name_from_rows(rows):
     return name;
 
 def get_workout_ids(rows):
-    workout_ids = []
+    workout_ids = [];
     for r in rows:
         (name, workout_id, start_date, exercise, reps, weight) = r;
         if workout_id not in workout_ids:
-            workout_ids.append(workout_id);
+            workout_ids.append(workout_id);  
     return workout_ids
 
 def get_workouts_from_rows(rows):
     workout_ids = get_workout_ids(rows);
     workouts = [];
     for workout_id in workout_ids:
-        workouts.append(get_top_sets_from_rows_with_workout_id(rows, workout_id));
+        (name, workout_id, start_date, exercise, reps, weight) = workout_id;
+        workouts.append(start_date);
     return workouts
 
+'''
 def get_top_sets_from_rows_with_workout_id(rows, workout_id):
     topset_id = get_workouts_from_rows(rows);
     topsets = [];
@@ -85,6 +87,7 @@ def transform_data(rows):
     return res;
 
 print(transform_data(rows));
+'''
 
 print(get_workouts_from_rows(rows));
 
