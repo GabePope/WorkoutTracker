@@ -1,25 +1,40 @@
 import sqlite3
 
-connection = sqlite3.connect('workout.db')
+DATABASE = 'workout.db'
 
-cur = connection.cursor()
+def query_db(query, args=(), one=False):
+    conn = sqlite3.connect(DATABASE)
+    conn.row_factory = sqlite3.Row
+    cur = conn.execute(query, args)
+    rv = cur.fetchall()
+    conn.commit()
+    cur.close()
+    return (rv[0] if rv else None) if one else rv
 
-cur.execute("""SELECT P.Name, W.WorkoutId, W.StartDate, E.Name, T.Repetitions, T.Weight
-FROM Workout W, Person P, Excercise E, TopSet T
-WHERE W.PersonId=P.PersonId AND W.WorkoutId=T.WorkoutId AND E.ExcerciseId=T.ExcerciseId""")
-
-rows = cur.fetchall(); 
-
-print(rows);
+rows = query_db("""
+    SELECT 
+        P.PersonId, 
+        P.Name AS PersonName, 
+        W.WorkoutId,
+        W.StartDate,
+        T.TopSetId,
+        E.ExcerciseId,
+        E.Name AS ExerciseName,
+        T.Repetitions,
+        T.Weight
+    FROM Person P
+         LEFT JOIN Workout W ON P.PersonId=W.PersonId
+         LEFT JOIN TopSet T ON W.WorkoutId=T.WorkoutId
+         LEFT JOIN Excercise E ON T.ExcerciseId=E.ExcerciseId
+    WHERE P.PersonId=?""", [1])
 
 def get_name_from_rows(rows):
-    (name, workout_id, start_date, exercise, reps, weight) = rows[0];
-    return name;
+    return rows[0]["PersonName"];
 
 def get_workout_ids(rows):
     workout_ids = [];
     for r in rows:
-        (name, workout_id, start_date, exercise, reps, weight) = r;
+        workout_id = r["WorkoutId"];
         if workout_id not in workout_ids:
             workout_ids.append(workout_id);  
     return workout_ids
@@ -28,66 +43,43 @@ def get_workouts_from_rows(rows):
     workout_ids = get_workout_ids(rows);
     workouts = [];
     for workout_id in workout_ids:
-        (name, workout_id, start_date, exercise, reps, weight) = workout_id;
-        workouts.append(start_date);
+        workout = {  
+            "WorkoutId": workout_id,
+            "StartDate": get_startdate(workout_id, rows),  
+            "TopSets": get_topsets(workout_id, rows)
+        }
+        workouts.append(workout);
     return workouts
 
-'''
-def get_top_sets_from_rows_with_workout_id(rows, workout_id):
-    topset_id = get_workouts_from_rows(rows);
+def get_topsets(workout_id, rows):
     topsets = [];
-    reps = get_name_from_rows(4);
-    weight = get_name_from_rows(5);
-    for topset_id in topsets:
-        topsets.append(get_reps_and_weight_from_topset_id(reps, weight));
+    for row in rows:
+        if workout_id == row["WorkoutId"]:
+            topset = {  
+                "TopSetId": row["TopSetId"],
+                "ExerciseId": row["ExcerciseId"],
+                "ExerciseName": row["ExerciseName"],
+                "Weight": row["Weight"],
+                "Repetitions": row["Repetitions"],
+            }  
+            topsets.append(topset)
     return topsets
 
-def get_reps_and_weight_from_topset_id(reps, weight):
-    reps = get_name_from_rows(4);
-    weight = get_name_from_rows(5);
-    topset = [reps, weight];
-    return topset
+def get_startdate(workout_id, rows):
+    for r in rows:
+        if workout_id == r["WorkoutId"]:
+            start_date = r["StartDate"]
+            return start_date
 
-def transform_data(rows):
-    res = {
-        "name": get_name_from_rows(rows),
-        "workouts": [
-            {
-                "StartDate": get_workouts_from_rows(rows),
-                "TopSets": [
-                    {
-                        "ExerciseName": "Squat",
-                        "Weight": get_reps_and_weight_from_topset_id(1),
-                        "Repetitions": get_reps_and_weight_from_topset_id(0)
-                    },
-                    {
-                        "ExerciseName": "Bench",
-                        "Weight": 60,
-                        "Repetitions": 4
-                    }
-                ]
-            },
-            {
-                "StartDate": "bkah",
-                "TopSets": [
-                    {
-                        "ExerciseName": "Squat",
-                        "Weight": 60,
-                        "Repetitions": 4
-                    },
-                    {
-                        "ExerciseName": "Bench",
-                        "Weight": 60,
-                        "Repetitions": 4
-                    }
-                ]
-            }
-        ]
-    };
-    return res;
+def get_person(rows):
+    person = {
+        "PersonId": 1,
+        "PersonName": get_name_from_rows(rows),
+        "Workouts": get_workouts_from_rows(rows)
+    }
+    return person
 
-print(transform_data(rows));
-'''
+def get_person_from_id(person_id):
+    return None
 
-print(get_workouts_from_rows(rows));
-
+print(get_person_from_id(1));
