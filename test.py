@@ -80,6 +80,11 @@ def get_person(rows):
     return person
 
 def get_person_from_id(person_id):
-    return None
+    for r in rows:
+        if person_id == r["PersonId"]:
+            person_name = r["PersonName"]
+            return person_name
+
+
 
 print(get_person_from_id(1));
