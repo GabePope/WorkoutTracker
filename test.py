@@ -71,9 +71,9 @@ def get_startdate(workout_id, rows):
             start_date = r["StartDate"]
             return start_date
 
-def get_person(rows):
+def get_person(rows, person_id):
     person = {
-        "PersonId": 1,
+        "PersonId": get_person_from_id(person_id),
         "PersonName": get_name_from_rows(rows),
         "Workouts": get_workouts_from_rows(rows)
     }
@@ -85,6 +85,9 @@ def get_person_from_id(person_id):
             person_name = r["PersonName"]
             return person_name
 
+def get_person_id_request():
+    person_id = input("Which ID would you like to query?");
+    print("Results for Person with ID ",person_id,":")
+    print(get_person(rows, person_id));
 
-
-print(get_person_from_id(1));
+print(get_person_id_request());
