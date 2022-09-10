@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, redirect, request, url_for
 from flasgger import Swagger, swag_from
 
@@ -109,3 +110,9 @@ def my_utility_processor():
         return None
 
     return dict(get_list_of_people_and_workout_count=get_list_of_people_and_workout_count, is_selected_page=is_selected_page, get_first_element_from_list_with_matching_attribute=get_first_element_from_list_with_matching_attribute)
+
+
+if __name__ == '__main__':
+    # Bind to PORT if defined, otherwise default to 5000.
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='127.0.0.1', port=port)
