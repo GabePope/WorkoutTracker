@@ -3,6 +3,7 @@ from flasgger import Swagger, swag_from
 
 from db import DataBase
 from decorators import validate_person, validate_topset, validate_workout
+from utils import get_people_and_exercise_rep_maxes
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
@@ -14,7 +15,10 @@ db = DataBase(app)
 @ app.route("/")
 @ swag_from('swagger/dashboard.yml')
 def dashboard():
-    return render_template('index.html')
+    all_topsets = db.get_all_topsets()
+    people_and_exercise_rep_maxes = get_people_and_exercise_rep_maxes(
+        all_topsets)
+    return render_template('index.html', model=people_and_exercise_rep_maxes)
 
 
 @ app.route("/person/<int:person_id>")

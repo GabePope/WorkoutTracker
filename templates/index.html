@@ -3,24 +3,26 @@
 {% block content %}
 
 <div class="w-full grid grid-cols-1 xl:grid-cols-3 2xl:grid-cols-3 gap-4">
+    {% for p in model %}
     <div class="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
 
         <div class="mb-4 flex items-center justify-between">
             <div>
-                <h3 class="text-xl font-bold text-gray-900 mb-2">Gabe</h3>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">{{ p['PersonName'] }}</h3>
                 <span class="text-base font-normal text-gray-500">Current rep maxes</span>
             </div>
             <div class="flex-shrink-0">
-                <a href="{{ url_for('get_person' ,person_id=1) }}"
+                <a href="{{ url_for('get_person' ,person_id=p['PersonId']) }}"
                     class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg p-2">View workouts</a>
             </div>
         </div>
 
+        {% for e in p['Exercises'] %}
         <div class="flex flex-col mt-8">
             <div class="overflow-x-auto rounded-lg">
                 <div class="align-middle inline-block min-w-full">
                     <div class="shadow overflow-hidden sm:rounded-lg">
-                        <h4 class="text-l font-semibold text-blue-400 mb-2 text-center">Bench</h4>
+                        <h4 class="text-l font-semibold text-blue-400 mb-2 text-center">{{ e['ExerciseName'] }}</h4>
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
@@ -32,300 +34,31 @@
                                         class="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Rep Max
                                     </th>
-                                    <th scope="col"
-                                        class="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Estimated 1 Rep max
-                                    </th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white">
-                                <tr>
-                                    <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                        Apr 23 ,2021
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        5 x 100kg
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        130kg
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                        Apr 23 ,2021
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        5 x 100kg
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        130kg
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                        Apr 23 ,2021
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        5 x 100kg
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        130kg
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                        Apr 23 ,2021
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        5 x 100kg
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        130kg
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <div class="flex flex-col mt-8">
-            <div class="overflow-x-auto rounded-lg">
-                <div class="align-middle inline-block min-w-full">
-                    <div class="shadow overflow-hidden sm:rounded-lg">
-                        <h4 class="text-l font-semibold text-blue-400 mb-2 text-center">Squat</h4>
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th scope="col"
-                                        class="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Date
-                                    </th>
-                                    <th scope="col"
-                                        class="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Rep Max
-                                    </th>
-                                    <th scope="col"
-                                        class="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Estimated 1 Rep max
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white">
+                                {% for rm in e['RepMaxes'] %}
                                 <tr>
                                     <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                        Apr 23 ,2021
+                                        {{ rm['StartDate'] }}
                                     </td>
                                     <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        5 x 100kg
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        130kg
+                                        {{ rm['Repetitions'] }} x {{ rm['Weight'] }}kg
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                        Apr 23 ,2021
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        5 x 100kg
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        130kg
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                        Apr 23 ,2021
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        5 x 100kg
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        130kg
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                        Apr 23 ,2021
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        5 x 100kg
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        130kg
-                                    </td>
-                                </tr>
+                                {% endfor %}
+
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
         </div>
+        {% endfor %}
     </div>
+    {% endfor %}
 
-    <div class="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
-
-        <div class="mb-4 flex items-center justify-between">
-            <div>
-                <h3 class="text-xl font-bold text-gray-900 mb-2">Michael</h3>
-                <span class="text-base font-normal text-gray-500">Current rep maxes</span>
-            </div>
-            <div class="flex-shrink-0">
-                <a href="{{ url_for('get_person' ,person_id=2) }}"
-                    class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg p-2">View workouts</a>
-            </div>
-        </div>
-
-        <div class="flex flex-col mt-8">
-            <div class="overflow-x-auto rounded-lg">
-                <div class="align-middle inline-block min-w-full">
-                    <div class="shadow overflow-hidden sm:rounded-lg">
-                        <h4 class="text-l font-semibold text-blue-400 mb-2 text-center">Bench</h4>
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th scope="col"
-                                        class="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Date
-                                    </th>
-                                    <th scope="col"
-                                        class="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Rep Max
-                                    </th>
-                                    <th scope="col"
-                                        class="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Estimated 1 Rep max
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white">
-                                <tr>
-                                    <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                        Apr 23 ,2021
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        5 x 100kg
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        130kg
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                        Apr 23 ,2021
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        5 x 100kg
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        130kg
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                        Apr 23 ,2021
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        5 x 100kg
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        130kg
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                        Apr 23 ,2021
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        5 x 100kg
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        130kg
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="flex flex-col mt-8">
-            <div class="overflow-x-auto rounded-lg">
-                <div class="align-middle inline-block min-w-full">
-                    <div class="shadow overflow-hidden sm:rounded-lg">
-                        <h4 class="text-l font-semibold text-blue-400 mb-2 text-center">Squat</h4>
-                        <table class="min-w-full divide-y divide-gray-200">
-                            <thead class="bg-gray-50">
-                                <tr>
-                                    <th scope="col"
-                                        class="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Date
-                                    </th>
-                                    <th scope="col"
-                                        class="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Rep Max
-                                    </th>
-                                    <th scope="col"
-                                        class="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Estimated 1 Rep max
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white">
-                                <tr>
-                                    <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                        Apr 23 ,2021
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        5 x 100kg
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        130kg
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                        Apr 23 ,2021
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        5 x 100kg
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        130kg
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                        Apr 23 ,2021
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        5 x 100kg
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        130kg
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                        Apr 23 ,2021
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        5 x 100kg
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        130kg
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
 </div>
 

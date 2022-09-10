@@ -1,7 +1,7 @@
 import datetime
 import sqlite3
 
-from utils import get_all_exercises_from_topsets, get_workouts
+from utils import get_all_exercises_from_topsets, get_people_and_exercise_rep_maxes, get_workouts
 
 
 class DataBase():
@@ -170,3 +170,22 @@ class DataBase():
             "Weight": topset['Weight'],
             "Repetitions": topset['Repetitions']
         }
+
+    def get_all_topsets(self):
+        all_topsets = self.execute("""
+            SELECT 
+            P.PersonId, 
+            P.Name AS PersonName, 
+            W.WorkoutId, 
+            W.StartDate, 
+            T.TopSetId, 
+            E.ExerciseId, 
+            E.Name AS ExerciseName, 
+            T.Repetitions, 
+            T.Weight
+        FROM Person P
+            LEFT JOIN Workout W ON P.PersonId=W.PersonId
+            LEFT JOIN TopSet T ON W.WorkoutId=T.WorkoutId
+            LEFT JOIN Exercise E ON T.ExerciseId=E.ExerciseId""")
+
+        return all_topsets
