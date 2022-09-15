@@ -91,6 +91,12 @@ def delete_topset(person_id, workout_id, topset_id):
     return redirect(url_for('get_workout', person_id=person_id, workout_id=workout_id))
 
 
+@ app.route("/settings")
+@ swag_from('swagger/dashboard.yml')
+def settings():
+    return render_template('settings.html')
+
+
 @ app.context_processor
 def my_utility_processor():
 
