@@ -53,7 +53,7 @@ def get_rep_maxes_for_person(person_topsets):
 
         # datetime.strptime(x['StartDate'], "%Y-%m-%d")
         topsets_for_exercise.sort(
-            key=lambda x: x['Repetitions'], reverse=True)
+            key=lambda x: x['StartDate'], reverse=True)
 
         rep_maxes_in_exercises.append({
             'ExerciseId': e['ExerciseId'],
