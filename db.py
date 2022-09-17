@@ -9,21 +9,14 @@ from utils import get_all_exercises_from_topsets, get_people_and_exercise_rep_ma
 
 class DataBase():
     def __init__(self, app):
-        self.DATABASE_URI = app.config['DATABASE_URI']
-
         db_url = urlparse(os.environ['DATABASE_URL'])
-        username = db_url.username
-        password = db_url.password
-        database = db_url.path[1:]
-        hostname = db_url.hostname
-        port = db_url.port
 
         self.conn = psycopg2.connect(
-            database=database,
-            user=username,
-            password=password,
-            host=hostname,
-            port=port
+            database=db_url.path[1:],
+            user=db_url.username,
+            password=db_url.password,
+            host=db_url.hostname,
+            port=db_url.port
         )
 
     def execute(self, query, args=(), one=False, commit=False):

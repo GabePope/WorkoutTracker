@@ -1,20 +1,16 @@
 import os
 from flask import Flask, render_template, redirect, request, url_for
-from flasgger import Swagger, swag_from
-
-from db import DataBase
 from decorators import validate_person, validate_topset, validate_workout
+from db import DataBase
 from utils import get_people_and_exercise_rep_maxes
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
-swagger = Swagger(app, template_file='swagger/base.json')
 
 db = DataBase(app)
 
 
 @ app.route("/")
-@ swag_from('swagger/dashboard.yml')
 def dashboard():
     all_topsets = db.get_all_topsets()
     people_and_exercise_rep_maxes = get_people_and_exercise_rep_maxes(
@@ -23,7 +19,6 @@ def dashboard():
 
 
 @ app.route("/person/<int:person_id>")
-@ swag_from('swagger/get_person.yml')
 @ validate_person
 def get_person(person_id):
     person = db.get_person_final(person_id)
@@ -31,7 +26,6 @@ def get_person(person_id):
 
 
 @ app.route("/person/<int:person_id>/workout", methods=['POST'])
-@ swag_from('swagger/create_workout.yml')
 @ validate_person
 def create_workout(person_id):
     new_workout_id = db.create_workout(person_id)
@@ -39,7 +33,6 @@ def create_workout(person_id):
 
 
 @ app.route("/person/<int:person_id>/workout/<int:workout_id>")
-@ swag_from('swagger/get_workout.yml')
 @ validate_workout
 def get_workout(person_id, workout_id):
     workout = db.get_workout_final(person_id, workout_id)
@@ -47,7 +40,6 @@ def get_workout(person_id, workout_id):
 
 
 @ app.route("/person/<int:person_id>/workout/<int:workout_id>/delete", methods=['GET', 'DELETE'])
-@ swag_from('swagger/delete_workout.yml')
 @ validate_workout
 def delete_workout(person_id, workout_id):
     db.delete_workout(workout_id)
@@ -55,7 +47,6 @@ def delete_workout(person_id, workout_id):
 
 
 @ app.route("/person/<int:person_id>/workout/<int:workout_id>/topset/<int:topset_id>", methods=['GET', 'POST'])
-@ swag_from('swagger/get_topset.yml')
 @ validate_topset
 def get_topset(person_id, workout_id, topset_id):
     if request.method == 'POST':
@@ -72,7 +63,6 @@ def get_topset(person_id, workout_id, topset_id):
 
 
 @ app.route("/person/<int:person_id>/workout/<int:workout_id>/topset", methods=['POST'])
-@ swag_from('swagger/create_topset.yml')
 @ validate_workout
 def create_topset(person_id, workout_id):
     exercise_id = request.form.get("exercise_id")
@@ -84,7 +74,6 @@ def create_topset(person_id, workout_id):
 
 
 @ app.route("/person/<int:person_id>/workout/<int:workout_id>/topset/<int:topset_id>/delete", methods=['GET', 'DELETE'])
-@ swag_from('swagger/delete_topset.yml')
 @ validate_topset
 def delete_topset(person_id, workout_id, topset_id):
     db.delete_topset(topset_id)
@@ -118,7 +107,6 @@ def delete_exercise(exercise_id):
 
 
 @ app.route("/settings")
-@ swag_from('swagger/dashboard.yml')
 def settings():
     people = db.get_people()
     exercises = db.get_exercises()
