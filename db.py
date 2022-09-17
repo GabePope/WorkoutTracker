@@ -1,7 +1,7 @@
 import os
 import psycopg2
 from psycopg2.extras import RealDictCursor
-import datetime
+from datetime import datetime
 from urllib.parse import urlparse
 
 from utils import get_all_exercises_from_topsets, get_people_and_exercise_rep_maxes, get_workouts
@@ -120,6 +120,8 @@ class DataBase():
             FROM
                 Person P LEFT JOIN Workout W ON P.PersonId = W.PersonId
             GROUP BY
+                P.PersonId
+            ORDER BY
                 P.PersonId""", [person_id])
 
     def get_person_final(self, person_id):
@@ -170,7 +172,7 @@ class DataBase():
             'PersonId': next((t['PersonId'] for t in topsets), -1),
             'PersonName': next((t['PersonName'] for t in topsets), 'Unknown'),
             'WorkoutId': workout_id,
-            'StartDate': next((t['StartDate'] for t in topsets), 'Unknown'),
+            'StartDate': datetime.strptime(topsets[0]['StartDate'], "%Y-%m-%d").strftime("%b %d %Y"),
             'Exercises': self.get_exercises(),
             'TopSets': [{"TopSetId": t['TopSetId'], "ExerciseId": t['ExerciseId'], "ExerciseName": t['ExerciseName'], "Weight": t['Weight'], "Repetitions": t['Repetitions']} for t in topsets if t['TopSetId'] is not None]
         }

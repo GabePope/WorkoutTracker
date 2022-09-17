@@ -9,8 +9,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.plot.ly/plotly-2.14.0.min.js"></script>
     <script>
-        window.addEventListener('resize', function () {
-            window.dispatchEvent(new Event('resize'));
+        let doit;
+        window.addEventListener('resize', () => {
+            clearTimeout(doit);
+            doit = setTimeout(window.dispatchEvent(new Event('resize')), 100);
         })
     </script>
 </head>

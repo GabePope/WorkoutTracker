@@ -41,6 +41,7 @@
                                 x: {{ e['EstimatedOneRepMaxProgressions']['StartDates'] | replace('"', "'") | safe }},
                                 y: {{ e['EstimatedOneRepMaxProgressions']['Estimated1RMs'] | replace('"', "'") | safe }},
                                 text: {{ e['EstimatedOneRepMaxProgressions']['TopSets'] | replace('"', "'") | safe }},
+                                name: "{{ p['PersonName'] }} - {{ e['ExerciseName'] }}",
                                 hovertemplate
                             }], layout, config);
                         </script>

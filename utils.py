@@ -14,7 +14,7 @@ def get_workouts(topsets):
             t for t in topsets if t['WorkoutId'] == workout_id]
         workouts.append({
             'WorkoutId': workout_id,
-            'StartDate': topsets_in_workout[0]['StartDate'],
+            'StartDate': datetime.strptime(topsets_in_workout[0]['StartDate'], "%Y-%m-%d").strftime("%b %d %Y"),
             'TopSets': [{"TopSetId": t['TopSetId'], "ExerciseId": t['ExerciseId'], "ExerciseName": t['ExerciseName'], "Weight": t['Weight'], "Repetitions": t['Repetitions']} for t in topsets_in_workout]
         })
     return workouts
@@ -47,7 +47,7 @@ def get_rep_maxes_for_person(person_topsets):
             max_weight = max([t['Weight'] for t in reps])
             max_topset_for_rep = [t for t in reps if t['Weight'] == max_weight]
             topsets_for_exercise.append({
-                'StartDate': max_topset_for_rep[0]['StartDate'],
+                'StartDate': datetime.strptime(max_topset_for_rep[0]['StartDate'], "%Y-%m-%d").strftime("%b %d %Y"),
                 'Repetitions': rep,
                 'Weight': max_weight,
                 'Estimated1RM': max_topset_for_rep[0]['Estimated1RM'],
