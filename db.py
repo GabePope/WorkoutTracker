@@ -43,10 +43,35 @@ class DataBase():
             'SELECT ExerciseId AS "ExerciseId", Name AS "Name" FROM Exercise')
         return [{"ExerciseId": e['ExerciseId'], "Name": e['Name']} for e in exercises]
 
+    def create_exercise(self, name):
+        self.execute('INSERT INTO Exercise (Name) VALUES (%s)',
+                     [name], commit=True)
+
+    def delete_exercise(self, exercise_id):
+        self.execute('DELETE FROM Exercise WHERE ExerciseId=%s', [
+            exercise_id], commit=True)
+
+    def get_people(self):
+        people = self.execute(
+            'SELECT PersonId AS "PersonId", Name AS "Name" FROM Person')
+        return people
+
     def get_person(self, person_id):
         person = self.execute(
             'SELECT PersonId AS "PersonId" FROM Person WHERE PersonId=%s LIMIT 1', [person_id], one=True)
         return person
+
+    def create_person(self, name):
+        self.execute('INSERT INTO Person (Name) VALUES (%s)',
+                     [name], commit=True)
+
+    def delete_person(self, person_id):
+        self.execute('DELETE FROM TopSet WHERE WorkoutId IN (SELECT WorkoutId FROM Workout WHERE PersonId=%s)', [
+            person_id], commit=True)
+        self.execute('DELETE FROM Workout WHERE PersonId=%s',
+                     [person_id], commit=True)
+        self.execute('DELETE FROM Person WHERE PersonId=%s',
+                     [person_id], commit=True)
 
     def get_workout(self, person_id, workout_id):
         workout = self.execute('SELECT W.WorkoutId AS "WorkoutId" FROM Person P, Workout W WHERE P.PersonId=W.PersonId AND P.PersonId=%s AND W.WorkoutId=%s LIMIT 1', [

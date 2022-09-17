@@ -31,34 +31,22 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-white">
+                                {% for p in people %}
                                 <tr>
                                     <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                        1
+                                        {{ loop.index }}
                                     </td>
                                     <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        Gabe
+                                        {{ p['Name'] }}
                                     </td>
                                     <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        <a href="/person/2/workout/10"
+                                        <a href="{{ url_for('delete_person', person_id=p['PersonId']) }}"
                                             class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
                                             Remove
                                         </a>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                        2
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        Michael
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        <a href="/person/2/workout/10"
-                                            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
-                                            Remove
-                                        </a>
-                                    </td>
-                                </tr>
+                                {% endfor %}
                             </tbody>
                         </table>
                     </div>
@@ -66,7 +54,7 @@
             </div>
         </div>
 
-        <form class="w-full mt-3" action="/user" method="post">
+        <form class="w-full mt-3" action="{{ url_for('create_person') }}" method="post">
             <div class="flex flex-wrap -mx-3 mb-2">
                 <div class="grow px-3">
                     <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-city">
@@ -123,48 +111,22 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-white">
+                                {% for e in exercises %}
                                 <tr>
                                     <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                        1
+                                        {{ loop.index }}
                                     </td>
                                     <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        Squat
+                                        {{ e['Name'] }}
                                     </td>
                                     <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        <a href="/person/2/workout/10"
+                                        <a href="{{ url_for('delete_exercise', exercise_id=e['ExerciseId']) }}"
                                             class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
                                             Remove
                                         </a>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                        1
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        Deadlift
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        <a href="/person/2/workout/10"
-                                            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
-                                            Remove
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                        1
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        Bench
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        <a href="/person/2/workout/10"
-                                            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
-                                            Remove
-                                        </a>
-                                    </td>
-                                </tr>
+                                {% endfor %}
                             </tbody>
                         </table>
                     </div>
@@ -172,7 +134,7 @@
             </div>
         </div>
 
-        <form class="w-full mt-3" action="/user" method="post">
+        <form class="w-full mt-3" action="{{ url_for('create_exercise') }}" method="post">
             <div class="flex flex-wrap -mx-3 mb-2">
                 <div class="grow px-3">
                     <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-city">

@@ -91,10 +91,38 @@ def delete_topset(person_id, workout_id, topset_id):
     return redirect(url_for('get_workout', person_id=person_id, workout_id=workout_id))
 
 
+@ app.route("/person", methods=['POST'])
+def create_person():
+    name = request.form.get("name")
+    db.create_person(name)
+    return redirect(url_for('settings'))
+
+
+@ app.route("/person/<int:person_id>/delete", methods=['GET', 'POST'])
+def delete_person(person_id):
+    db.delete_person(person_id)
+    return redirect(url_for('settings'))
+
+
+@ app.route("/exercise", methods=['POST'])
+def create_exercise():
+    name = request.form.get("name")
+    db.create_exercise(name)
+    return redirect(url_for('settings'))
+
+
+@ app.route("/exercise/<int:exercise_id>/delete", methods=['GET', 'POST'])
+def delete_exercise(exercise_id):
+    db.delete_exercise(exercise_id)
+    return redirect(url_for('settings'))
+
+
 @ app.route("/settings")
 @ swag_from('swagger/dashboard.yml')
 def settings():
-    return render_template('settings.html')
+    people = db.get_people()
+    exercises = db.get_exercises()
+    return render_template('settings.html', people=people, exercises=exercises)
 
 
 @ app.context_processor
