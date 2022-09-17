@@ -1,4 +1,5 @@
 from datetime import datetime
+import json
 
 
 def get_workouts(topsets):
@@ -48,17 +49,23 @@ def get_rep_maxes_for_person(person_topsets):
             topsets_for_exercise.append({
                 'StartDate': max_topset_for_rep[0]['StartDate'],
                 'Repetitions': rep,
-                'Weight': max_weight
+                'Weight': max_weight,
+                'Estimated1RM': max_topset_for_rep[0]['Estimated1RM'],
             })
 
         # datetime.strptime(x['StartDate'], "%Y-%m-%d")
         topsets_for_exercise.sort(
-            key=lambda x: x['StartDate'], reverse=True)
+            key=lambda x: x['Repetitions'], reverse=True)
 
         rep_maxes_in_exercises.append({
             'ExerciseId': e['ExerciseId'],
             'ExerciseName': e['ExerciseName'],
             'RepMaxes': topsets_for_exercise,
+            'EstimatedOneRepMaxProgressions': {
+                'StartDates': json.dumps([t['StartDate'] for t in exercise_topsets]),
+                'TopSets': json.dumps([f"{t['Repetitions']} x {t['Weight']}kg" for t in exercise_topsets]),
+                'Estimated1RMs': json.dumps([t['Estimated1RM'] for t in exercise_topsets]),
+            }
         })
     return rep_maxes_in_exercises
 

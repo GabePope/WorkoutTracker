@@ -226,7 +226,8 @@ class DataBase():
             E.ExerciseId AS "ExerciseId",
             E.Name AS "ExerciseName",
             T.Repetitions AS "Repetitions", 
-            T.Weight AS "Weight"
+            T.Weight AS "Weight",
+            round((100 * T.Weight)/(101.3-2.67123 * T.Repetitions),0)::numeric::integer AS "Estimated1RM"
         FROM Person P
             LEFT JOIN Workout W ON P.PersonId=W.PersonId
             LEFT JOIN TopSet T ON W.WorkoutId=T.WorkoutId
