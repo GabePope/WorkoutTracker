@@ -1,6 +1,7 @@
 # Workout tracker
 
 Track topsets over time.
+Demo: https://workout.peterstockings.com
 
 ### Setup
 
