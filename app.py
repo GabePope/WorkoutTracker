@@ -2,7 +2,7 @@ import os
 from flask import Flask, render_template, redirect, request, url_for
 from decorators import validate_person, validate_topset, validate_workout
 from db import DataBase
-from utils import get_people_and_exercise_rep_maxes
+from utils import get_people_and_exercise_rep_maxes, get_dashboard_stats
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
@@ -15,7 +15,8 @@ def dashboard():
     all_topsets = db.get_all_topsets()
     people_and_exercise_rep_maxes = get_people_and_exercise_rep_maxes(
         all_topsets)
-    return render_template('index.html', model=people_and_exercise_rep_maxes)
+    stats = get_dashboard_stats(all_topsets)
+    return render_template('index.html', model=people_and_exercise_rep_maxes, stats=stats)
 
 
 @ app.route("/person/<int:person_id>")

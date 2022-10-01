@@ -4,7 +4,7 @@ from psycopg2.extras import RealDictCursor
 from datetime import datetime
 from urllib.parse import urlparse
 
-from utils import get_all_exercises_from_topsets, get_people_and_exercise_rep_maxes, get_workouts
+from utils import get_all_exercises_from_topsets, get_people_and_exercise_rep_maxes, get_workouts, get_person_stats
 
 
 class DataBase():
@@ -145,6 +145,7 @@ class DataBase():
         return {
             'PersonId': next((t['PersonId'] for t in topsets), -1),
             'PersonName': next((t['PersonName'] for t in topsets), 'Unknown'),
+            'Stats': get_person_stats(topsets),
             'Exercises': get_all_exercises_from_topsets(topsets),
             'Workouts': get_workouts(topsets)
         }
