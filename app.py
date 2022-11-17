@@ -47,6 +47,13 @@ def delete_workout(person_id, workout_id):
     return redirect(url_for('get_person', person_id=person_id))
 
 
+@ app.route("/person/<int:person_id>/workout/<int:workout_id>", methods=['POST'])
+@ validate_workout
+def update_workout(person_id, workout_id):
+    db.update_workout(workout_id, request.form)
+    return redirect(url_for('get_workout', person_id=person_id, workout_id=workout_id))
+
+
 @ app.route("/person/<int:person_id>/workout/<int:workout_id>/topset/<int:topset_id>", methods=['GET', 'POST'])
 @ validate_topset
 def get_topset(person_id, workout_id, topset_id):

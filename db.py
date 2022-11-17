@@ -124,6 +124,10 @@ class DataBase():
             ORDER BY
                 P.PersonId""", [person_id])
 
+    def update_workout(self, workout_id, form):
+        self.execute('UPDATE Workout SET StartDate=%s WHERE WorkoutId=%s', [
+            form.get('start-date'), workout_id], commit=True)
+
     def get_person_final(self, person_id):
         topsets = self.execute("""
             SELECT 
@@ -173,7 +177,7 @@ class DataBase():
             'PersonId': next((t['PersonId'] for t in topsets), -1),
             'PersonName': next((t['PersonName'] for t in topsets), 'Unknown'),
             'WorkoutId': workout_id,
-            'StartDate': datetime.strptime(topsets[0]['StartDate'], "%Y-%m-%d").strftime("%b %d %Y"),
+            'StartDate': datetime.strptime(topsets[0]['StartDate'], "%Y-%m-%d").strftime("%Y-%m-%d"),
             'Exercises': self.get_exercises(),
             'TopSets': [{"TopSetId": t['TopSetId'], "ExerciseId": t['ExerciseId'], "ExerciseName": t['ExerciseName'], "Weight": t['Weight'], "Repetitions": t['Repetitions']} for t in topsets if t['TopSetId'] is not None]
         }
