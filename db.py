@@ -98,7 +98,7 @@ class DataBase():
             topset_id], commit=True)
 
     def create_workout(self, person_id):
-        now = datetime.datetime.now()
+        now = datetime.now()
         date_string = now.strftime('%Y-%m-%d')
         print(
             f'Creating workout for PersonId {person_id} starting at {date_string}')
