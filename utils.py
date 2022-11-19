@@ -98,7 +98,7 @@ def get_stats_from_topsets(topsets):
 
     stats = [{"Text": "Total Workouts", "Value": workout_count}]
     if people_count > 1:
-        stats.append({"Text": "Number of People", "Value": people_count})
+        stats.append({"Text": "People tracked", "Value": people_count})
     if workout_count > 0:
         first_workout_date = min(workout_start_dates)
         last_workout_date = max(workout_start_dates)

@@ -21,7 +21,7 @@ def dashboard():
 @ app.route("/person/<int:person_id>")
 @ validate_person
 def get_person(person_id):
-    person = db.get_person_final(person_id)
+    person = db.get_person(person_id)
     return render_template('person.html', person=person)
 
 
@@ -35,7 +35,7 @@ def create_workout(person_id):
 @ app.route("/person/<int:person_id>/workout/<int:workout_id>")
 @ validate_workout
 def get_workout(person_id, workout_id):
-    workout = db.get_workout_final(person_id, workout_id)
+    workout = db.get_workout(person_id, workout_id)
     return render_template('workout.html', workout=workout)
 
 

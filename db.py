@@ -49,7 +49,7 @@ class DataBase():
             'SELECT PersonId AS "PersonId", Name AS "Name" FROM Person')
         return people
 
-    def get_person(self, person_id):
+    def is_valid_person(self, person_id):
         person = self.execute(
             'SELECT PersonId AS "PersonId" FROM Person WHERE PersonId=%s LIMIT 1', [person_id], one=True)
         return person
@@ -66,12 +66,12 @@ class DataBase():
         self.execute('DELETE FROM Person WHERE PersonId=%s',
                      [person_id], commit=True)
 
-    def get_workout(self, person_id, workout_id):
+    def is_valid_workout(self, person_id, workout_id):
         workout = self.execute('SELECT W.WorkoutId AS "WorkoutId" FROM Person P, Workout W WHERE P.PersonId=W.PersonId AND P.PersonId=%s AND W.WorkoutId=%s LIMIT 1', [
                                person_id, workout_id], one=True)
         return workout
 
-    def get_topset(self, person_id, workout_id, topset_id):
+    def is_valid_topset(self, person_id, workout_id, topset_id):
         topset = self.execute("""
             SELECT T.TopSetId AS "TopSetId"
             FROM Person P, Workout W, TopSet T
@@ -128,7 +128,7 @@ class DataBase():
         self.execute('UPDATE Workout SET StartDate=%s WHERE WorkoutId=%s', [
             form.get('start-date'), workout_id], commit=True)
 
-    def get_person_final(self, person_id):
+    def get_person(self, person_id):
         topsets = self.execute("""
             SELECT 
                 P.PersonId AS "PersonId", 
@@ -154,7 +154,7 @@ class DataBase():
             'Workouts': get_workouts(topsets)
         }
 
-    def get_workout_final(self, person_id, workout_id):
+    def get_workout(self, person_id, workout_id):
         topsets = self.execute("""
             SELECT 
                 P.PersonId AS "PersonId", 
