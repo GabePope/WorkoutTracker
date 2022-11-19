@@ -102,7 +102,9 @@ def get_workout_start_date(person_id, workout_id):
     workout = db.get_workout(person_id, workout_id)
     return f"""
     <span class="text-base font-normal text-gray-500">{workout['StartDate']}</span>
-    <a class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+    <a class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2"
+        hx-get="{ url_for('get_workout_start_date_edit_form', person_id=person_id, workout_id=workout_id) }"
+        hx-target="#edit-start-date">
         Edit
     </a>
     """
