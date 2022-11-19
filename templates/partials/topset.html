@@ -1,0 +1,33 @@
+<tr class="text-gray-500">
+    <th class="border-t-0 px-4 align-middle text-l font-normal whitespace-nowrap p-4 text-left">
+        <select
+            class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+            id="grid-state" name="exercise_id">
+            {% for exercise in exercises %}
+            <option value="{{ exercise['ExerciseId'] }}" {% if topset['ExerciseId']==exercise['ExerciseId'] %} selected
+                {% endif %}>{{
+                exercise['Name']}}</option>
+            {% endfor %}
+        </select>
+    </th>
+    <td class="border-t-0 px-4 align-middle text-l font-medium text-gray-900 whitespace-nowrap p-4">
+        <div class="flex items-center">
+            <input type="number"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-full md:w-1/4"
+                name="repetitions" value="{{ topset['Repetitions'] }}"> x <input type="number"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-full md:w-1/4"
+                name="weight" value="{{ topset['Weight'] }}">kg
+        </div>
+    </td>
+    <td class="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
+        <a hx-put="{{ url_for('update_topset', person_id=topset['PersonId'], workout_id=topset['WorkoutId'], topset_id=topset['TopSetId']) }}"
+            hx-include="[name='exercise_id'], [name='repetitions'], [name='weight']"
+            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+            Update
+        </a>
+        <a hx-get="{{ url_for('get_topset', person_id=topset['PersonId'], workout_id=topset['WorkoutId'], topset_id=topset['TopSetId']) }}"
+            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+            Cancel
+        </a>
+    </td>
+</tr>

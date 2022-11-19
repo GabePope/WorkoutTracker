@@ -110,20 +110,37 @@ def get_workout_start_date(person_id, workout_id):
     """
 
 
-@ app.route("/person/<int:person_id>/workout/<int:workout_id>/topset/<int:topset_id>", methods=['GET', 'POST'])
+@ app.route("/person/<int:person_id>/workout/<int:workout_id>/topset/<int:topset_id>", methods=['GET'])
 @ validate_topset
 def get_topset(person_id, workout_id, topset_id):
-    if request.method == 'POST':
-        exercise_id = request.form.get("exercise_id")
-        repetitions = request.form.get("repetitions")
-        weight = request.form.get("weight")
-
-        db.update_topset(exercise_id, repetitions, weight, topset_id)
-
-        return redirect(url_for('get_workout', person_id=person_id, workout_id=workout_id))
-
     topset = db.get_topset(person_id, workout_id, topset_id)
-    return render_template('topset.html', topset=topset)
+    return f"""
+    <tr class="text-gray-500">
+                    <th class="border-t-0 px-4 align-middle text-l font-normal whitespace-nowrap p-4 text-left">
+                        { topset['ExerciseName'] }</th>
+                    </th>
+                    <td class="border-t-0 px-4 align-middle text-l font-medium text-gray-900 whitespace-nowrap p-4">
+                        { topset['Repetitions'] } x { topset['Weight'] }kg</td>
+                    <td class="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
+                        <a hx-get="{ url_for('get_topset_edit_form',person_id=person_id, workout_id=workout_id, topset_id=topset_id) }"
+                            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+                            Edit
+                        </a>
+                        <a hx-delete="{ url_for('delete_topset', person_id=person_id, workout_id=workout_id, topset_id=topset_id) }"
+                            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+    """
+
+
+@ app.route("/person/<int:person_id>/workout/<int:workout_id>/topset/<int:topset_id>/edit_form", methods=['GET'])
+@ validate_topset
+def get_topset_edit_form(person_id, workout_id, topset_id):
+    exercises = db.get_exercises()
+    topset = db.get_topset(person_id, workout_id, topset_id)
+    return render_template('partials/topset.html', topset=topset, exercises=exercises)
 
 
 @ app.route("/person/<int:person_id>/workout/<int:workout_id>/topset", methods=['POST'])
@@ -145,11 +162,43 @@ def create_topset(person_id, workout_id):
         <td class="border-t-0 px-4 align-middle text-l font-medium text-gray-900 whitespace-nowrap p-4">
             {repetitions} x {weight}kg</td>
         <td class="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
-                        <a href="{ url_for('get_topset', person_id=person_id, workout_id=workout_id, topset_id=new_top_set_id) }"
+                        <a href="{ url_for('get_topset_edit_form', person_id=person_id, workout_id=workout_id, topset_id=new_top_set_id) }"
                             class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
                             Edit
                         </a>
                         <a hx-delete="{ url_for('delete_topset', person_id=person_id, workout_id=workout_id, topset_id=new_top_set_id)}"
+                            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+                            Delete
+                        </a>
+                    </td>
+    </tr>
+    """
+
+
+@ app.route("/person/<int:person_id>/workout/<int:workout_id>/topset/<int:topset_id>", methods=['PUT'])
+@ validate_workout
+def update_topset(person_id, workout_id, topset_id):
+    exercise_id = request.form.get("exercise_id")
+    repetitions = request.form.get("repetitions")
+    weight = request.form.get("weight")
+
+    new_top_set_id = db.update_topset(
+        workout_id, exercise_id, repetitions, weight)
+    exercise = db.get_exercise(exercise_id)
+
+    return f"""
+    <tr class="text-gray-500">
+        <th class="border-t-0 px-4 align-middle text-l font-normal whitespace-nowrap p-4 text-left">
+            { exercise['Name'] }</th>
+        </th>
+        <td class="border-t-0 px-4 align-middle text-l font-medium text-gray-900 whitespace-nowrap p-4">
+            {repetitions} x {weight}kg</td>
+        <td class="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
+                        <a hx-get="{ url_for('get_topset_edit_form', person_id=person_id, workout_id=workout_id, topset_id=topset_id) }"
+                            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+                            Edit
+                        </a>
+                        <a hx-delete="{ url_for('delete_topset', person_id=person_id, workout_id=workout_id, topset_id=topset_id)}"
                             class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
                             Delete
                         </a>
