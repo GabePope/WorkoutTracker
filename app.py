@@ -1,12 +1,13 @@
 import os
 from flask import Flask, render_template, redirect, request, url_for
+import jinja_partials
 from decorators import validate_person, validate_topset, validate_workout
 from db import DataBase
 from utils import get_people_and_exercise_rep_maxes
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
-
+jinja_partials.register_extensions(app)
 db = DataBase(app)
 
 
