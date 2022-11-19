@@ -134,9 +134,9 @@ class DataBase():
             ORDER BY
                 P.PersonId""", [person_id])
 
-    def update_workout(self, workout_id, form):
+    def update_workout_start_date(self, workout_id, start_date):
         self.execute('UPDATE Workout SET StartDate=%s WHERE WorkoutId=%s', [
-            form.get('start-date'), workout_id], commit=True)
+            start_date, workout_id], commit=True)
 
     def get_person(self, person_id):
         topsets = self.execute("""
