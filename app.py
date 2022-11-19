@@ -182,8 +182,7 @@ def update_topset(person_id, workout_id, topset_id):
     repetitions = request.form.get("repetitions")
     weight = request.form.get("weight")
 
-    new_top_set_id = db.update_topset(
-        workout_id, exercise_id, repetitions, weight)
+    db.update_topset(exercise_id, repetitions, weight, topset_id)
     exercise = db.get_exercise(exercise_id)
 
     return f"""
