@@ -14,7 +14,7 @@
 </script>
 
 <div class="w-full grid grid-cols-1 xl:grid-cols-3 2xl:grid-cols-3 gap-4">
-    {% for p in model %}
+    {% for p in model['People'] %}
     <div class="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
 
         <div class="mb-4 flex items-center justify-between">
@@ -91,55 +91,17 @@
 </div>
 
 <div class="mt-4 w-full grid grid-cols-1 md:grid-cols-3 2xl:grid-cols-4 xl:grid-cols-5 gap-4">
-    <div class="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
-        <div class="flex items-center">
-            <div class="flex-shrink-0">
-                <span class="text-2xl sm:text-3xl leading-none font-bold text-gray-900">{{ stats['TotalWorkouts']
-                    }}</span>
-                <h3 class="text-base font-normal text-gray-500">Total workouts tracked</h3>
-            </div>
-        </div>
-    </div>
+    {% for stat in model['Stats'] %}
     <div class="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
         <div class="flex items-center">
             <div class="flex-shrink-0">
                 <span class="text-2xl sm:text-3xl leading-none font-bold text-gray-900">{{
-                    stats['AverageWorkoutsPerWeek']
-                    }}</span>
-                <h3 class="text-base font-normal text-gray-500">Avg. weekly workouts</h3>
+                    stat['Value'] }}</span>
+                <h3 class="text-base font-normal text-gray-500">{{ stat['Text'] }}</h3>
             </div>
         </div>
     </div>
-    <div class="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
-        <div class="flex items-center">
-            <div class="flex-shrink-0">
-                <span class="text-2xl sm:text-3xl leading-none font-bold text-gray-900">{{ stats['NumberOfPeople']
-                    }}</span>
-                <h3 class="text-base font-normal text-gray-500">People tracked</h3>
-            </div>
-        </div>
-    </div>
-    {% if stats['TotalWorkouts'] > 0 %}
-    <div class="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
-        <div class="flex items-center">
-            <div class="flex-shrink-0">
-                <span class="text-2xl sm:text-3xl leading-none font-bold text-gray-900">{{
-                    stats['DaysSinceFirstWorkout']
-                    }}</span>
-                <h3 class="text-base font-normal text-gray-500">Days since first workout</h3>
-            </div>
-        </div>
-    </div>
-    <div class="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
-        <div class="flex items-center">
-            <div class="flex-shrink-0">
-                <span class="text-2xl sm:text-3xl leading-none font-bold text-gray-900">{{ stats['DaysSinceLastWorkout']
-                    }}</span>
-                <h3 class="text-base font-normal text-gray-500">Days since last workout</h3>
-            </div>
-        </div>
-    </div>
-    {% endif %}
+    {% endfor %}
 </div>
 
 {% endblock %}
