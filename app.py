@@ -66,7 +66,7 @@ def get_topset(person_id, workout_id, topset_id):
 
         return redirect(url_for('get_workout', person_id=person_id, workout_id=workout_id))
 
-    topset = db.get_topset_final(person_id, workout_id, topset_id)
+    topset = db.get_topset(person_id, workout_id, topset_id)
     return render_template('topset.html', topset=topset)
 
 

@@ -182,7 +182,7 @@ class DataBase():
             'TopSets': [{"TopSetId": t['TopSetId'], "ExerciseId": t['ExerciseId'], "ExerciseName": t['ExerciseName'], "Weight": t['Weight'], "Repetitions": t['Repetitions']} for t in topsets if t['TopSetId'] is not None]
         }
 
-    def get_topset_final(self, person_id, workout_id, topset_id):
+    def get_topset(self, person_id, workout_id, topset_id):
         topset = self.execute("""
             SELECT 
                 P.PersonId AS "PersonId", 
