@@ -133,15 +133,36 @@ def create_topset(person_id, workout_id):
     repetitions = request.form.get("repetitions")
     weight = request.form.get("weight")
 
-    db.create_topset(workout_id, exercise_id, repetitions, weight)
-    return redirect(url_for('get_workout', person_id=person_id, workout_id=workout_id))
+    new_top_set_id = db.create_topset(
+        workout_id, exercise_id, repetitions, weight)
+    exercise = db.get_exercise(exercise_id)
+
+    return f"""
+    <tr class="text-gray-500">
+        <th class="border-t-0 px-4 align-middle text-l font-normal whitespace-nowrap p-4 text-left">
+            { exercise['Name'] }</th>
+        </th>
+        <td class="border-t-0 px-4 align-middle text-l font-medium text-gray-900 whitespace-nowrap p-4">
+            {repetitions} x {weight}kg</td>
+        <td class="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
+                        <a href="{ url_for('get_topset', person_id=person_id, workout_id=workout_id, topset_id=new_top_set_id) }"
+                            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+                            Edit
+                        </a>
+                        <a hx-delete="{ url_for('delete_topset', person_id=person_id, workout_id=workout_id, topset_id=new_top_set_id)}"
+                            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+                            Delete
+                        </a>
+                    </td>
+    </tr>
+    """
 
 
-@ app.route("/person/<int:person_id>/workout/<int:workout_id>/topset/<int:topset_id>/delete", methods=['GET', 'DELETE'])
+@ app.route("/person/<int:person_id>/workout/<int:workout_id>/topset/<int:topset_id>/delete", methods=['DELETE'])
 @ validate_topset
 def delete_topset(person_id, workout_id, topset_id):
     db.delete_topset(topset_id)
-    return redirect(url_for('get_workout', person_id=person_id, workout_id=workout_id))
+    return ""
 
 
 @ app.route("/person", methods=['POST'])

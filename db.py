@@ -100,8 +100,9 @@ class DataBase():
             exercise_id, repetitions, weight, topset_id], commit=True)
 
     def create_topset(self, workout_id, exercise_id, repetitions, weight):
-        self.execute('INSERT INTO TopSet (WorkoutId, ExerciseId, Repetitions, Weight) VALUES (%s, %s, %s, %s)', [
-            workout_id, exercise_id, repetitions, weight], commit=True)
+        new_top_set = self.execute('INSERT INTO TopSet (WorkoutId, ExerciseId, Repetitions, Weight) VALUES (%s, %s, %s, %s) RETURNING TopSetId AS "TopSetId"', [
+            workout_id, exercise_id, repetitions, weight], commit=True, one=True)
+        return new_top_set['TopSetId']
 
     def delete_topset(self, topset_id):
         self.execute('DELETE FROM TopSet WHERE TopSetId=%s', [

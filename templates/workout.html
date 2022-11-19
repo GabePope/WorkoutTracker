@@ -50,7 +50,8 @@
                     </th>
                 </tr>
             </thead>
-            <tbody class="divide-y divide-gray-100">
+            <tbody class="divide-y divide-gray-100" id="new-workout" hx-target="closest tr"
+                hx-swap="outerHTML swap:0.5s">
                 {% for t in workout['TopSets'] %}
                 <tr class="text-gray-500">
                     <th class="border-t-0 px-4 align-middle text-l font-normal whitespace-nowrap p-4 text-left">
@@ -63,7 +64,7 @@
                             class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
                             Edit
                         </a>
-                        <a href="{{ url_for('delete_topset', person_id=workout['PersonId'], workout_id=workout['WorkoutId'], topset_id=t['TopSetId'])}}"
+                        <a hx-delete="{{ url_for('delete_topset', person_id=workout['PersonId'], workout_id=workout['WorkoutId'], topset_id=t['TopSetId'])}}"
                             class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
                             Delete
                         </a>
@@ -85,8 +86,8 @@
 <div class="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8  2xl:col-span-2 mt-4">
     <div class=" ">
         <form class="w-full max-w-lg"
-            action="{{ url_for('create_topset', person_id=workout['PersonId'], workout_id=workout['WorkoutId']) }}"
-            method="post">
+            hx-post="{{ url_for('create_topset', person_id=workout['PersonId'], workout_id=workout['WorkoutId']) }}"
+            hx-swap="beforeend" hx-target="#new-workout">
 
             <div class="flex flex-wrap -mx-3 mb-2">
                 <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
