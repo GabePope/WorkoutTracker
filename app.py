@@ -104,14 +104,89 @@ def delete_person(person_id):
 @ app.route("/exercise", methods=['POST'])
 def create_exercise():
     name = request.form.get("name")
-    db.create_exercise(name)
-    return redirect(url_for('settings'))
+    new_exercise_id = db.create_exercise(name)
+    return f"""
+    <tr>
+        <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+            {name}
+        </td>
+        <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+            <a hx-get="{ url_for('get_exercise_edit_form', exercise_id=new_exercise_id) }" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+                Edit
+            </a>
+            <a hx-delete="{url_for('delete_exercise', exercise_id=new_exercise_id)}" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+                Remove
+            </a>
+        </td>
+    </tr>
+    """
 
 
-@ app.route("/exercise/<int:exercise_id>/delete", methods=['GET', 'POST'])
+@ app.route("/exercise/<int:exercise_id>", methods=['GET'])
+def get_exercise(exercise_id):
+    exercise = db.get_exercise(exercise_id)
+    return f"""
+    <tr>
+        <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+            {exercise['Name']}
+        </td>
+        <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+            <a hx-get="{ url_for('get_exercise_edit_form', exercise_id=exercise['ExerciseId']) }" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+                Edit
+            </a>
+            <a hx-delete="{url_for('delete_exercise', exercise_id=exercise['ExerciseId'])}" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+                Remove
+            </a>
+        </td>
+    </tr>
+    """
+
+
+@ app.route("/exercise/<int:exercise_id>/edit_form", methods=['GET'])
+def get_exercise_edit_form(exercise_id):
+    exercise = db.get_exercise(exercise_id)
+    return f"""
+    <tr>
+        <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text" name="name" value="{exercise['Name']}">
+        </td>
+        <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+            <a hx-put="{ url_for('update_exercise', exercise_id=exercise['ExerciseId']) }"  hx-include="closest tr" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+                Update
+            </a>
+            <a hx-get="{url_for('get_exercise', exercise_id=exercise['ExerciseId'])}" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+                Cancel
+            </a>
+        </td>
+    </tr>
+    """
+
+
+@ app.route("/exercise/<int:exercise_id>/update", methods=['PUT'])
+def update_exercise(exercise_id):
+    new_name = request.form.get('name')
+    db.update_exercise(exercise_id, new_name)
+    return f"""
+    <tr>
+        <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+            {new_name}
+        </td>
+        <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+            <a hx-get="{ url_for('get_exercise_edit_form', exercise_id=exercise_id) }" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+                Edit
+            </a>
+            <a hx-delete="{url_for('delete_exercise', exercise_id=exercise_id)}" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+                Remove
+            </a>
+        </td>
+    </tr>
+    """
+
+
+@ app.route("/exercise/<int:exercise_id>/delete", methods=['DELETE'])
 def delete_exercise(exercise_id):
     db.delete_exercise(exercise_id)
-    return redirect(url_for('settings'))
+    return ""
 
 
 @ app.route("/settings")

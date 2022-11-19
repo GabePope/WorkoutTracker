@@ -36,13 +36,23 @@ class DataBase():
             'SELECT ExerciseId AS "ExerciseId", Name AS "Name" FROM Exercise')
         return [{"ExerciseId": e['ExerciseId'], "Name": e['Name']} for e in exercises]
 
+    def get_exercise(self, exercise_id):
+        exercise = self.execute(
+            'SELECT ExerciseId AS "ExerciseId", Name AS "Name" FROM Exercise WHERE ExerciseId=%s LIMIT 1', [exercise_id], one=True)
+        return exercise
+
     def create_exercise(self, name):
-        self.execute('INSERT INTO Exercise (Name) VALUES (%s)',
-                     [name], commit=True)
+        new_exercise = self.execute('INSERT INTO Exercise (Name) VALUES (%s) RETURNING ExerciseId AS "ExerciseId"',
+                                    [name], commit=True, one=True)
+        return new_exercise['ExerciseId']
 
     def delete_exercise(self, exercise_id):
         self.execute('DELETE FROM Exercise WHERE ExerciseId=%s', [
             exercise_id], commit=True)
+
+    def update_exercise(self, exercise_id, name):
+        self.execute('UPDATE Exercise SET Name=%s WHERE ExerciseId=%s', [
+            name, exercise_id], commit=True)
 
     def get_people(self):
         people = self.execute(

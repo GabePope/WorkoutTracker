@@ -98,10 +98,6 @@
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th scope="col"
-                                        class="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-0.5">
-                                        #
-                                    </th>
-                                    <th scope="col"
                                         class="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-3/5">
                                         Name
                                     </th>
@@ -110,17 +106,19 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white">
+                            <tbody class="bg-white" id="new-exercise" hx-target="closest tr"
+                                hx-swap="outerHTML swap:0.5s">
                                 {% for e in exercises %}
                                 <tr>
-                                    <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                        {{ loop.index }}
-                                    </td>
                                     <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
                                         {{ e['Name'] }}
                                     </td>
                                     <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        <a href="{{ url_for('delete_exercise', exercise_id=e['ExerciseId']) }}"
+                                        <a hx-get="{{ url_for('get_exercise_edit_form', exercise_id=e['ExerciseId']) }}"
+                                            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+                                            Edit
+                                        </a>
+                                        <a hx-delete="{{ url_for('delete_exercise', exercise_id=e['ExerciseId']) }}"
                                             class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
                                             Remove
                                         </a>
@@ -134,7 +132,8 @@
             </div>
         </div>
 
-        <form class="w-full mt-3" action="{{ url_for('create_exercise') }}" method="post">
+        <form class="w-full mt-3" hx-post="{{ url_for('create_exercise') }}" hx-swap="beforeend"
+            hx-target="#new-exercise">
             <div class="flex flex-wrap -mx-3 mb-2">
                 <div class="grow px-3">
                     <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-city">
