@@ -102,15 +102,18 @@ def get_stats_from_topsets(topsets):
     if workout_count > 0:
         first_workout_date = min(workout_start_dates)
         last_workout_date = max(workout_start_dates)
-        training_duration = last_workout_date - first_workout_date
-        average_workouts_per_week = round(
-            workout_count / (training_duration.days / 7), 2)
+
         stats.append({"Text": "Days Since First Workout", "Value": (
             datetime.now() - first_workout_date).days})
-        stats.append({"Text": "Days Since Last Workout",
-                     "Value": (
-                         datetime.now() - last_workout_date).days})
-        stats.append({"Text": "Average Workouts Per Week",
-                     "Value": average_workouts_per_week})
+        if workout_count >= 2:
+            stats.append({"Text": "Days Since Last Workout",
+                          "Value": (
+                              datetime.now() - last_workout_date).days})
+
+            training_duration = last_workout_date - first_workout_date
+            average_workouts_per_week = round(
+                workout_count / (training_duration.days / 7), 2)
+            stats.append({"Text": "Average Workouts Per Week",
+                          "Value": average_workouts_per_week})
 
     return stats
