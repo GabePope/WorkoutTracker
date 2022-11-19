@@ -40,6 +40,7 @@
                 <div class="align-middle inline-block min-w-full">
                     <div class="shadow overflow-hidden sm:rounded-lg">
                         <h4 class="text-l font-semibold text-blue-400 mb-2 text-center">{{ e['ExerciseName'] }}</h4>
+                        {% if e['RepMaxes']|length > 1 %}
                         <div id="person-{{ p['PersonId'] }}-exercise-{{ e['ExerciseId'] }}"
                             class="w-full mt-2 aspect-video"></div>
                         <script>
@@ -51,6 +52,7 @@
                                 hovertemplate
                             }], layout, config);
                         </script>
+                        {% endif %}
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
