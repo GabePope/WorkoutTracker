@@ -65,8 +65,9 @@ class DataBase():
         return person
 
     def create_person(self, name):
-        self.execute('INSERT INTO Person (Name) VALUES (%s)',
-                     [name], commit=True)
+        new_person = self.execute('INSERT INTO Person (Name) VALUES (%s) RETURNING PersonId AS "PersonId"', [
+                                  name], commit=True, one=True)
+        return new_person['PersonId']
 
     def delete_person(self, person_id):
         self.execute('DELETE FROM TopSet WHERE WorkoutId IN (SELECT WorkoutId FROM Workout WHERE PersonId=%s)', [
@@ -76,9 +77,13 @@ class DataBase():
         self.execute('DELETE FROM Person WHERE PersonId=%s',
                      [person_id], commit=True)
 
+    def update_person_name(self, person_id, name):
+        self.execute('UPDATE Person SET Name=%s WHERE PersonId=%s', [
+            name, person_id], commit=True)
+
     def is_valid_workout(self, person_id, workout_id):
         workout = self.execute('SELECT W.WorkoutId AS "WorkoutId" FROM Person P, Workout W WHERE P.PersonId=W.PersonId AND P.PersonId=%s AND W.WorkoutId=%s LIMIT 1', [
-                               person_id, workout_id], one=True)
+            person_id, workout_id], one=True)
         return workout
 
     def is_valid_topset(self, person_id, workout_id, topset_id):
@@ -121,12 +126,12 @@ class DataBase():
         return self.execute("""
             SELECT
                 P.PersonId AS "PersonId",
-                P.Name AS "Name", 
-                COUNT(W.WorkoutId) AS "NumberOfWorkouts", 
-                CASE P.PersonId 
-                    WHEN %s 
-                        THEN 1 
-                        ELSE 0 
+                P.Name AS "Name",
+                COUNT(W.WorkoutId) AS "NumberOfWorkouts",
+                CASE P.PersonId
+                    WHEN %s
+                        THEN 1
+                        ELSE 0
                     END "IsActive"
             FROM
                 Person P LEFT JOIN Workout W ON P.PersonId = W.PersonId
@@ -141,15 +146,15 @@ class DataBase():
 
     def get_person(self, person_id):
         topsets = self.execute("""
-            SELECT 
-                P.PersonId AS "PersonId", 
-                P.Name AS "PersonName", 
-                W.WorkoutId AS "WorkoutId", 
-                W.StartDate AS "StartDate", 
-                T.TopSetId AS "TopSetId", 
+            SELECT
+                P.PersonId AS "PersonId",
+                P.Name AS "PersonName",
+                W.WorkoutId AS "WorkoutId",
+                W.StartDate AS "StartDate",
+                T.TopSetId AS "TopSetId",
                 E.ExerciseId AS "ExerciseId",
-                E.Name AS "ExerciseName", 
-                T.Repetitions AS "Repetitions", 
+                E.Name AS "ExerciseName",
+                T.Repetitions AS "Repetitions",
                 T.Weight AS "Weight"
             FROM Person P
                 LEFT JOIN Workout W ON P.PersonId=W.PersonId
@@ -167,15 +172,15 @@ class DataBase():
 
     def get_workout(self, person_id, workout_id):
         topsets = self.execute("""
-            SELECT 
-                P.PersonId AS "PersonId", 
-                P.Name AS "PersonName", 
-                W.WorkoutId AS "WorkoutId", 
-                W.StartDate AS "StartDate", 
-                T.TopSetId AS "TopSetId", 
-                E.ExerciseId AS "ExerciseId", 
-                E.Name AS "ExerciseName", 
-                T.Repetitions AS "Repetitions", 
+            SELECT
+                P.PersonId AS "PersonId",
+                P.Name AS "PersonName",
+                W.WorkoutId AS "WorkoutId",
+                W.StartDate AS "StartDate",
+                T.TopSetId AS "TopSetId",
+                E.ExerciseId AS "ExerciseId",
+                E.Name AS "ExerciseName",
+                T.Repetitions AS "Repetitions",
                 T.Weight AS "Weight"
             FROM Person P
                 LEFT JOIN Workout W ON P.PersonId=W.PersonId
@@ -195,15 +200,15 @@ class DataBase():
 
     def get_topset(self, person_id, workout_id, topset_id):
         topset = self.execute("""
-            SELECT 
-                P.PersonId AS "PersonId", 
-                P.Name AS "PersonName", 
-                W.WorkoutId AS "WorkoutId", 
-                W.StartDate AS "StartDate", 
-                T.TopSetId AS "TopSetId", 
-                E.ExerciseId AS "ExerciseId", 
-                E.Name AS "ExerciseName", 
-                T.Repetitions AS "Repetitions", 
+            SELECT
+                P.PersonId AS "PersonId",
+                P.Name AS "PersonName",
+                W.WorkoutId AS "WorkoutId",
+                W.StartDate AS "StartDate",
+                T.TopSetId AS "TopSetId",
+                E.ExerciseId AS "ExerciseId",
+                E.Name AS "ExerciseName",
+                T.Repetitions AS "Repetitions",
                 T.Weight AS "Weight"
             FROM Person P
                 INNER JOIN Workout W ON P.PersonId=W.PersonId
@@ -228,15 +233,15 @@ class DataBase():
 
     def get_all_topsets(self):
         all_topsets = self.execute("""
-            SELECT 
-            P.PersonId AS "PersonId", 
-            P.Name AS "PersonName", 
-            W.WorkoutId AS "WorkoutId", 
-            W.StartDate AS "StartDate", 
+            SELECT
+            P.PersonId AS "PersonId",
+            P.Name AS "PersonName",
+            W.WorkoutId AS "WorkoutId",
+            W.StartDate AS "StartDate",
             T.TopSetId AS "TopSetId",
             E.ExerciseId AS "ExerciseId",
             E.Name AS "ExerciseName",
-            T.Repetitions AS "Repetitions", 
+            T.Repetitions AS "Repetitions",
             T.Weight AS "Weight",
             round((100 * T.Weight)/(101.3-2.67123 * T.Repetitions),0)::numeric::integer AS "Estimated1RM"
         FROM Person P

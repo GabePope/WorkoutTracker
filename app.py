@@ -19,6 +19,12 @@ def dashboard():
     return render_template('index.html', model=people_and_exercise_rep_maxes)
 
 
+@ app.route("/person/list", methods=['GET'])
+def get_person_list():
+    people = db.get_people_and_workout_count(-1)
+    return render_template('partials/people_link.html', people=people)
+
+
 @ app.route("/person/<int:person_id>")
 @ validate_person
 def get_person(person_id):
@@ -216,14 +222,91 @@ def delete_topset(person_id, workout_id, topset_id):
 @ app.route("/person", methods=['POST'])
 def create_person():
     name = request.form.get("name")
-    db.create_person(name)
-    return redirect(url_for('settings'))
+    new_person_id = db.create_person(name)
+    return f"""
+    <tr>
+        <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+            { name }
+        </td>
+        <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+            <a hx-get="{ url_for('get_person_edit_form', person_id=new_person_id) }"
+               class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
+                Edit
+            </a>
+            <a hx-delete="{ url_for('delete_person', person_id=new_person_id) }"
+               class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
+                Remove
+            </a>
+        </td>
+    </tr>
+    """, 200, {"HX-Trigger": "updatedPeople"}
 
 
-@ app.route("/person/<int:person_id>/delete", methods=['GET', 'POST'])
+@ app.route("/person/<int:person_id>/delete", methods=['DELETE'])
 def delete_person(person_id):
     db.delete_person(person_id)
-    return redirect(url_for('settings'))
+    return "", 200, {"HX-Trigger": "updatedPeople"}
+
+
+@ app.route("/person/<int:person_id>/edit_form", methods=['GET'])
+def get_person_edit_form(person_id):
+    person = db.get_person(person_id)
+    return f"""
+    <tr>
+        <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text" name="name" value="{person['PersonName']}">
+        </td>
+        <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+            <a hx-put="{ url_for('update_person_name', person_id=person_id) }"  hx-include="closest tr" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
+                Update
+            </a>
+            <a hx-get="{url_for('get_person_name', person_id=person_id)}" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
+                Cancel
+            </a>
+        </td>
+    </tr>
+    """
+
+
+@ app.route("/person/<int:person_id>/name", methods=['PUT'])
+def update_person_name(person_id):
+    new_name = request.form.get("name")
+    db.update_person_name(person_id, new_name)
+    return f"""
+    <tr>
+        <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+            {new_name}
+        </td>
+        <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+            <a hx-get="{ url_for('get_person_edit_form', person_id=person_id) }"  hx-include="closest tr" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
+                Edit
+            </a>
+            <a href="{ url_for('delete_person', person_id=person_id) }" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
+                Remove
+            </a>
+        </td>
+    </tr>
+    """, 200, {"HX-Trigger": "updatedPeople"}
+
+
+@ app.route("/person/<int:person_id>/name", methods=['GET'])
+def get_person_name(person_id):
+    person = db.get_person(person_id)
+    return f"""
+    <tr>
+        <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+            {person['PersonName']}
+        </td>
+        <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+            <a hx-get="{ url_for('get_person_edit_form', person_id=person_id) }"  hx-include="closest tr" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
+                Edit
+            </a>
+            <a href="{ url_for('delete_person', person_id=person_id) }" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
+                Remove
+            </a>
+        </td>
+    </tr>
+    """
 
 
 @ app.route("/exercise", methods=['POST'])
