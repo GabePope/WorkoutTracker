@@ -11,7 +11,7 @@
         <form action="{{ url_for('delete_workout', person_id=workout['PersonId'], workout_id=workout['WorkoutId']) }}"
             method="delete">
             <button
-                class="sm:inline-flex text-white bg-red-200 hover:bg-red-700 focus:ring-4 focus:ring-red-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center items-center mt-6"
+                class="sm:inline-flex text-white bg-red-200 hover:bg-red-700 focus:ring-4 focus:ring-red-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center items-center mt-6 cursor-pointer"
                 type="submit">Delete
                 workout</button>
         </form>
@@ -19,7 +19,7 @@
 
     <div id="edit-start-date" hx-target="this" hx-swap="innerHTML swap:0.5s">
         <span class="text-base font-normal text-gray-500">{{ workout['StartDate'] }}</span>
-        <a class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2"
+        <a class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer"
             hx-get="{{ url_for('get_workout_start_date_edit_form', person_id=workout['PersonId'], workout_id=workout['WorkoutId']) }}"
             hx-target="#edit-start-date">
             Edit
@@ -60,11 +60,11 @@
                         {{ t['Repetitions'] }} x {{ t['Weight'] }}kg</td>
                     <td class="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
                         <a hx-get="{{ url_for('get_topset_edit_form', person_id=workout['PersonId'], workout_id=workout['WorkoutId'], topset_id=t['TopSetId']) }}"
-                            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+                            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
                             Edit
                         </a>
                         <a hx-delete="{{ url_for('delete_topset', person_id=workout['PersonId'], workout_id=workout['WorkoutId'], topset_id=t['TopSetId'])}}"
-                            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+                            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
                             Delete
                         </a>
                     </td>

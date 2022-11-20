@@ -67,7 +67,7 @@ def get_workout_start_date_edit_form(person_id, workout_id):
         </div>
 
         <a
-            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2"
+            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer"
             hx-put="{url_for('update_workout_start_date', person_id=person_id, workout_id=workout_id)}"
             hx-include="[name='start-date']">
             Update
@@ -75,7 +75,7 @@ def get_workout_start_date_edit_form(person_id, workout_id):
         <a 
             hx-get="{url_for('get_workout_start_date', person_id=person_id, workout_id=workout_id)}"
             hx-target="#edit-start-date"
-            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
             Cancel
         </a>
     """
@@ -88,7 +88,7 @@ def update_workout_start_date(person_id, workout_id):
     db.update_workout_start_date(workout_id, new_start_date)
     return f"""
     <span class="text-base font-normal text-gray-500">{new_start_date}</span>
-    <a class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2"
+    <a class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer"
         hx-get="{ url_for('get_workout_start_date_edit_form', person_id=person_id, workout_id=workout_id) }"
         hx-target="#edit-start-date">
         Edit
@@ -102,7 +102,7 @@ def get_workout_start_date(person_id, workout_id):
     workout = db.get_workout(person_id, workout_id)
     return f"""
     <span class="text-base font-normal text-gray-500">{workout['StartDate']}</span>
-    <a class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2"
+    <a class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer"
         hx-get="{ url_for('get_workout_start_date_edit_form', person_id=person_id, workout_id=workout_id) }"
         hx-target="#edit-start-date">
         Edit
@@ -123,11 +123,11 @@ def get_topset(person_id, workout_id, topset_id):
                         { topset['Repetitions'] } x { topset['Weight'] }kg</td>
                     <td class="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
                         <a hx-get="{ url_for('get_topset_edit_form',person_id=person_id, workout_id=workout_id, topset_id=topset_id) }"
-                            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+                            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
                             Edit
                         </a>
                         <a hx-delete="{ url_for('delete_topset', person_id=person_id, workout_id=workout_id, topset_id=topset_id) }"
-                            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+                            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
                             Delete
                         </a>
                     </td>
@@ -163,11 +163,11 @@ def create_topset(person_id, workout_id):
             {repetitions} x {weight}kg</td>
         <td class="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
                         <a href="{ url_for('get_topset_edit_form', person_id=person_id, workout_id=workout_id, topset_id=new_top_set_id) }"
-                            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+                            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
                             Edit
                         </a>
                         <a hx-delete="{ url_for('delete_topset', person_id=person_id, workout_id=workout_id, topset_id=new_top_set_id)}"
-                            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+                            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
                             Delete
                         </a>
                     </td>
@@ -194,11 +194,11 @@ def update_topset(person_id, workout_id, topset_id):
             {repetitions} x {weight}kg</td>
         <td class="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
                         <a hx-get="{ url_for('get_topset_edit_form', person_id=person_id, workout_id=workout_id, topset_id=topset_id) }"
-                            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+                            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
                             Edit
                         </a>
                         <a hx-delete="{ url_for('delete_topset', person_id=person_id, workout_id=workout_id, topset_id=topset_id)}"
-                            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+                            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
                             Delete
                         </a>
                     </td>
@@ -236,10 +236,10 @@ def create_exercise():
             {name}
         </td>
         <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-            <a hx-get="{ url_for('get_exercise_edit_form', exercise_id=new_exercise_id) }" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+            <a hx-get="{ url_for('get_exercise_edit_form', exercise_id=new_exercise_id) }" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
                 Edit
             </a>
-            <a hx-delete="{url_for('delete_exercise', exercise_id=new_exercise_id)}" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+            <a hx-delete="{url_for('delete_exercise', exercise_id=new_exercise_id)}" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
                 Remove
             </a>
         </td>
@@ -256,10 +256,10 @@ def get_exercise(exercise_id):
             {exercise['Name']}
         </td>
         <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-            <a hx-get="{ url_for('get_exercise_edit_form', exercise_id=exercise['ExerciseId']) }" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+            <a hx-get="{ url_for('get_exercise_edit_form', exercise_id=exercise['ExerciseId']) }" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
                 Edit
             </a>
-            <a hx-delete="{url_for('delete_exercise', exercise_id=exercise['ExerciseId'])}" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+            <a hx-delete="{url_for('delete_exercise', exercise_id=exercise['ExerciseId'])}" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
                 Remove
             </a>
         </td>
@@ -276,10 +276,10 @@ def get_exercise_edit_form(exercise_id):
             <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text" name="name" value="{exercise['Name']}">
         </td>
         <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-            <a hx-put="{ url_for('update_exercise', exercise_id=exercise['ExerciseId']) }"  hx-include="closest tr" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+            <a hx-put="{ url_for('update_exercise', exercise_id=exercise['ExerciseId']) }"  hx-include="closest tr" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
                 Update
             </a>
-            <a hx-get="{url_for('get_exercise', exercise_id=exercise['ExerciseId'])}" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+            <a hx-get="{url_for('get_exercise', exercise_id=exercise['ExerciseId'])}" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
                 Cancel
             </a>
         </td>
@@ -297,10 +297,10 @@ def update_exercise(exercise_id):
             {new_name}
         </td>
         <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-            <a hx-get="{ url_for('get_exercise_edit_form', exercise_id=exercise_id) }" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+            <a hx-get="{ url_for('get_exercise_edit_form', exercise_id=exercise_id) }" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
                 Edit
             </a>
-            <a hx-delete="{url_for('delete_exercise', exercise_id=exercise_id)}" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2">
+            <a hx-delete="{url_for('delete_exercise', exercise_id=exercise_id)}" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
                 Remove
             </a>
         </td>
