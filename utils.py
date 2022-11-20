@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date
 import json
 
 
@@ -14,7 +14,7 @@ def get_workouts(topsets):
             t for t in topsets if t['WorkoutId'] == workout_id]
         workouts.append({
             'WorkoutId': workout_id,
-            'StartDate': datetime.strptime(topsets_in_workout[0]['StartDate'], "%Y-%m-%d").strftime("%b %d %Y"),
+            'StartDate': topsets_in_workout[0]['StartDate'].strftime("%b %d %Y"),
             'TopSets': [{"TopSetId": t['TopSetId'], "ExerciseId": t['ExerciseId'], "ExerciseName": t['ExerciseName'], "Weight": t['Weight'], "Repetitions": t['Repetitions']} for t in topsets_in_workout]
         })
     return workouts
@@ -47,7 +47,7 @@ def get_rep_maxes_for_person(person_topsets):
             max_weight = max([t['Weight'] for t in reps])
             max_topset_for_rep = [t for t in reps if t['Weight'] == max_weight]
             topsets_for_exercise.append({
-                'StartDate': datetime.strptime(max_topset_for_rep[0]['StartDate'], "%Y-%m-%d").strftime("%b %d %Y"),
+                'StartDate': max_topset_for_rep[0]['StartDate'].strftime("%b %d %Y"),
                 'Repetitions': rep,
                 'Weight': max_weight,
                 'Estimated1RM': max_topset_for_rep[0]['Estimated1RM'],
@@ -62,7 +62,7 @@ def get_rep_maxes_for_person(person_topsets):
             'ExerciseName': e['ExerciseName'],
             'RepMaxes': topsets_for_exercise,
             'EstimatedOneRepMaxProgressions': {
-                'StartDates': json.dumps([t['StartDate'] for t in exercise_topsets]),
+                'StartDates': json.dumps([t['StartDate'].strftime("%Y-%m-%d") for t in exercise_topsets]),
                 'TopSets': json.dumps([f"{t['Repetitions']} x {t['Weight']}kg" for t in exercise_topsets]),
                 'Estimated1RMs': json.dumps([t['Estimated1RM'] for t in exercise_topsets]),
             }
@@ -93,8 +93,8 @@ def get_stats_from_topsets(topsets):
                              for t in topsets if t['WorkoutId'] is not None]))
     people_count = len(set([t['PersonId']
                             for t in topsets if t['PersonId'] is not None]))
-    workout_start_dates = [datetime.strptime(
-        t['StartDate'], '%Y-%m-%d') for t in topsets if t['StartDate'] is not None]
+    workout_start_dates = [t['StartDate']
+                           for t in topsets if t['StartDate'] is not None]
 
     stats = [{"Text": "Total Workouts", "Value": workout_count}]
     if people_count > 1:
@@ -104,11 +104,11 @@ def get_stats_from_topsets(topsets):
         last_workout_date = max(workout_start_dates)
 
         stats.append({"Text": "Days Since First Workout", "Value": (
-            datetime.now() - first_workout_date).days})
+            date.today() - first_workout_date).days})
         if workout_count >= 2:
             stats.append({"Text": "Days Since Last Workout",
                           "Value": (
-                              datetime.now() - last_workout_date).days})
+                              date.today() - last_workout_date).days})
 
             training_duration = last_workout_date - first_workout_date
             average_workouts_per_week = round(
