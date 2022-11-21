@@ -57,34 +57,7 @@ def delete_workout(person_id, workout_id):
 @ validate_workout
 def get_workout_start_date_edit_form(person_id, workout_id):
     workout = db.get_workout(person_id, workout_id)
-    return f"""
-        <div class="relative">
-            <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor"
-                    viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd"
-                        d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                        clip-rule="evenodd"></path>
-                </svg>
-            </div>
-            <input type="date"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-full md:w-1/4"
-                name="start-date" value="{workout['StartDate']}">
-        </div>
-
-        <a
-            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer"
-            hx-put="{url_for('update_workout_start_date', person_id=person_id, workout_id=workout_id)}"
-            hx-include="[name='start-date']">
-            Update
-        </a>
-        <a 
-            hx-get="{url_for('get_workout_start_date', person_id=person_id, workout_id=workout_id)}"
-            hx-target="#edit-start-date"
-            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
-            Cancel
-        </a>
-    """
+    return render_template('partials/start_date.html', person_id=person_id, workout_id=workout_id, start_date=workout['StartDate'], is_edit=True)
 
 
 @ app.route("/person/<int:person_id>/workout/<int:workout_id>/start_date", methods=['PUT'])
@@ -92,35 +65,21 @@ def get_workout_start_date_edit_form(person_id, workout_id):
 def update_workout_start_date(person_id, workout_id):
     new_start_date = request.form.get('start-date')
     db.update_workout_start_date(workout_id, new_start_date)
-    return f"""
-    <span class="text-base font-normal text-gray-500">{new_start_date}</span>
-    <a class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer"
-        hx-get="{ url_for('get_workout_start_date_edit_form', person_id=person_id, workout_id=workout_id) }"
-        hx-target="#edit-start-date">
-        Edit
-    </a>
-    """
+    return render_template('partials/start_date.html', person_id=person_id, workout_id=workout_id, start_date=new_start_date)
 
 
 @ app.route("/person/<int:person_id>/workout/<int:workout_id>/start_date", methods=['GET'])
 @ validate_workout
 def get_workout_start_date(person_id, workout_id):
     workout = db.get_workout(person_id, workout_id)
-    return f"""
-    <span class="text-base font-normal text-gray-500">{workout['StartDate']}</span>
-    <a class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer"
-        hx-get="{ url_for('get_workout_start_date_edit_form', person_id=person_id, workout_id=workout_id) }"
-        hx-target="#edit-start-date">
-        Edit
-    </a>
-    """
+    return render_template('partials/start_date.html', person_id=person_id, workout_id=workout_id, start_date=workout['StartDate'])
 
 
 @ app.route("/person/<int:person_id>/workout/<int:workout_id>/topset/<int:topset_id>", methods=['GET'])
 @ validate_topset
 def get_topset(person_id, workout_id, topset_id):
     topset = db.get_topset(person_id, workout_id, topset_id)
-    return render_template('partials/person.html', topset=topset, exercises=exercises)
+    return render_template('partials/topset.html', person_id=person_id, workout_id=workout_id, topset_id=topset_id, exercise_name=topset['ExerciseName'], repetitions=topset['Repetitions'], weight=topset['Weight'])
 
 
 @ app.route("/person/<int:person_id>/workout/<int:workout_id>/topset/<int:topset_id>/edit_form", methods=['GET'])

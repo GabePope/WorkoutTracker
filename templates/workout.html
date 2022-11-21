@@ -18,12 +18,8 @@
     </div>
 
     <div id="edit-start-date" hx-target="this" hx-swap="innerHTML swap:0.5s">
-        <span class="text-base font-normal text-gray-500">{{ workout['StartDate'] }}</span>
-        <a class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer"
-            hx-get="{{ url_for('get_workout_start_date_edit_form', person_id=workout['PersonId'], workout_id=workout['WorkoutId']) }}"
-            hx-target="#edit-start-date">
-            Edit
-        </a>
+        {{ render_partial('partials/start_date.html', person_id=workout['PersonId'], workout_id=workout['WorkoutId'],
+        start_date=workout['StartDate']) }}
     </div>
 
 </div>
