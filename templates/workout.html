@@ -52,23 +52,10 @@
             <tbody class="divide-y divide-gray-100" id="new-workout" hx-target="closest tr"
                 hx-swap="outerHTML swap:0.5s">
                 {% for t in workout['TopSets'] %}
-                <tr class="text-gray-500">
-                    <th class="border-t-0 px-4 align-middle text-l font-normal whitespace-nowrap p-4 text-left">
-                        {{ t['ExerciseName'] }}</th>
-                    </th>
-                    <td class="border-t-0 px-4 align-middle text-l font-medium text-gray-900 whitespace-nowrap p-4">
-                        {{ t['Repetitions'] }} x {{ t['Weight'] }}kg</td>
-                    <td class="border-t-0 px-4 align-middle text-xs whitespace-nowrap p-4">
-                        <a hx-get="{{ url_for('get_topset_edit_form', person_id=workout['PersonId'], workout_id=workout['WorkoutId'], topset_id=t['TopSetId']) }}"
-                            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
-                            Edit
-                        </a>
-                        <a hx-delete="{{ url_for('delete_topset', person_id=workout['PersonId'], workout_id=workout['WorkoutId'], topset_id=t['TopSetId'])}}"
-                            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
-                            Delete
-                        </a>
-                    </td>
-                </tr>
+                {{ render_partial('partials/topset.html', person_id=workout['PersonId'],
+                workout_id=workout['WorkoutId'],
+                topset_id=t['TopSetId'], exercise_name=t['ExerciseName'], repetitions=t['Repetitions'],
+                weight=t['Weight']) }}
                 {% endfor %}
             </tbody>
         </table>
