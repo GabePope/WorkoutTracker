@@ -1,0 +1,33 @@
+<tr>
+    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+        {% if is_edit|default(false, true) == false %}
+        {{ name }}
+        {% else %}
+        <input
+            class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+            type="text" name="name" value="{{ name }}">
+        {% endif %}
+    </td>
+    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+        {% if is_edit|default(false, true) == false %}
+        <a hx-get="{{ url_for('get_person_edit_form', person_id=person_id) }}"
+            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
+            Edit
+        </a>
+        <a hx-delete="{{ url_for('delete_person', person_id=person_id) }}"
+            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
+            Remove
+        </a>
+        {% else %}
+        <a hx-put="{{ url_for('update_person_name', person_id=person_id) }}" hx-include="closest tr"
+            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
+            Update
+        </a>
+        <a hx-get="{{ url_for('get_person_name', person_id=person_id) }}"
+            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
+            Cancel
+        </a>
+        {% endif %}
+
+    </td>
+</tr>

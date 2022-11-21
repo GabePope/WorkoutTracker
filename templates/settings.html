@@ -29,21 +29,8 @@
                             <tbody class="bg-white" id="new-person" hx-target="closest tr"
                                 hx-swap="outerHTML swap:0.5s">
                                 {% for p in people %}
-                                <tr>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        {{ p['Name'] }}
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        <a hx-get="{{ url_for('get_person_edit_form', person_id=p['PersonId']) }}"
-                                            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
-                                            Edit
-                                        </a>
-                                        <a hx-delete="{{ url_for('delete_person', person_id=p['PersonId']) }}"
-                                            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
-                                            Remove
-                                        </a>
-                                    </td>
-                                </tr>
+                                {{ render_partial('partials/person.html', person_id=p['PersonId'],
+                                name=p['Name'])}}
                                 {% endfor %}
                             </tbody>
                         </table>
@@ -107,21 +94,8 @@
                             <tbody class="bg-white" id="new-exercise" hx-target="closest tr"
                                 hx-swap="outerHTML swap:0.5s">
                                 {% for e in exercises %}
-                                <tr>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        {{ e['Name'] }}
-                                    </td>
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        <a hx-get="{{ url_for('get_exercise_edit_form', exercise_id=e['ExerciseId']) }}"
-                                            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
-                                            Edit
-                                        </a>
-                                        <a hx-delete="{{ url_for('delete_exercise', exercise_id=e['ExerciseId']) }}"
-                                            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
-                                            Remove
-                                        </a>
-                                    </td>
-                                </tr>
+                                {{ render_partial('partials/exercise.html', exercise_id=e['ExerciseId'],
+                                name=e['Name'])}}
                                 {% endfor %}
                             </tbody>
                         </table>

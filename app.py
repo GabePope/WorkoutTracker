@@ -223,23 +223,7 @@ def delete_topset(person_id, workout_id, topset_id):
 def create_person():
     name = request.form.get("name")
     new_person_id = db.create_person(name)
-    return f"""
-    <tr>
-        <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-            { name }
-        </td>
-        <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-            <a hx-get="{ url_for('get_person_edit_form', person_id=new_person_id) }"
-               class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
-                Edit
-            </a>
-            <a hx-delete="{ url_for('delete_person', person_id=new_person_id) }"
-               class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
-                Remove
-            </a>
-        </td>
-    </tr>
-    """, 200, {"HX-Trigger": "updatedPeople"}
+    return render_template('partials/person.html', person_id=new_person_id, name=name), 200, {"HX-Trigger": "updatedPeople"}
 
 
 @ app.route("/person/<int:person_id>/delete", methods=['DELETE'])
@@ -251,144 +235,46 @@ def delete_person(person_id):
 @ app.route("/person/<int:person_id>/edit_form", methods=['GET'])
 def get_person_edit_form(person_id):
     person = db.get_person(person_id)
-    return f"""
-    <tr>
-        <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text" name="name" value="{person['PersonName']}">
-        </td>
-        <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-            <a hx-put="{ url_for('update_person_name', person_id=person_id) }"  hx-include="closest tr" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
-                Update
-            </a>
-            <a hx-get="{url_for('get_person_name', person_id=person_id)}" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
-                Cancel
-            </a>
-        </td>
-    </tr>
-    """
+    return render_template('partials/person.html', person_id=person_id, name=person['PersonName'], is_edit=True)
 
 
 @ app.route("/person/<int:person_id>/name", methods=['PUT'])
 def update_person_name(person_id):
     new_name = request.form.get("name")
     db.update_person_name(person_id, new_name)
-    return f"""
-    <tr>
-        <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-            {new_name}
-        </td>
-        <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-            <a hx-get="{ url_for('get_person_edit_form', person_id=person_id) }"  hx-include="closest tr" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
-                Edit
-            </a>
-            <a href="{ url_for('delete_person', person_id=person_id) }" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
-                Remove
-            </a>
-        </td>
-    </tr>
-    """, 200, {"HX-Trigger": "updatedPeople"}
+    return render_template('partials/person.html', person_id=person_id, name=new_name), 200, {"HX-Trigger": "updatedPeople"}
 
 
 @ app.route("/person/<int:person_id>/name", methods=['GET'])
 def get_person_name(person_id):
     person = db.get_person(person_id)
-    return f"""
-    <tr>
-        <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-            {person['PersonName']}
-        </td>
-        <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-            <a hx-get="{ url_for('get_person_edit_form', person_id=person_id) }"  hx-include="closest tr" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
-                Edit
-            </a>
-            <a href="{ url_for('delete_person', person_id=person_id) }" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
-                Remove
-            </a>
-        </td>
-    </tr>
-    """
+    return render_template('partials/person.html', person_id=person_id, name=person['PersonName'])
 
 
 @ app.route("/exercise", methods=['POST'])
 def create_exercise():
     name = request.form.get("name")
     new_exercise_id = db.create_exercise(name)
-    return f"""
-    <tr>
-        <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-            {name}
-        </td>
-        <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-            <a hx-get="{ url_for('get_exercise_edit_form', exercise_id=new_exercise_id) }" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
-                Edit
-            </a>
-            <a hx-delete="{url_for('delete_exercise', exercise_id=new_exercise_id)}" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
-                Remove
-            </a>
-        </td>
-    </tr>
-    """
+    return render_template('partials/exercise.html', exercise_id=new_exercise_id, name=name)
 
 
 @ app.route("/exercise/<int:exercise_id>", methods=['GET'])
 def get_exercise(exercise_id):
     exercise = db.get_exercise(exercise_id)
-    return f"""
-    <tr>
-        <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-            {exercise['Name']}
-        </td>
-        <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-            <a hx-get="{ url_for('get_exercise_edit_form', exercise_id=exercise['ExerciseId']) }" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
-                Edit
-            </a>
-            <a hx-delete="{url_for('delete_exercise', exercise_id=exercise['ExerciseId'])}" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
-                Remove
-            </a>
-        </td>
-    </tr>
-    """
+    return render_template('partials/exercise.html', exercise_id=exercise_id, name=exercise['Name'])
 
 
 @ app.route("/exercise/<int:exercise_id>/edit_form", methods=['GET'])
 def get_exercise_edit_form(exercise_id):
     exercise = db.get_exercise(exercise_id)
-    return f"""
-    <tr>
-        <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-            <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text" name="name" value="{exercise['Name']}">
-        </td>
-        <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-            <a hx-put="{ url_for('update_exercise', exercise_id=exercise['ExerciseId']) }"  hx-include="closest tr" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
-                Update
-            </a>
-            <a hx-get="{url_for('get_exercise', exercise_id=exercise['ExerciseId'])}" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
-                Cancel
-            </a>
-        </td>
-    </tr>
-    """
+    return render_template('partials/exercise.html', exercise_id=exercise_id, name=exercise['Name'], is_edit=True)
 
 
 @ app.route("/exercise/<int:exercise_id>/update", methods=['PUT'])
 def update_exercise(exercise_id):
     new_name = request.form.get('name')
     db.update_exercise(exercise_id, new_name)
-    return f"""
-    <tr>
-        <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-            {new_name}
-        </td>
-        <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-            <a hx-get="{ url_for('get_exercise_edit_form', exercise_id=exercise_id) }" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
-                Edit
-            </a>
-            <a hx-delete="{url_for('delete_exercise', exercise_id=exercise_id)}" class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
-                Remove
-            </a>
-        </td>
-    </tr>
-    """
+    return render_template('partials/exercise.html', exercise_id=exercise_id, name=new_name)
 
 
 @ app.route("/exercise/<int:exercise_id>/delete", methods=['DELETE'])
