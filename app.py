@@ -32,6 +32,18 @@ def get_person(person_id):
     return render_template('person.html', person=person)
 
 
+@app.route("/person/<int:person_id>/exercise_filter", methods=['POST'])
+@ validate_person
+def filter_exercises_for_person(person_id):
+    selected_exercise_ids = [int(i)
+                             for i in request.form.getlist('exercise_id')]
+    person = db.get_person(person_id)
+    filtered_exercises = filter(
+        lambda e: e['ExerciseId'] in selected_exercise_ids, person['Exercises'])
+    person['FilteredExercises'] = list(filtered_exercises)
+    return render_template('partials/page/person.html', person=person, is_filtered=True, selected_exercise_ids=selected_exercise_ids)
+
+
 @ app.route("/person/<int:person_id>/workout", methods=['POST'])
 @ validate_person
 def create_workout(person_id):
@@ -213,7 +225,12 @@ def my_utility_processor():
                 return element
         return None
 
-    return dict(get_list_of_people_and_workout_count=get_list_of_people_and_workout_count, is_selected_page=is_selected_page, get_first_element_from_list_with_matching_attribute=get_first_element_from_list_with_matching_attribute)
+    def is_checked(val, checked_vals):
+        if not checked_vals:
+            return 'checked'
+        return 'checked' if val in checked_vals else ''
+
+    return dict(get_list_of_people_and_workout_count=get_list_of_people_and_workout_count, is_selected_page=is_selected_page, get_first_element_from_list_with_matching_attribute=get_first_element_from_list_with_matching_attribute, is_checked=is_checked)
 
 
 if __name__ == '__main__':
