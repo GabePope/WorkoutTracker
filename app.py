@@ -4,11 +4,13 @@ import jinja_partials
 from decorators import validate_person, validate_topset, validate_workout
 from db import DataBase
 from utils import get_people_and_exercise_rep_maxes
+from flask_htmx import HTMX
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
 jinja_partials.register_extensions(app)
 db = DataBase(app)
+htmx = HTMX(app)
 
 
 @ app.route("/")
@@ -16,7 +18,10 @@ def dashboard():
     all_topsets = db.get_all_topsets()
     people_and_exercise_rep_maxes = get_people_and_exercise_rep_maxes(
         all_topsets)
-    return render_template('index.html', model=people_and_exercise_rep_maxes)
+    if htmx:
+        return render_template('partials/page/dashboard.html',
+                               model=people_and_exercise_rep_maxes), 200, {"HX-Trigger": "updatedPeople"}
+    return render_template('dashboard.html', model=people_and_exercise_rep_maxes)
 
 
 @ app.route("/person/list", methods=['GET'])
@@ -29,10 +34,14 @@ def get_person_list():
 @ validate_person
 def get_person(person_id):
     person = db.get_person(person_id)
+    if htmx:
+        return render_template('partials/page/person.html',
+                               person=person, is_filtered=False), 200, {"HX-Trigger": "updatedPeople"}
+
     return render_template('person.html', person=person)
 
 
-@app.route("/person/<int:person_id>/exercise_filter", methods=['POST'])
+@ app.route("/person/<int:person_id>/exercise_filter", methods=['POST'])
 @ validate_person
 def filter_exercises_for_person(person_id):
     selected_exercise_ids = [int(i)
@@ -204,6 +213,9 @@ def delete_exercise(exercise_id):
 def settings():
     people = db.get_people()
     exercises = db.get_exercises()
+    if htmx:
+        return render_template('partials/page/settings.html',
+                               people=people, exercises=exercises), 200, {"HX-Trigger": "updatedPeople"}
     return render_template('settings.html', people=people, exercises=exercises)
 
 

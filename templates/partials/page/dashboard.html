@@ -1,7 +1,3 @@
-{% extends 'base.html' %}
-
-{% block content %}
-
 <script>
     let layout = {
         margin: { t: 0 }, xaxis: { type: 'date', showgrid: false }, yaxis: {
@@ -93,5 +89,3 @@
 </div>
 
 {{ render_partial('partials/stats.html', stats=model['Stats']) }}
-
-{% endblock %}
