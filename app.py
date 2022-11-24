@@ -57,6 +57,10 @@ def filter_exercises_for_person(person_id):
 @ validate_person
 def create_workout(person_id):
     new_workout_id = db.create_workout(person_id)
+    if htmx:
+        workout = db.get_workout(person_id, new_workout_id)
+        return render_template('partials/page/workout.html',
+                               workout=workout), 200, {"HX-Trigger": "updatedPeople", "HX-Push": url_for('get_workout', person_id=person_id, workout_id=new_workout_id)}
     return redirect(url_for('get_workout', person_id=person_id, workout_id=new_workout_id))
 
 
@@ -64,14 +68,19 @@ def create_workout(person_id):
 @ validate_workout
 def get_workout(person_id, workout_id):
     workout = db.get_workout(person_id, workout_id)
+    if htmx:
+        return render_template('partials/page/workout.html',
+                               workout=workout), 200, {"HX-Trigger": "updatedPeople"}
     return render_template('workout.html', workout=workout)
 
 
-@ app.route("/person/<int:person_id>/workout/<int:workout_id>/delete", methods=['GET', 'DELETE'])
+@ app.route("/person/<int:person_id>/workout/<int:workout_id>/delete", methods=['DELETE'])
 @ validate_workout
 def delete_workout(person_id, workout_id):
     db.delete_workout(workout_id)
-    return redirect(url_for('get_person', person_id=person_id))
+    person = db.get_person(person_id)
+    return render_template('partials/page/person.html',
+                           person=person, is_filtered=False), 200, {"HX-Trigger": "updatedPeople", "HX-Push": url_for('get_person', person_id=person_id)}
 
 
 @ app.route("/person/<int:person_id>/workout/<int:workout_id>/start_date_edit_form", methods=['GET'])
@@ -122,7 +131,7 @@ def create_topset(person_id, workout_id):
         workout_id, exercise_id, repetitions, weight)
     exercise = db.get_exercise(exercise_id)
 
-    return render_template('partials/topset.html', person_id=person_id, workout_id=workout_id, topset_id=new_topset_id, exercise_name=exercise['Name'], repetitions=repetitions, weight=weight)
+    return render_template('partials/topset.html', person_id=person_id, workout_id=workout_id, topset_id=new_topset_id, exercise_name=exercise['Name'], repetitions=repetitions, weight=weight), 200, {"HX-Trigger": "topsetAdded"}
 
 
 @ app.route("/person/<int:person_id>/workout/<int:workout_id>/topset/<int:topset_id>", methods=['PUT'])
