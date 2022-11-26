@@ -33,24 +33,25 @@ def get_person_list():
 @ app.route("/person/<int:person_id>")
 @ validate_person
 def get_person(person_id):
+    selected_exercise_ids = [int(i)
+                             for i in request.args.getlist('exercise_id')]
     person = db.get_person(person_id)
+
+    if selected_exercise_ids:
+        filtered_exercises = filter(
+            lambda e: e['ExerciseId'] in selected_exercise_ids, person['Exercises'])
+        person['FilteredExercises'] = list(filtered_exercises)
+        if htmx:
+            return render_template('partials/page/person.html',
+                                   person=person, is_filtered=True, selected_exercise_ids=selected_exercise_ids), 200, {"HX-Trigger": "updatedPeople"}
+
+        return render_template('person.html', person=person, is_filtered=True, selected_exercise_ids=selected_exercise_ids)
+
     if htmx:
         return render_template('partials/page/person.html',
                                person=person, is_filtered=False), 200, {"HX-Trigger": "updatedPeople"}
 
     return render_template('person.html', person=person)
-
-
-@ app.route("/person/<int:person_id>/exercise_filter", methods=['POST'])
-@ validate_person
-def filter_exercises_for_person(person_id):
-    selected_exercise_ids = [int(i)
-                             for i in request.form.getlist('exercise_id')]
-    person = db.get_person(person_id)
-    filtered_exercises = filter(
-        lambda e: e['ExerciseId'] in selected_exercise_ids, person['Exercises'])
-    person['FilteredExercises'] = list(filtered_exercises)
-    return render_template('partials/page/person.html', person=person, is_filtered=True, selected_exercise_ids=selected_exercise_ids)
 
 
 @ app.route("/person/<int:person_id>/workout", methods=['POST'])

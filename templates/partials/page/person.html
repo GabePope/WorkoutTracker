@@ -18,9 +18,8 @@
             {% set exercise_list = person['FilteredExercises'] if is_filtered else person['Exercises'] %}
 
             {% for e in person['Exercises'] %}
-            <div class="flex items-center mr-4"
-                hx-post="{{ url_for('filter_exercises_for_person', person_id=person['PersonId']) }}"
-                hx-include="[name='exercise_id']" hx-target="#container">
+            <div class="flex items-center mr-4" hx-get="{{ url_for('get_person', person_id=person['PersonId']) }}"
+                hx-include="[name='exercise_id']" hx-target="#container" hx-push-url="true">
                 <input {{ is_checked(e['ExerciseId'], selected_exercise_ids) }} type="checkbox" name="exercise_id"
                     value="{{ e['ExerciseId'] }}"
                     class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
