@@ -1,3 +1,4 @@
+from datetime import datetime
 import os
 from flask import Flask, render_template, redirect, request, url_for
 import jinja_partials
@@ -33,9 +34,23 @@ def get_person_list():
 @ app.route("/person/<int:person_id>")
 @ validate_person
 def get_person(person_id):
-    selected_exercise_ids = [int(i)
-                             for i in request.args.getlist('exercise_id')]
     person = db.get_person(person_id)
+
+    max_date = request.args.get(
+        'max_date') or datetime.strptime(max(person['Workouts'], key=lambda x: datetime.strptime(x['StartDate'], '%b %d %Y'))['StartDate'], '%b %d %Y').strftime('%Y-%m-%d')
+    min_date = request.args.get(
+        'min_date') or datetime.strptime(min(person['Workouts'], key=lambda x: datetime.strptime(x['StartDate'], '%b %d %Y'))['StartDate'], '%b %d %Y').strftime('%Y-%m-%d')
+
+    selected_exercise_ids = [int(i)
+                             for i in request.args.getlist('exercise_id')] or [e['ExerciseId'] for e in person['Exercises']]
+
+    def filter_workout_topsets(workout, selected_exercise_ids):
+        workout['TopSets'] = [topset for topset in workout['TopSets']
+                              if topset['ExerciseId'] in selected_exercise_ids]
+        return workout
+
+    person['Workouts'] = [filter_workout_topsets(workout, selected_exercise_ids) for workout in person['Workouts'] if datetime.strptime(
+        workout['StartDate'], '%b %d %Y').strftime('%Y-%m-%d') <= max_date and datetime.strptime(workout['StartDate'], '%b %d %Y').strftime('%Y-%m-%d') >= min_date]
 
     if selected_exercise_ids:
         filtered_exercises = filter(
@@ -43,15 +58,15 @@ def get_person(person_id):
         person['FilteredExercises'] = list(filtered_exercises)
         if htmx:
             return render_template('partials/page/person.html',
-                                   person=person, is_filtered=True, selected_exercise_ids=selected_exercise_ids), 200, {"HX-Trigger": "updatedPeople"}
+                                   person=person, is_filtered=True, selected_exercise_ids=selected_exercise_ids, max_date=max_date, min_date=min_date), 200, {"HX-Trigger": "updatedPeople"}
 
-        return render_template('person.html', person=person, is_filtered=True, selected_exercise_ids=selected_exercise_ids)
+        return render_template('person.html', person=person, is_filtered=True, selected_exercise_ids=selected_exercise_ids, max_date=max_date, min_date=min_date)
 
     if htmx:
         return render_template('partials/page/person.html',
-                               person=person, is_filtered=False), 200, {"HX-Trigger": "updatedPeople"}
+                               person=person, is_filtered=False, max_date=max_date, min_date=min_date), 200, {"HX-Trigger": "updatedPeople"}
 
-    return render_template('person.html', person=person)
+    return render_template('person.html', person=person, max_date=max_date, min_date=min_date)
 
 
 @ app.route("/person/<int:person_id>/workout", methods=['POST'])

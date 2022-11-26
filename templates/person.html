@@ -3,6 +3,7 @@
 {% block content %}
 
 {{ render_partial('partials/page/person.html',
-person=person, is_filtered=is_filtered or False, selected_exercise_ids=selected_exercise_ids) }}
+person=person, is_filtered=is_filtered or False, selected_exercise_ids=selected_exercise_ids, max_date=max_date,
+min_date=min_date) }}
 
 {% endblock %}
