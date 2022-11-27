@@ -4,7 +4,7 @@ from flask import Flask, render_template, redirect, request, url_for
 import jinja_partials
 from decorators import validate_person, validate_topset, validate_workout
 from db import DataBase
-from utils import get_people_and_exercise_rep_maxes, convert_str_to_date, get_earliest_and_latest_workout_date, filter_workout_topsets
+from utils import get_people_and_exercise_rep_maxes, convert_str_to_date, get_earliest_and_latest_workout_date, filter_workout_topsets, get_exercise_ids_from_workouts
 from flask_htmx import HTMX
 
 app = Flask(__name__)
@@ -49,21 +49,16 @@ def get_person(person_id):
     person['Workouts'] = [filter_workout_topsets(workout, selected_exercise_ids) for workout in person['Workouts'] if
                           workout['StartDate'] <= max_date and workout['StartDate'] >= min_date]
 
-    if selected_exercise_ids:
-        filtered_exercises = filter(
-            lambda e: e['ExerciseId'] in selected_exercise_ids, person['Exercises'])
-        person['FilteredExercises'] = list(filtered_exercises)
-        if htmx:
-            return render_template('partials/page/person.html',
-                                   person=person, is_filtered=True, selected_exercise_ids=selected_exercise_ids, max_date=max_date, min_date=min_date), 200, {"HX-Trigger": "updatedPeople"}
+    active_exercise_ids = get_exercise_ids_from_workouts(person['Workouts'])
 
-        return render_template('person.html', person=person, is_filtered=True, selected_exercise_ids=selected_exercise_ids, max_date=max_date, min_date=min_date)
-
+    filtered_exercises = filter(
+        lambda e: e['ExerciseId'] in active_exercise_ids, person['Exercises'])
+    person['FilteredExercises'] = list(filtered_exercises)
     if htmx:
         return render_template('partials/page/person.html',
-                               person=person, is_filtered=False, max_date=max_date, min_date=min_date), 200, {"HX-Trigger": "updatedPeople"}
+                               person=person, is_filtered=True, selected_exercise_ids=active_exercise_ids, max_date=max_date, min_date=min_date), 200, {"HX-Trigger": "updatedPeople"}
 
-    return render_template('person.html', person=person, max_date=max_date, min_date=min_date)
+    return render_template('person.html', person=person, is_filtered=True, selected_exercise_ids=active_exercise_ids, max_date=max_date, min_date=min_date)
 
 
 @ app.route("/person/<int:person_id>/workout", methods=['POST'])

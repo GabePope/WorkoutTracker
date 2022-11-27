@@ -138,3 +138,12 @@ def filter_workout_topsets(workout, selected_exercise_ids):
     workout['TopSets'] = [topset for topset in workout['TopSets']
                           if topset['ExerciseId'] in selected_exercise_ids]
     return workout
+
+
+def get_exercise_ids_from_workouts(workouts):
+    return list(set(flatten_list(list(map(lambda x: list(
+        map(lambda y: y['ExerciseId'], x['TopSets'])), workouts)))))
+
+
+def flatten_list(list_of_lists):
+    return [item for sublist in list_of_lists for item in sublist]
