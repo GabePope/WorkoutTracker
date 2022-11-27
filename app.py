@@ -4,7 +4,7 @@ from flask import Flask, render_template, redirect, request, url_for
 import jinja_partials
 from decorators import validate_person, validate_topset, validate_workout
 from db import DataBase
-from utils import get_people_and_exercise_rep_maxes, convert_str_to_date
+from utils import get_people_and_exercise_rep_maxes, convert_str_to_date, get_earliest_and_latest_workout_date, filter_workout_topsets
 from flask_htmx import HTMX
 
 app = Flask(__name__)
@@ -36,18 +36,15 @@ def get_person_list():
 def get_person(person_id):
     person = db.get_person(person_id)
 
-    max_date = convert_str_to_date(request.args.get(
-        'max_date'), '%Y-%m-%d') or max(person['Workouts'], key=lambda x: x['StartDate'])['StartDate']
+    (min_date, max_date) = get_earliest_and_latest_workout_date(person)
+
     min_date = convert_str_to_date(request.args.get(
-        'min_date'), '%Y-%m-%d') or min(person['Workouts'], key=lambda x: x['StartDate'])['StartDate']
+        'min_date'), '%Y-%m-%d') or min_date
+    max_date = convert_str_to_date(request.args.get(
+        'max_date'), '%Y-%m-%d') or max_date
 
     selected_exercise_ids = [int(i)
                              for i in request.args.getlist('exercise_id')] or [e['ExerciseId'] for e in person['Exercises']]
-
-    def filter_workout_topsets(workout, selected_exercise_ids):
-        workout['TopSets'] = [topset for topset in workout['TopSets']
-                              if topset['ExerciseId'] in selected_exercise_ids]
-        return workout
 
     person['Workouts'] = [filter_workout_topsets(workout, selected_exercise_ids) for workout in person['Workouts'] if
                           workout['StartDate'] <= max_date and workout['StartDate'] >= min_date]

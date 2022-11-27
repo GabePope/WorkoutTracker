@@ -126,3 +126,15 @@ def convert_str_to_date(date_str, format='%Y-%m-%d'):
         return None
     except TypeError:
         return None
+
+
+def get_earliest_and_latest_workout_date(person):
+    if len(person['Workouts']) > 0:
+        return (min(person['Workouts'], key=lambda x: x['StartDate'])['StartDate'], max(person['Workouts'], key=lambda x: x['StartDate'])['StartDate'])
+    return (datetime.now().date(), datetime.now().date())
+
+
+def filter_workout_topsets(workout, selected_exercise_ids):
+    workout['TopSets'] = [topset for topset in workout['TopSets']
+                          if topset['ExerciseId'] in selected_exercise_ids]
+    return workout
