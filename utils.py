@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 import json
 
 
@@ -14,7 +14,7 @@ def get_workouts(topsets):
             t for t in topsets if t['WorkoutId'] == workout_id]
         workouts.append({
             'WorkoutId': workout_id,
-            'StartDate': topsets_in_workout[0]['StartDate'].strftime("%b %d %Y"),
+            'StartDate': topsets_in_workout[0]['StartDate'],
             'TopSets': [{"TopSetId": t['TopSetId'], "ExerciseId": t['ExerciseId'], "ExerciseName": t['ExerciseName'], "Weight": t['Weight'], "Repetitions": t['Repetitions']} for t in topsets_in_workout]
         })
     return workouts
@@ -117,3 +117,12 @@ def get_stats_from_topsets(topsets):
                           "Value": average_workouts_per_week})
 
     return stats
+
+
+def convert_str_to_date(date_str, format='%Y-%m-%d'):
+    try:
+        return datetime.strptime(date_str, format).date()
+    except ValueError:
+        return None
+    except TypeError:
+        return None

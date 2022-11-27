@@ -4,7 +4,7 @@ from flask import Flask, render_template, redirect, request, url_for
 import jinja_partials
 from decorators import validate_person, validate_topset, validate_workout
 from db import DataBase
-from utils import get_people_and_exercise_rep_maxes
+from utils import get_people_and_exercise_rep_maxes, convert_str_to_date
 from flask_htmx import HTMX
 
 app = Flask(__name__)
@@ -36,10 +36,10 @@ def get_person_list():
 def get_person(person_id):
     person = db.get_person(person_id)
 
-    max_date = request.args.get(
-        'max_date') or datetime.strptime(max(person['Workouts'], key=lambda x: datetime.strptime(x['StartDate'], '%b %d %Y'))['StartDate'], '%b %d %Y').strftime('%Y-%m-%d')
-    min_date = request.args.get(
-        'min_date') or datetime.strptime(min(person['Workouts'], key=lambda x: datetime.strptime(x['StartDate'], '%b %d %Y'))['StartDate'], '%b %d %Y').strftime('%Y-%m-%d')
+    max_date = convert_str_to_date(request.args.get(
+        'max_date'), '%Y-%m-%d') or max(person['Workouts'], key=lambda x: x['StartDate'])['StartDate']
+    min_date = convert_str_to_date(request.args.get(
+        'min_date'), '%Y-%m-%d') or min(person['Workouts'], key=lambda x: x['StartDate'])['StartDate']
 
     selected_exercise_ids = [int(i)
                              for i in request.args.getlist('exercise_id')] or [e['ExerciseId'] for e in person['Exercises']]
@@ -49,8 +49,8 @@ def get_person(person_id):
                               if topset['ExerciseId'] in selected_exercise_ids]
         return workout
 
-    person['Workouts'] = [filter_workout_topsets(workout, selected_exercise_ids) for workout in person['Workouts'] if datetime.strptime(
-        workout['StartDate'], '%b %d %Y').strftime('%Y-%m-%d') <= max_date and datetime.strptime(workout['StartDate'], '%b %d %Y').strftime('%Y-%m-%d') >= min_date]
+    person['Workouts'] = [filter_workout_topsets(workout, selected_exercise_ids) for workout in person['Workouts'] if
+                          workout['StartDate'] <= max_date and workout['StartDate'] >= min_date]
 
     if selected_exercise_ids:
         filtered_exercises = filter(
@@ -267,7 +267,10 @@ def my_utility_processor():
             return 'checked'
         return 'checked' if val in checked_vals else ''
 
-    return dict(get_list_of_people_and_workout_count=get_list_of_people_and_workout_count, is_selected_page=is_selected_page, get_first_element_from_list_with_matching_attribute=get_first_element_from_list_with_matching_attribute, is_checked=is_checked)
+    def strftime(date, format="%b %d %Y"):
+        return date.strftime(format)
+
+    return dict(get_list_of_people_and_workout_count=get_list_of_people_and_workout_count, is_selected_page=is_selected_page, get_first_element_from_list_with_matching_attribute=get_first_element_from_list_with_matching_attribute, is_checked=is_checked, strftime=strftime)
 
 
 if __name__ == '__main__':

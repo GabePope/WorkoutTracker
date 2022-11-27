@@ -193,7 +193,7 @@ class DataBase():
             'PersonId': next((t['PersonId'] for t in topsets), -1),
             'PersonName': next((t['PersonName'] for t in topsets), 'Unknown'),
             'WorkoutId': workout_id,
-            'StartDate': topsets[0]['StartDate'].strftime("%Y-%m-%d"),
+            'StartDate': topsets[0]['StartDate'],
             'Exercises': self.get_exercises(),
             'TopSets': [{"TopSetId": t['TopSetId'], "ExerciseId": t['ExerciseId'], "ExerciseName": t['ExerciseName'], "Weight": t['Weight'], "Repetitions": t['Repetitions']} for t in topsets if t['TopSetId'] is not None]
         }
