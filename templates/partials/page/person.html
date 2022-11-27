@@ -16,7 +16,7 @@
 
 
         <div class="flex">
-            {% set exercise_list = person['FilteredExercises'] if is_filtered else person['Exercises'] %}
+            {% set exercise_list = person['FilteredExercises'] %}
 
             {% for e in person['Exercises'] %}
             <div class="flex items-center mr-4" hx-get="{{ url_for('get_person', person_id=person['PersonId']) }}"
