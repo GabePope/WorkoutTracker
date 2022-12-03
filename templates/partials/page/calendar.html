@@ -28,7 +28,11 @@
                 {% else %}
                 <h2 class="ml-2 text-xl font-bold leading-none">{{ strftime(selected_date, '%Y') }}</h2>
                 {% endif %}
+                <span
+                    class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-5">{{
+                    person['PersonName']}}</span>
             </div>
+
             <select
                 class="block appearance-none w-40 bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mr-5"
                 name="view" hx-get="{{ url_for('get_calendar', person_id=person['PersonId']) }}" hx-target="#container"
