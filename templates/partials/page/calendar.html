@@ -89,7 +89,7 @@
                     <span class="text-gray-500 font-semibold">{{ date.day }}</span>
                 </div>
                 <div class="bottom flex-grow h-30 py-1 w-full">
-                    {% if workout %}
+                    {% if workout['TopSets']|length > 0 %}
                     {% for topset in workout['TopSets'] %}
                     <button class="flex items-center flex-shrink-0 h-5 px-1 text-xs">
                         <span class="ml-2 font-medium leading-none truncate">{{ topset['ExerciseName'] }}</span>
