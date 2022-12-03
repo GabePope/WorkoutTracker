@@ -1,4 +1,5 @@
 from datetime import datetime, date, timedelta
+import calendar
 import os
 from flask import Flask, render_template, redirect, request, url_for
 import jinja_partials
@@ -31,7 +32,7 @@ def get_person_list():
     return render_template('partials/people_link.html', people=people)
 
 
-@ app.route("/person/<int:person_id>")
+@ app.route("/person/<int:person_id>/workout/list", methods=['GET'])
 @ validate_person
 def get_person(person_id):
     person = db.get_person(person_id)
@@ -70,15 +71,31 @@ def get_calendar(person_id):
         'date'), '%Y-%m-%d') or date.today()
     selected_view = request.args.get('view') or 'month'
 
+    if selected_view == 'all':
+        return redirect(url_for('get_person', person_id=person_id))
+
     next_date = selected_date + (timedelta(
         365/12) if selected_view == 'month' else timedelta(365))
     previous_date = selected_date + (timedelta(
         -365/12) if selected_view == 'month' else timedelta(-365))
 
+    first_date_of_view = selected_date.replace(
+        day=1) if selected_view == 'month' else selected_date.replace(month=1, day=1)
+    last_date_of_view = first_date_of_view + \
+        (timedelta(365/12) if selected_view == 'month' else timedelta(365))
+
+    start = dict([(6, 0), (0, 1), (1, 2), (2, 3), (3, 4), (4, 5), (5, 6)])
+    start_date = first_date_of_view - \
+        timedelta(days=start[first_date_of_view.weekday()])
+
+    end = dict([(6, 6), (0, 5), (1, 4), (2, 3), (3, 2), (4, 1), (5, 0)])
+    end_date = last_date_of_view + \
+        timedelta(days=end[last_date_of_view.weekday()])
+
     if htmx:
         return render_template('partials/page/calendar.html',
-                               person=person, selected_date=selected_date, selected_view=selected_view, next_date=next_date, previous_date=previous_date)
-    return render_template('calendar.html', person=person, selected_date=selected_date, selected_view=selected_view, next_date=next_date, previous_date=previous_date)
+                               person=person, selected_date=selected_date, selected_view=selected_view, next_date=next_date, previous_date=previous_date, start_date=start_date, end_date=end_date)
+    return render_template('calendar.html', person=person, selected_date=selected_date, selected_view=selected_view, next_date=next_date, previous_date=previous_date, start_date=start_date, end_date=end_date)
 
 
 @ app.route("/person/<int:person_id>/workout", methods=['POST'])
@@ -282,7 +299,7 @@ def my_utility_processor():
     def strftime(date, format="%b %d %Y"):
         return date.strftime(format)
 
-    return dict(get_list_of_people_and_workout_count=get_list_of_people_and_workout_count, is_selected_page=is_selected_page, get_first_element_from_list_with_matching_attribute=get_first_element_from_list_with_matching_attribute, is_checked=is_checked, strftime=strftime)
+    return dict(get_list_of_people_and_workout_count=get_list_of_people_and_workout_count, is_selected_page=is_selected_page, get_first_element_from_list_with_matching_attribute=get_first_element_from_list_with_matching_attribute, is_checked=is_checked, strftime=strftime, datetime=datetime, timedelta=timedelta)
 
 
 if __name__ == '__main__':

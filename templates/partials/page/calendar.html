@@ -35,6 +35,7 @@
                 hx-vals='{"date": "{{ selected_date }}"}' hx-push-url="true">
                 <option value="month" {% if selected_view=='month' %}selected{% endif %}>Month</option>
                 <option value="year" {% if selected_view=='year' %}selected{% endif %}>Year</option>
+                <option value="all">All</option>
             </select>
         </div>
     </div>
@@ -74,301 +75,32 @@
 
         <div class="grid grid-cols-7 overflow-hidden flex-1 pl-2 pr-2 w-full">
 
-            <div class="border flex flex-col h-40 mx-auto mx-auto overflow-hidden w-full pt-2 pl-2 cursor-pointer">
+            {% for i in range((end_date-start_date).days + 1) %}
+            {% set date = start_date + timedelta(days=i) %}
+            {% set workout =
+            get_first_element_from_list_with_matching_attribute(person['Workouts'],
+            'StartDate',
+            date) %}
+            <div class="{% if date == datetime.today().date() %}rounded-md border-4 border-green-50{% endif %} border flex flex-col h-40 mx-auto mx-auto overflow-hidden w-full pt-2 pl-2 cursor-pointer {% if selected_date.month != date.month %}bg-gray-100{% endif %}"
+                {% if workout %}
+                hx-get="{{ url_for('get_workout' ,person_id=person['PersonId'], workout_id=workout['WorkoutId']) }}"
+                hx-target="#container" hx-push-url="true" {% endif %}>
                 <div class="top h-5 w-full">
-                    <span class="text-gray-500 font-semibold">1</span>
+                    <span class="text-gray-500 font-semibold">{{ date.day }}</span>
                 </div>
                 <div class="bottom flex-grow h-30 py-1 w-full">
+                    {% if workout %}
+                    {% for topset in workout['TopSets'] %}
                     <button class="flex items-center flex-shrink-0 h-5 px-1 text-xs">
-                        <span class="ml-2 font-medium leading-none truncate">Squat</span>
-                        <span class="ml-2 font-light leading-none">5x50kg</span>
+                        <span class="ml-2 font-medium leading-none truncate">{{ topset['ExerciseName'] }}</span>
+                        <span class="ml-2 font-light leading-none">{{ topset['Repetitions'] }} x {{ topset['Weight']
+                            }}kg</span>
                     </button>
-                    <button class="flex items-center flex-shrink-0 h-5 px-1 text-xs">
-                        <span class="ml-2 font-medium leading-none truncate">DB Seal row</span>
-                        <span class="ml-2 font-light leading-none">12x20kg</span>
-                    </button>
+                    {% endfor %}
+                    {% endif %}
                 </div>
             </div>
-
-            <div class="border flex flex-col h-40 mx-auto mx-auto overflow-hidden w-full pt-2 pl-2 cursor-pointer">
-                <div class="top h-5 w-full">
-                    <span class="text-gray-500 font-semibold">2</span>
-                </div>
-                <div class="bottom flex-grow h-30 py-1 w-full">
-                    <button class="flex items-center flex-shrink-0 h-5 px-1 text-xs">
-                        <span class="ml-2 font-medium leading-none truncate">Squat</span>
-                        <span class="ml-2 font-light leading-none">5x50kg</span>
-                    </button>
-                    <button class="flex items-center flex-shrink-0 h-5 px-1 text-xs">
-                        <span class="ml-2 font-medium leading-none truncate">DB Seal row</span>
-                        <span class="ml-2 font-light leading-none">12x20kg</span>
-                    </button>
-                </div>
-            </div>
-
-            <div class="border flex flex-col h-40 mx-auto mx-auto overflow-hidden w-full pt-2 pl-2 cursor-pointer">
-                <div class="top h-5 w-full">
-                    <span class="text-gray-500 font-semibold">3</span>
-                </div>
-                <div class="bottom flex-grow h-30 py-1 w-full"></div>
-            </div>
-
-            <div class="border flex flex-col h-40 mx-auto mx-auto overflow-hidden w-full pt-2 pl-2 cursor-pointer">
-                <div class="top h-5 w-full">
-                    <span class="text-gray-500 font-semibold">4</span>
-                </div>
-                <div class="bottom flex-grow h-30 py-1 w-full"></div>
-            </div>
-
-            <div class="border flex flex-col h-40 mx-auto mx-auto overflow-hidden w-full pt-2 pl-2 cursor-pointer">
-                <div class="top h-5 w-full">
-                    <span class="text-gray-500 font-semibold">6</span>
-                </div>
-                <div class="bottom flex-grow h-30 py-1 w-full"></div>
-            </div>
-
-            <div class="border flex flex-col h-40 mx-auto mx-auto overflow-hidden w-full pt-2 pl-2 cursor-pointer">
-                <div class="top h-5 w-full">
-                    <span class="text-gray-500 font-semibold">7</span>
-                </div>
-                <div class="bottom flex-grow h-30 py-1 w-full">
-                    <button class="flex items-center flex-shrink-0 h-5 px-1 text-xs">
-                        <span class="ml-2 font-medium leading-none truncate">Squat</span>
-                        <span class="ml-2 font-light leading-none">5x50kg</span>
-                    </button>
-                    <button class="flex items-center flex-shrink-0 h-5 px-1 text-xs">
-                        <span class="ml-2 font-medium leading-none truncate">DB Seal row</span>
-                        <span class="ml-2 font-light leading-none">12x20kg</span>
-                    </button>
-                </div>
-            </div>
-
-            <div class="border flex flex-col h-40 mx-auto mx-auto overflow-hidden w-full pt-2 pl-2 cursor-pointer">
-                <div class="top h-5 w-full">
-                    <span class="text-gray-500 font-semibold text-sm">8</span>
-                </div>
-                <div class="bottom flex-grow h-30 py-1 w-full"></div>
-            </div>
-
-            <div class="border flex flex-col h-40 mx-auto mx-auto overflow-hidden w-full pt-2 pl-2 cursor-pointer">
-                <div class="top h-5 w-full">
-                    <span class="text-gray-500 font-semibold">9</span>
-                </div>
-                <div class="bottom flex-grow h-30 py-1 w-full"></div>
-            </div>
-
-            <div class="border flex flex-col h-40 mx-auto mx-auto overflow-hidden w-full pt-2 pl-2 cursor-pointer">
-                <div class="top h-5 w-full">
-                    <span class="text-gray-500 font-semibold">10</span>
-                </div>
-                <div class="bottom flex-grow h-30 py-1 w-full"></div>
-            </div>
-
-            <div class="border flex flex-col h-40 mx-auto mx-auto overflow-hidden w-full pt-2 pl-2 cursor-pointer">
-                <div class="top h-5 w-full">
-                    <span class="text-gray-500 font-semibold">12</span>
-                </div>
-                <div class="bottom flex-grow h-30 py-1 w-full">
-                    <button class="flex items-center flex-shrink-0 h-5 px-1 text-xs">
-                        <span class="ml-2 font-medium leading-none truncate">Squat</span>
-                        <span class="ml-2 font-light leading-none">5x50kg</span>
-                    </button>
-                    <button class="flex items-center flex-shrink-0 h-5 px-1 text-xs">
-                        <span class="ml-2 font-medium leading-none truncate">DB Seal row</span>
-                        <span class="ml-2 font-light leading-none">12x20kg</span>
-                    </button>
-                </div>
-            </div>
-
-            <div class="border flex flex-col h-40 mx-auto mx-auto overflow-hidden w-full pt-2 pl-2 cursor-pointer">
-                <div class="top h-5 w-full">
-                    <span class="text-gray-500 font-semibold">13</span>
-                </div>
-                <div class="bottom flex-grow h-30 py-1 w-full"></div>
-            </div>
-
-            <div
-                class="rounded-md border-4 border-green-50 border flex flex-col h-40 mx-auto mx-auto overflow-hidden w-full pt-2 pl-2 cursor-pointer">
-                <div class="top h-5 w-full">
-                    <span class="text-gray-500 font-semibold">14</span>
-                </div>
-                <div class="bottom flex-grow h-30 py-1 w-full"></div>
-            </div>
-
-            <div class="border flex flex-col h-40 mx-auto mx-auto overflow-hidden w-full pt-2 pl-2 cursor-pointer">
-                <div class="top h-5 w-full">
-                    <span class="text-gray-500 font-semibold">15</span>
-                </div>
-                <div class="bottom flex-grow h-30 py-1 w-full"></div>
-            </div>
-
-            <div class="border flex flex-col h-40 mx-auto mx-auto overflow-hidden w-full pt-2 pl-2 cursor-pointer">
-                <div class="top h-5 w-full">
-                    <span class="text-gray-500 font-semibold text-sm">16</span>
-                </div>
-                <div class="bottom flex-grow h-30 py-1 w-full"></div>
-            </div>
-
-            <div class="border flex flex-col h-40 mx-auto mx-auto overflow-hidden w-full pt-2 pl-2 cursor-pointer">
-                <div class="top h-5 w-full">
-                    <span class="text-gray-500 font-semibold">16</span>
-                </div>
-                <div class="bottom flex-grow h-30 py-1 w-full">
-                    <button class="flex items-center flex-shrink-0 h-5 px-1 text-xs">
-                        <span class="ml-2 font-medium leading-none truncate">Squat</span>
-                        <span class="ml-2 font-light leading-none">5x50kg</span>
-                    </button>
-                    <button class="flex items-center flex-shrink-0 h-5 px-1 text-xs">
-                        <span class="ml-2 font-medium leading-none truncate">DB Seal row</span>
-                        <span class="ml-2 font-light leading-none">12x20kg</span>
-                    </button>
-                </div>
-            </div>
-
-            <div class="border flex flex-col h-40 mx-auto mx-auto overflow-hidden w-full pt-2 pl-2 cursor-pointer">
-                <div class="top h-5 w-full">
-                    <span class="text-gray-500 font-semibold">17</span>
-                </div>
-                <div class="bottom flex-grow h-30 py-1 w-full"></div>
-            </div>
-
-            <div class="border flex flex-col h-40 mx-auto mx-auto overflow-hidden w-full pt-2 pl-2 cursor-pointer">
-                <div class="top h-5 w-full">
-                    <span class="text-gray-500 font-semibold">18</span>
-                </div>
-                <div class="bottom flex-grow h-30 py-1 w-full"></div>
-            </div>
-
-            <div class="border flex flex-col h-40 mx-auto mx-auto overflow-hidden w-full pt-2 pl-2 cursor-pointer">
-                <div class="top h-5 w-full">
-                    <span class="text-gray-500 font-semibold">19</span>
-                </div>
-                <div class="bottom flex-grow h-30 py-1 w-full"></div>
-            </div>
-
-            <div class="border flex flex-col h-40 mx-auto mx-auto overflow-hidden w-full pt-2 pl-2 cursor-pointer">
-                <div class="top h-5 w-full">
-                    <span class="text-gray-500 font-semibold">20</span>
-                </div>
-                <div class="bottom flex-grow h-30 py-1 w-full"></div>
-            </div>
-
-            <div class="border flex flex-col h-40 mx-auto mx-auto overflow-hidden w-full pt-2 pl-2 cursor-pointer">
-                <div class="top h-5 w-full">
-                    <span class="text-gray-500 font-semibold">21</span>
-                </div>
-                <div class="bottom flex-grow h-30 py-1 w-full"></div>
-            </div>
-
-            <div class="border flex flex-col h-40 mx-auto mx-auto overflow-hidden w-full pt-2 pl-2 cursor-pointer">
-                <div class="top h-5 w-full">
-                    <span class="text-gray-500 font-semibold text-sm">22</span>
-                </div>
-                <div class="bottom flex-grow h-30 py-1 w-full"></div>
-            </div>
-
-            <div class="border flex flex-col h-40 mx-auto mx-auto overflow-hidden w-full pt-2 pl-2 cursor-pointer">
-                <div class="top h-5 w-full">
-                    <span class="text-gray-500 font-semibold">23</span>
-                </div>
-                <div class="bottom flex-grow h-30 py-1 w-full"></div>
-            </div>
-
-            <div class="border flex flex-col h-40 mx-auto mx-auto overflow-hidden w-full pt-2 pl-2 cursor-pointer">
-                <div class="top h-5 w-full">
-                    <span class="text-gray-500 font-semibold">24</span>
-                </div>
-                <div class="bottom flex-grow h-30 py-1 w-full"></div>
-            </div>
-
-            <div class="border flex flex-col h-40 mx-auto mx-auto overflow-hidden w-full pt-2 pl-2 cursor-pointer">
-                <div class="top h-5 w-full">
-                    <span class="text-gray-500 font-semibold">25</span>
-                </div>
-                <div class="bottom flex-grow h-30 py-1 w-full"></div>
-            </div>
-
-            <div class="border flex flex-col h-40 mx-auto mx-auto overflow-hidden w-full pt-2 pl-2 cursor-pointer">
-                <div class="top h-5 w-full">
-                    <span class="text-gray-500 font-semibold">26</span>
-                </div>
-                <div class="bottom flex-grow h-30 py-1 w-full"></div>
-            </div>
-
-            <div class="border flex flex-col h-40 mx-auto mx-auto overflow-hidden w-full pt-2 pl-2 cursor-pointer">
-                <div class="top h-5 w-full">
-                    <span class="text-gray-500 font-semibold">27</span>
-                </div>
-                <div class="bottom flex-grow h-30 py-1 w-full"></div>
-            </div>
-
-            <div class="border flex flex-col h-40 mx-auto mx-auto overflow-hidden w-full pt-2 pl-2 cursor-pointer">
-                <div class="top h-5 w-full">
-                    <span class="text-gray-500 font-semibold">28</span>
-                </div>
-                <div class="bottom flex-grow h-30 py-1 w-full"></div>
-            </div>
-
-            <div class="border flex flex-col h-40 mx-auto mx-auto overflow-hidden w-full pt-2 pl-2 cursor-pointer">
-                <div class="top h-5 w-full">
-                    <span class="text-gray-500 font-semibold text-sm">29</span>
-                </div>
-                <div class="bottom flex-grow h-30 py-1 w-full"></div>
-            </div>
-
-            <div class="border flex flex-col h-40 mx-auto mx-auto overflow-hidden w-full pt-2 pl-2 cursor-pointer">
-                <div class="top h-5 w-full">
-                    <span class="text-gray-500 font-semibold">30</span>
-                </div>
-                <div class="bottom flex-grow h-30 py-1 w-full"></div>
-            </div>
-
-            <div class="border flex flex-col h-40 mx-auto mx-auto overflow-hidden w-full pt-2 pl-2 cursor-pointer">
-                <div class="top h-5 w-full">
-                    <span class="text-gray-500 font-semibold">31</span>
-                </div>
-                <div class="bottom flex-grow h-30 py-1 w-full"></div>
-            </div>
-
-            <div
-                class="border flex flex-col h-40 mx-auto mx-auto overflow-hidden w-full pt-2 pl-2 cursor-pointer bg-gray-100 pt-2 pl-2 cursor-pointer">
-                <div class="top h-5 w-full">
-                    <span class="text-gray-500 font-semibold">1</span>
-                </div>
-                <div class="bottom flex-grow h-30 py-1 w-full"></div>
-            </div>
-
-            <div
-                class="border flex flex-col h-40 mx-auto mx-auto overflow-hidden w-full pt-2 pl-2 cursor-pointer bg-gray-100 pt-2 pl-2 cursor-pointer">
-                <div class="top h-5 w-full">
-                    <span class="text-gray-500 font-semibold">2</span>
-                </div>
-                <div class="bottom flex-grow h-30 py-1 w-full"></div>
-            </div>
-
-            <div
-                class="border flex flex-col h-40 mx-auto mx-auto overflow-hidden w-full pt-2 pl-2 cursor-pointer bg-gray-100 pt-2 pl-2 cursor-pointer">
-                <div class="top h-5 w-full">
-                    <span class="text-gray-500 font-semibold">3</span>
-                </div>
-                <div class="bottom flex-grow h-30 py-1 w-full"></div>
-            </div>
-
-            <div
-                class="border flex flex-col h-40 mx-auto mx-auto overflow-hidden w-full pt-2 pl-2 cursor-pointer bg-gray-100 pt-2 pl-2 cursor-pointer">
-                <div class="top h-5 w-full">
-                    <span class="text-gray-500 font-semibold">4</span>
-                </div>
-                <div class="bottom flex-grow h-30 py-1 w-full"></div>
-            </div>
-
-            <div
-                class="border flex flex-col h-40 mx-auto mx-auto overflow-hidden w-full pt-2 pl-2 cursor-pointer bg-gray-100 pt-2 pl-2 cursor-pointer">
-                <div class="top h-5 w-full">
-                    <span class="text-gray-500 font-semibold text-sm">5</span>
-                </div>
-                <div class="bottom flex-grow h-30 py-1 w-full"></div>
-            </div>
+            {% endfor %}
 
         </div>
     </div>
