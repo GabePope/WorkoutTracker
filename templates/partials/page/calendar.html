@@ -117,7 +117,7 @@
             <div class="w-auto mx-3 my-3 border-solid border-grey-light rounded border shadow-sm">
                 <div class="bg-grey-lighter px-2 py-2 border-solid border-grey-light border-b text-center cursor-pointer"
                     hx-get="{{ url_for('get_calendar', person_id=person['PersonId']) }}" hx-target="#container"
-                    hx-vals='{"date": "{{ next_date }}", "view": "month"}' hx-push-url="true">{{
+                    hx-vals='{"date": "{{ first_day_of_month }}", "view": "month"}' hx-push-url="true">{{
                     strftime(first_day_of_month, '%B %Y') }}
                 </div>
                 <div class="">
