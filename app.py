@@ -81,13 +81,6 @@ def get_calendar(person_id):
     return render_template('calendar.html', person=person, selected_date=selected_date, selected_view=selected_view, next_date=next_date, previous_date=previous_date)
 
 
-@ app.route("/person/<int:person_id>/calendar_year")
-@ validate_person
-def get_calendar_year(person_id):
-    person = db.get_person(person_id)
-    return render_template('calendar_year.html', person=person)
-
-
 @ app.route("/person/<int:person_id>/workout", methods=['POST'])
 @ validate_person
 def create_workout(person_id):
