@@ -1,11 +1,11 @@
 from datetime import datetime, date, timedelta
-import calendar
+from dateutil.relativedelta import relativedelta
 import os
 from flask import Flask, render_template, redirect, request, url_for
 import jinja_partials
 from decorators import validate_person, validate_topset, validate_workout
 from db import DataBase
-from utils import get_people_and_exercise_rep_maxes, convert_str_to_date, get_earliest_and_latest_workout_date, filter_workout_topsets, get_exercise_ids_from_workouts
+from utils import get_people_and_exercise_rep_maxes, convert_str_to_date, get_earliest_and_latest_workout_date, filter_workout_topsets, get_exercise_ids_from_workouts, first_and_last_visible_days_in_month
 from flask_htmx import HTMX
 
 app = Flask(__name__)
@@ -91,6 +91,10 @@ def get_calendar(person_id):
     end = dict([(6, 6), (0, 5), (1, 4), (2, 3), (3, 2), (4, 1), (5, 0)])
     end_date = last_date_of_view + \
         timedelta(days=end[last_date_of_view.weekday()])
+
+    if selected_view == 'year':
+        start_date = first_date_of_view
+        end_date = last_date_of_view
 
     if htmx:
         return render_template('partials/page/calendar.html',
@@ -299,7 +303,7 @@ def my_utility_processor():
     def strftime(date, format="%b %d %Y"):
         return date.strftime(format)
 
-    return dict(get_list_of_people_and_workout_count=get_list_of_people_and_workout_count, is_selected_page=is_selected_page, get_first_element_from_list_with_matching_attribute=get_first_element_from_list_with_matching_attribute, is_checked=is_checked, strftime=strftime, datetime=datetime, timedelta=timedelta)
+    return dict(get_list_of_people_and_workout_count=get_list_of_people_and_workout_count, is_selected_page=is_selected_page, get_first_element_from_list_with_matching_attribute=get_first_element_from_list_with_matching_attribute, is_checked=is_checked, strftime=strftime, datetime=datetime, timedelta=timedelta, relativedelta=relativedelta, first_and_last_visible_days_in_month=first_and_last_visible_days_in_month)
 
 
 if __name__ == '__main__':

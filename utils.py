@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import datetime, date, timedelta
 import json
 
 
@@ -147,3 +147,14 @@ def get_exercise_ids_from_workouts(workouts):
 
 def flatten_list(list_of_lists):
     return [item for sublist in list_of_lists for item in sublist]
+
+
+def first_and_last_visible_days_in_month(first_day_of_month, last_day_of_month):
+    start = dict([(6, 0), (0, 1), (1, 2), (2, 3), (3, 4), (4, 5), (5, 6)])
+    start_date = first_day_of_month - \
+        timedelta(days=start[first_day_of_month.weekday()])
+
+    end = dict([(6, 6), (0, 5), (1, 4), (2, 3), (3, 2), (4, 1), (5, 0)])
+    end_date = last_day_of_month + \
+        timedelta(days=end[last_day_of_month.weekday()])
+    return (start_date, end_date)

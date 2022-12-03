@@ -109,11 +109,16 @@
 
         <div class="flex flex-wrap bg-white overflow-hidden">
             {% for i in range(12) %}
-
+            {% set date = start_date + relativedelta(months=i) %}
+            {% set first_day_of_month = date.replace(day=1) %}
+            {% set last_day_of_month = date + relativedelta(day=31) %}
+            {% set (first_day, last_day) = first_and_last_visible_days_in_month(first_day_of_month, last_day_of_month)
+            %}
             <div class="w-auto mx-3 my-3 border-solid border-grey-light rounded border shadow-sm">
                 <div class="bg-grey-lighter px-2 py-2 border-solid border-grey-light border-b text-center cursor-pointer"
                     hx-get="{{ url_for('get_calendar', person_id=person['PersonId']) }}" hx-target="#container"
-                    hx-vals='{"date": "{{ next_date }}", "view": "month"}' hx-push-url="true">December 2018
+                    hx-vals='{"date": "{{ next_date }}", "view": "month"}' hx-push-url="true">{{
+                    strftime(first_day_of_month, '%B %Y') }}
                 </div>
                 <div class="">
                     <div class="grid grid-cols-7 border-b font-semibold">
@@ -127,52 +132,20 @@
                     </div>
 
                     <div class="grid grid-cols-7 overflow-hidden flex-1 pl-2 pr-2 w-full">
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">1</div>
-                        <div class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">2</div>
-                        <div class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">3</div>
-                        <div class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">4</div>
-                        <div class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">5</div>
-                        <div
-                            class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer bg-blue text-white">
-                            6</div>
-                        <div
-                            class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer bg-blue text-white">
-                            7</div>
-                        <div class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">8</div>
-                        <div class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">9</div>
-                        <div class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">10</div>
-                        <div class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">11</div>
-                        <div class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">12</div>
-                        <div class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">13</div>
-                        <div class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">14</div>
-                        <div class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">15</div>
-                        <div class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">16</div>
-                        <div class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">17</div>
-                        <div class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">18</div>
-                        <div class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">19</div>
-                        <div class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">20</div>
-                        <div class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">21</div>
-                        <div class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">22</div>
-                        <div class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">23</div>
-                        <div class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">24</div>
-                        <div class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">25</div>
-                        <div class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">26</div>
-                        <div class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">27</div>
-                        <div class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">28</div>
-                        <div class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">29</div>
-                        <div class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">30</div>
-                        <div class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">31</div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
+                        {% for i in range((last_day-first_day).days + 1) %}
+                        {% set day_date = first_day + timedelta(days=i) %}
+                        {% set workout =
+                        get_first_element_from_list_with_matching_attribute(person['Workouts'],
+                        'StartDate',
+                        day_date) %}
+                        {% set is_in_month = day_date.month == first_day_of_month.month%}
+                        <div class="{% if day_date == datetime.today().date() and is_in_month %}rounded-md border-4 border-green-50 border{% endif %} py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer {% if workout and is_in_month %}bg-green-100{% endif %}"
+                            {% if workout %}
+                            hx-get="{{ url_for('get_workout' ,person_id=person['PersonId'], workout_id=workout['WorkoutId']) }}"
+                            hx-target="#container" hx-push-url="true" {% endif %}>
+                            {% if is_in_month %}
+                            {{ day_date.day }} {% endif %}</div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
