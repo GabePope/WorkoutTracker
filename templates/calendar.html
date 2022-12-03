@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{{ render_partial('partials/page/calendar.html',
+person=person, selected_date=selected_date, selected_view=selected_view, next_date=next_date,
+previous_date=previous_date) }}
+
+{% endblock %}

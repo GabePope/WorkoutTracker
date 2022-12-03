@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date, timedelta
 import os
 from flask import Flask, render_template, redirect, request, url_for
 import jinja_partials
@@ -59,6 +59,33 @@ def get_person(person_id):
                                person=person, selected_exercise_ids=active_exercise_ids, max_date=max_date, min_date=min_date), 200, {"HX-Trigger": "updatedPeople"}
 
     return render_template('person.html', person=person, selected_exercise_ids=active_exercise_ids, max_date=max_date, min_date=min_date)
+
+
+@ app.route("/person/<int:person_id>/calendar")
+@ validate_person
+def get_calendar(person_id):
+    person = db.get_person(person_id)
+
+    selected_date = convert_str_to_date(request.args.get(
+        'date'), '%Y-%m-%d') or date.today()
+    selected_view = request.args.get('view') or 'month'
+
+    next_date = selected_date + (timedelta(
+        365/12) if selected_view == 'month' else timedelta(365))
+    previous_date = selected_date + (timedelta(
+        -365/12) if selected_view == 'month' else timedelta(-365))
+
+    if htmx:
+        return render_template('partials/page/calendar.html',
+                               person=person, selected_date=selected_date, selected_view=selected_view, next_date=next_date, previous_date=previous_date)
+    return render_template('calendar.html', person=person, selected_date=selected_date, selected_view=selected_view, next_date=next_date, previous_date=previous_date)
+
+
+@ app.route("/person/<int:person_id>/calendar_year")
+@ validate_person
+def get_calendar_year(person_id):
+    person = db.get_person(person_id)
+    return render_template('calendar_year.html', person=person)
 
 
 @ app.route("/person/<int:person_id>/workout", methods=['POST'])

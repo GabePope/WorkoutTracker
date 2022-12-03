@@ -1,0 +1,448 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="flex flex-grow flex-col bg-white sm:rounded shadow overflow-hidden">
+    <div class="">
+        <div class="flex items-center justify-between pt-2 pb-2">
+            <div class="flex">
+                <div class="flex ml-6">
+                    <button>
+                        <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" data-darkreader-inline-stroke=""
+                            style="--darkreader-inline-stroke:currentColor;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7">
+                            </path>
+                        </svg>
+                    </button>
+                    <button>
+                        <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" data-darkreader-inline-stroke=""
+                            style="--darkreader-inline-stroke:currentColor;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
+                            </path>
+                        </svg>
+                    </button>
+                </div>
+                <h2 class="ml-2 text-xl font-bold leading-none">2022</h2>
+            </div>
+            <select
+                class="block appearance-none w-40 bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mr-5"
+                name="range">
+                <option value="month">Month</option>
+                <option value="year">Year</option>
+            </select>
+        </div>
+    </div>
+    <div class="flex px-2 py-2 -mb-px">
+        <div class="flex flex-wrap bg-white overflow-hidden">
+            <div class="w-auto mx-3 my-3 border-solid border-grey-light rounded border shadow-sm">
+                <div class="bg-grey-lighter px-2 py-2 border-solid border-grey-light border-b text-center">December 2018
+                </div>
+                <div class="">
+                    <table class="w-full">
+                        <tbody>
+                            <tr class="border-b">
+                                <th class="py-3 px-4">S</th>
+                                <th class="py-3 px-4">M</th>
+                                <th class="py-3 px-4">T</th>
+                                <th class="py-3 px-4">W</th>
+                                <th class="py-3 px-4">T</th>
+                                <th class="py-3 px-4">F</th>
+                                <th class="py-3 px-4">S</th>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">1</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">2</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">3</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">4</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">5</td>
+                                <td
+                                    class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer bg-blue text-white">
+                                    6</td>
+                                <td
+                                    class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer bg-blue text-white">
+                                    7</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">8</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">9</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">10</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">11</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">12</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">13</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">14</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">15</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">16</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">17</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">18</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">19</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">20</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">21</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">22</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">23</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">24</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">25</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">26</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">27</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">28</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">29</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">30</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">31</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="w-auto mx-3 my-3 border-solid border-grey-light rounded border shadow-sm">
+                <div class="bg-grey-lighter px-2 py-2 border-solid border-grey-light border-b text-center">January 2019
+                </div>
+                <div class="">
+                    <table class="w-full">
+                        <tbody>
+                            <tr class="border-b">
+                                <th class="py-3 px-4">S</th>
+                                <th class="py-3 px-4">M</th>
+                                <th class="py-3 px-4">T</th>
+                                <th class="py-3 px-4">W</th>
+                                <th class="py-3 px-4">T</th>
+                                <th class="py-3 px-4">F</th>
+                                <th class="py-3 px-4">S</th>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">1</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">2</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">3</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">4</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">5</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">6</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">7</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">8</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">9</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">10</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">11</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">12</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">13</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">14</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">15</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">16</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">17</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">18</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">19</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">20</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">21</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">22</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">23</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">24</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">25</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">26</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">27</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">28</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">29</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">30</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">31</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="w-auto mx-3 my-3 border-solid border-grey-light rounded border shadow-sm">
+                <div class="bg-grey-lighter px-2 py-2 border-solid border-grey-light border-b text-center">February 2019
+                </div>
+                <div class="">
+                    <table class="w-full">
+                        <tbody>
+                            <tr class="border-b">
+                                <th class="py-3 px-4">S</th>
+                                <th class="py-3 px-4">M</th>
+                                <th class="py-3 px-4">T</th>
+                                <th class="py-3 px-4">W</th>
+                                <th class="py-3 px-4">T</th>
+                                <th class="py-3 px-4">F</th>
+                                <th class="py-3 px-4">S</th>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">1</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">2</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">3</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">4</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">5</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">6</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">7</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">8</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">9</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">10</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">11</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">12</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">13</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">14</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">15</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">16</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">17</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">18</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">19</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">20</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">21</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">22</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">23</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">24</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">25</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">26</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">27</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">28</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="w-auto mx-3 my-3 border-solid border-grey-light rounded border shadow-sm">
+                <div class="bg-grey-lighter px-2 py-2 border-solid border-grey-light border-b text-center">March 2019
+                </div>
+                <div class="">
+                    <table class="w-full">
+                        <tbody>
+                            <tr class="border-b">
+                                <th class="py-3 px-4">S</th>
+                                <th class="py-3 px-4">M</th>
+                                <th class="py-3 px-4">T</th>
+                                <th class="py-3 px-4">W</th>
+                                <th class="py-3 px-4">T</th>
+                                <th class="py-3 px-4">F</th>
+                                <th class="py-3 px-4">S</th>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">1</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">2</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">3</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">4</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">5</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">6</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">7</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">8</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">9</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">10</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">11</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">12</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">13</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">14</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">15</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">16</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">17</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">18</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">19</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">20</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">21</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">22</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">23</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">24</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">25</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">26</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">27</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">28</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">29</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">30</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">31</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="w-auto mx-3 my-3 border-solid border-grey-light rounded border shadow-sm">
+                <div class="bg-grey-lighter px-2 py-2 border-solid border-grey-light border-b text-center">April 2019
+                </div>
+                <div class="">
+                    <table class="w-full">
+                        <tbody>
+                            <tr class="border-b">
+                                <th class="py-3 px-4">S</th>
+                                <th class="py-3 px-4">M</th>
+                                <th class="py-3 px-4">T</th>
+                                <th class="py-3 px-4">W</th>
+                                <th class="py-3 px-4">T</th>
+                                <th class="py-3 px-4">F</th>
+                                <th class="py-3 px-4">S</th>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">1</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">2</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">3</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">4</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">5</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">6</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">7</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">8</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">9</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">10</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">11</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">12</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">13</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">14</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">15</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">16</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">17</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">18</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">19</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">20</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">21</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">22</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">23</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">24</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">25</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">26</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">27</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">28</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">29</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">30</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="w-auto mx-3 my-3 border-solid border-grey-light rounded border shadow-sm">
+                <div class="bg-grey-lighter px-2 py-2 border-solid border-grey-light border-b text-center">May 2019
+                </div>
+                <div class="">
+                    <table class="w-full">
+                        <tbody>
+                            <tr class="border-b">
+                                <th class="py-3 px-4">S</th>
+                                <th class="py-3 px-4">M</th>
+                                <th class="py-3 px-4">T</th>
+                                <th class="py-3 px-4">W</th>
+                                <th class="py-3 px-4">T</th>
+                                <th class="py-3 px-4">F</th>
+                                <th class="py-3 px-4">S</th>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">1</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">2</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">3</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">4</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">5</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">6</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">7</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">8</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">9</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">10</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">11</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">12</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">13</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">14</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">15</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">16</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">17</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">18</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">19</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">20</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">21</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">22</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">23</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">24</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">25</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">26</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">27</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">28</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">29</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">30</td>
+                                <td class="py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer">31</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
