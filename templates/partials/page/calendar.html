@@ -87,8 +87,8 @@
             date) %}
             <div class="{% if date == datetime.today().date() %}rounded-md border-4 border-green-50{% endif %} border flex flex-col h-40 mx-auto mx-auto overflow-hidden w-full pt-2 pl-2 cursor-pointer {% if selected_date.month != date.month %}bg-gray-100{% endif %}"
                 {% if workout %}
-                hx-get="{{ url_for('get_workout' ,person_id=person['PersonId'], workout_id=workout['WorkoutId']) }}"
-                hx-target="#container" hx-push-url="true" {% endif %}>
+                hx-get="{{ url_for('get_workout_modal', person_id=person['PersonId'], workout_id=workout['WorkoutId']) }}"
+                hx-target='body' hx-swap='beforeend' {% endif %}>
                 <div class="top h-5 w-full">
                     <span class="text-gray-500 font-semibold">{{ date.day }}</span>
                 </div>
@@ -143,10 +143,10 @@
                         'StartDate',
                         day_date) %}
                         {% set is_in_month = day_date.month == first_day_of_month.month%}
-                        <div class="{% if day_date == datetime.today().date() and is_in_month %}rounded-md border-4 border-green-50 border{% endif %} py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer {% if workout and is_in_month %}bg-green-100{% endif %}"
+                        <div class="{% if day_date == datetime.today().date() and is_in_month %}rounded-md border-4 border-green-50 border{% endif %} py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer rounded-md {% if workout and is_in_month %}bg-green-100{% endif %}"
                             {% if workout %}
-                            hx-get="{{ url_for('get_workout' ,person_id=person['PersonId'], workout_id=workout['WorkoutId']) }}"
-                            hx-target="#container" hx-push-url="true" {% endif %}>
+                            hx-get="{{ url_for('get_workout_modal', person_id=person['PersonId'], workout_id=workout['WorkoutId']) }}"
+                            hx-target='body' hx-swap='beforeend' {% endif %}>
                             {% if is_in_month %}
                             {{ day_date.day }} {% endif %}</div>
                         {% endfor %}

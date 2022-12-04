@@ -102,6 +102,13 @@ def get_calendar(person_id):
     return render_template('calendar.html', person=person, selected_date=selected_date, selected_view=selected_view, next_date=next_date, previous_date=previous_date, start_date=start_date, end_date=end_date)
 
 
+@ app.route("/person/<int:person_id>/workout/<int:workout_id>/modal", methods=['GET'])
+@ validate_workout
+def get_workout_modal(person_id, workout_id):
+    workout = db.get_workout(person_id, workout_id)
+    return render_template('partials/workout_modal.html', workout=workout)
+
+
 @ app.route("/person/<int:person_id>/workout", methods=['POST'])
 @ validate_person
 def create_workout(person_id):
