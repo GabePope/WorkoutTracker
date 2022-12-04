@@ -113,11 +113,9 @@ def get_workout_modal(person_id, workout_id):
 @ validate_person
 def create_workout(person_id):
     new_workout_id = db.create_workout(person_id)
-    if htmx:
-        workout = db.get_workout(person_id, new_workout_id)
-        return render_template('partials/page/workout.html',
-                               workout=workout), 200, {"HX-Trigger": "updatedPeople", "HX-Push": url_for('get_workout', person_id=person_id, workout_id=new_workout_id)}
-    return redirect(url_for('get_workout', person_id=person_id, workout_id=new_workout_id))
+    workout = db.get_workout(person_id, new_workout_id)
+    return render_template('partials/workout_modal.html',
+                           workout=workout), 200, {"HX-Trigger": "updatedPeople"}
 
 
 @ app.route("/person/<int:person_id>/workout/<int:workout_id>")
@@ -134,9 +132,7 @@ def get_workout(person_id, workout_id):
 @ validate_workout
 def delete_workout(person_id, workout_id):
     db.delete_workout(workout_id)
-    person = db.get_person(person_id)
-    return render_template('partials/page/person.html',
-                           person=person), 200, {"HX-Trigger": "updatedPeople", "HX-Push": url_for('get_person', person_id=person_id)}
+    return "", 200, {"HX-Trigger": "updatedPeople"}
 
 
 @ app.route("/person/<int:person_id>/workout/<int:workout_id>/start_date_edit_form", methods=['GET'])
@@ -151,7 +147,7 @@ def get_workout_start_date_edit_form(person_id, workout_id):
 def update_workout_start_date(person_id, workout_id):
     new_start_date = request.form.get('start-date')
     db.update_workout_start_date(workout_id, new_start_date)
-    return render_template('partials/start_date.html', person_id=person_id, workout_id=workout_id, start_date=new_start_date)
+    return render_template('partials/start_date.html', person_id=person_id, workout_id=workout_id, start_date=convert_str_to_date(new_start_date, '%Y-%m-%d'))
 
 
 @ app.route("/person/<int:person_id>/workout/<int:workout_id>/start_date", methods=['GET'])
