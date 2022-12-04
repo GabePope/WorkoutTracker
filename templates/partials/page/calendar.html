@@ -1,3 +1,7 @@
+<a hx-get="{{ url_for('get_calendar', person_id=person['PersonId']) }}" hx-target="#container"
+    hx-vals='{"date": "{{ selected_date }}", "view": "{{ selected_view }}"}' hx-trigger="refreshView"
+    id="refreshViewElement"></a>
+
 <div class="flex flex-grow flex-col bg-white sm:rounded shadow overflow-hidden">
     <div class="">
         <div class="flex items-center justify-between pt-2 pb-2">
