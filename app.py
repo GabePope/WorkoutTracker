@@ -118,16 +118,6 @@ def create_workout(person_id):
                            workout=workout), 200, {"HX-Trigger": "updatedPeople"}
 
 
-@ app.route("/person/<int:person_id>/workout/<int:workout_id>")
-@ validate_workout
-def get_workout(person_id, workout_id):
-    workout = db.get_workout(person_id, workout_id)
-    if htmx:
-        return render_template('partials/page/workout.html',
-                               workout=workout), 200, {"HX-Trigger": "updatedPeople"}
-    return render_template('workout.html', workout=workout)
-
-
 @ app.route("/person/<int:person_id>/workout/<int:workout_id>/delete", methods=['DELETE'])
 @ validate_workout
 def delete_workout(person_id, workout_id):
