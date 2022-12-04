@@ -25,6 +25,17 @@
             debounce(() => window.dispatchEvent(new Event('resize')))
         })
     </script>
+
+    <script>
+        let layout = {
+            margin: { t: 0 }, xaxis: { type: 'date', showgrid: false }, yaxis: {
+                title: 'Estimated 1RM (kg)',
+                showgrid: false
+            }
+        };
+        let config = { responsive: true, displayModeBar: false };
+        let hovertemplate = '<i>Estimated 1RM</i>: <b>%{y}kg</b><br><i>Topset</i>:<b>%{text}</b><br><i>Date</i>: <b>%{x}</b>';
+    </script>
 </head>
 
 <body>
