@@ -104,15 +104,13 @@
                                         {{ e['ExerciseName'] }}
                                     </th>
                                     {% endfor %}
-                                    <th scope="col"
-                                        class="p-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-8">
-                                    </th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white">
 
                                 {% for w in person['Workouts'] %}
-                                <tr>
+                                <tr hx-get="{{ url_for('get_workout_modal', person_id=person['PersonId'], workout_id=w['WorkoutId']) }}"
+                                    hx-target='body' hx-swap='beforeend'>
                                     <td class="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
                                         {{ strftime(w['StartDate'], "%b %d %Y") }}
                                     </td>
@@ -128,20 +126,6 @@
                                         {% endif %}
                                     </td>
                                     {% endfor %}
-
-                                    <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                                        <a hx-get="{{ url_for('get_workout' ,person_id=person['PersonId'], workout_id=w['WorkoutId']) }}"
-                                            hx-target="#container" hx-push-url="true"
-                                            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
-                                            Edit
-                                        </a>
-
-                                        <button
-                                            hx-delete="{{ url_for('delete_workout', person_id=person['PersonId'], workout_id=w['WorkoutId']) }}"
-                                            hx-target="#container" hx-push-url="true"
-                                            class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer"
-                                            type="submit">Delete</button>
-                                    </td>
                                 </tr>
                                 {% endfor %}
 
