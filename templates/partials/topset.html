@@ -7,9 +7,9 @@
             class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             name="exercise_id">
             {% for exercise in exercises|default([], true) %}
-            <option value="{{ exercise['ExerciseId'] }}" {% if exercise['ExerciseId']==exercise_id %} selected {% endif
-                %}>{{
-                exercise['Name']}}</option>
+            <option value="{{ exercise['ExerciseId'] }}" {% if exercise['Name']==exercise_name %} selected {% endif %}>
+                {{exercise['Name']}}
+            </option>
             {% endfor %}
         </select>
         {% endif %}

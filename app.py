@@ -173,7 +173,7 @@ def get_topset(person_id, workout_id, topset_id):
 def get_topset_edit_form(person_id, workout_id, topset_id):
     exercises = db.get_exercises()
     topset = db.get_topset(person_id, workout_id, topset_id)
-    return render_template('partials/topset.html', person_id=person_id, workout_id=workout_id, topset_id=topset_id, exercises=exercises, repetitions=topset['Repetitions'], weight=topset['Weight'], is_edit=True)
+    return render_template('partials/topset.html', person_id=person_id, workout_id=workout_id, topset_id=topset_id, exercises=exercises, exercise_name=topset['ExerciseName'], repetitions=topset['Repetitions'], weight=topset['Weight'], is_edit=True)
 
 
 @ app.route("/person/<int:person_id>/workout/<int:workout_id>/topset", methods=['POST'])
