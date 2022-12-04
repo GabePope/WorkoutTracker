@@ -1,3 +1,7 @@
+<a hx-get="{{ url_for('get_person', person_id=person['PersonId']) }}"
+    hx-include="[name='exercise_id'],[name='min_date'],[name='max_date']" hx-target="#container"
+    hx-trigger="refreshView" id="refreshViewElement"></a>
+
 <div class="flex justify-center">
     <div class="bg-white shadow rounded-lg p-4 sm:w-full xl:p-8 md:w-full lg:w-11/12">
 
@@ -7,10 +11,14 @@
                 <span class="text-base font-normal text-gray-500">List of workouts</span>
             </div>
             <div>
-                <button
-                    class="sm:inline-flex text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center items-center mt-6"
-                    hx-post="{{ url_for('create_workout', person_id=person['PersonId']) }}" hx-target="#container">New
-                    workout</button>
+                <select
+                    class="block appearance-none w-40 bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mr-5"
+                    name="view" hx-get="{{ url_for('get_calendar', person_id=person['PersonId']) }}"
+                    hx-target="#container" hx-push-url="true">
+                    <option value="month">Month</option>
+                    <option value="year">Year</option>
+                    <option value="all" selected>All</option>
+                </select>
             </div>
         </div>
 
@@ -156,3 +164,12 @@
 </div>
 
 {{ render_partial('partials/stats.html', stats=person['Stats']) }}
+
+<button
+    class="fixed z-90 bottom-10 right-8 bg-blue-600 w-20 h-20 rounded-full drop-shadow-lg flex justify-center items-center text-white text-4xl hover:bg-blue-700 hover:drop-shadow-2xl hover:animate-bounce duration-300"
+    hx-post="{{ url_for('create_workout', person_id=person['PersonId']) }}" hx-target='body' hx-swap='beforeend'>
+    <svg viewBox="0 0 20 20" enable-background="new 0 0 20 20" class="w-6 h-6 inline-block">
+        <path fill="#FFFFFF" d="M16,10c0,0.553-0.048,1-0.601,1H11v4.399C11,15.951,10.553,16,10,16c-0.553,0-1-0.049-1-0.601V11H4.601
+                                C4.049,11,4,10.553,4,10c0-0.553,0.049-1,0.601-1H9V4.601C9,4.048,9.447,4,10,4c0.553,0,1,0.048,1,0.601V9h4.399
+                                C15.952,9,16,9.447,16,10z" />
+</button>
