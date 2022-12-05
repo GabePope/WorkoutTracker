@@ -7,12 +7,27 @@ from decorators import validate_person, validate_topset, validate_workout
 from db import DataBase
 from utils import get_people_and_exercise_rep_maxes, convert_str_to_date, get_earliest_and_latest_workout_date, filter_workout_topsets, get_exercise_ids_from_workouts, first_and_last_visible_days_in_month
 from flask_htmx import HTMX
+from htmlmin.main import minify
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
 jinja_partials.register_extensions(app)
 db = DataBase(app)
 htmx = HTMX(app)
+
+
+@app.after_request
+def response_minify(response):
+    """
+    minify html response to decrease site traffic
+    """
+    if response.content_type == u'text/html; charset=utf-8':
+        response.set_data(
+            minify(response.get_data(as_text=True))
+        )
+
+        return response
+    return response
 
 
 @ app.route("/")
