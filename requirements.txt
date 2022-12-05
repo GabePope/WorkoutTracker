@@ -5,4 +5,4 @@ jinja-partials==0.1.1
 psycopg2-binary==2.9.3
 flask-htmx==0.2.0
 python-dateutil==2.8.2
-htmlmin==0.1.12
+minify-html==0.10.3
