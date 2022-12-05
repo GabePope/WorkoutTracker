@@ -26,7 +26,10 @@ class DataBase():
         if cur.description is not None:
             rv = cur.fetchall()
         if commit:
-            self.conn.commit()
+            try:
+                self.conn.commit()
+            except:
+                self.conn.rollback()
         cur.close()
 
         return (rv[0] if rv else None) if one else rv
