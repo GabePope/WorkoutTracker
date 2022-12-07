@@ -299,6 +299,8 @@ def my_utility_processor():
         return db.get_people_and_workout_count(person_id)
 
     def get_first_element_from_list_with_matching_attribute(list, attribute, value):
+        if not list:
+            return None
         for element in list:
             if element[attribute] == value:
                 return element

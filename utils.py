@@ -17,6 +17,9 @@ def get_workouts(topsets):
             'StartDate': topsets_in_workout[0]['StartDate'],
             'TopSets': [{"TopSetId": t['TopSetId'], "ExerciseId": t['ExerciseId'], "ExerciseName": t['ExerciseName'], "Weight": t['Weight'], "Repetitions": t['Repetitions']} for t in topsets_in_workout if t['TopSetId'] is not None]
         })
+
+    workouts.sort(key=lambda x: x['StartDate'], reverse=True)
+
     return workouts
 
 
