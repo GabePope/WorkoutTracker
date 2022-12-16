@@ -8,6 +8,7 @@ from db import DataBase
 from utils import get_people_and_exercise_rep_maxes, convert_str_to_date, get_earliest_and_latest_workout_date, filter_workout_topsets, get_exercise_ids_from_workouts, first_and_last_visible_days_in_month
 from flask_htmx import HTMX
 import minify_html
+from urllib.parse import urlparse
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
@@ -75,7 +76,7 @@ def get_person(person_id):
         return render_template('partials/page/person.html',
                                person=person, selected_exercise_ids=active_exercise_ids, max_date=max_date, min_date=min_date), 200, {"HX-Trigger": "updatedPeople"}
 
-    return render_template('person.html', person=person, selected_exercise_ids=active_exercise_ids, max_date=max_date, min_date=min_date)
+    return render_template('person.html', person=person, selected_exercise_ids=active_exercise_ids, max_date=max_date, min_date=min_date), 200, {"HX-Trigger": "updatedPeople"}
 
 
 @ app.route("/person/<int:person_id>/calendar")
@@ -114,8 +115,8 @@ def get_calendar(person_id):
 
     if htmx:
         return render_template('partials/page/calendar.html',
-                               person=person, selected_date=selected_date, selected_view=selected_view, next_date=next_date, previous_date=previous_date, start_date=start_date, end_date=end_date)
-    return render_template('calendar.html', person=person, selected_date=selected_date, selected_view=selected_view, next_date=next_date, previous_date=previous_date, start_date=start_date, end_date=end_date)
+                               person=person, selected_date=selected_date, selected_view=selected_view, next_date=next_date, previous_date=previous_date, start_date=start_date, end_date=end_date), 200, {"HX-Trigger": "updatedPeople"}
+    return render_template('calendar.html', person=person, selected_date=selected_date, selected_view=selected_view, next_date=next_date, previous_date=previous_date, start_date=start_date, end_date=end_date), 200, {"HX-Trigger": "updatedPeople"}
 
 
 @ app.route("/person/<int:person_id>/workout/<int:workout_id>/modal", methods=['GET'])
@@ -290,6 +291,9 @@ def settings():
 def my_utility_processor():
 
     def is_selected_page(url):
+        if htmx:
+            parsed_url = urlparse(htmx.current_url)
+            return 'bg-gray-200' if url == parsed_url.path else ''
         if url == request.path:
             return 'bg-gray-200'
         return ''
