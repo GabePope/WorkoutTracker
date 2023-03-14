@@ -115,8 +115,8 @@ def get_calendar(person_id):
 
     if htmx:
         return render_template('partials/page/calendar.html',
-                               person=person, selected_date=selected_date, selected_view=selected_view, next_date=next_date, previous_date=previous_date, start_date=start_date, end_date=end_date), 200, {"HX-Trigger": "updatedPeople"}
-    return render_template('calendar.html', person=person, selected_date=selected_date, selected_view=selected_view, next_date=next_date, previous_date=previous_date, start_date=start_date, end_date=end_date), 200, {"HX-Trigger": "updatedPeople"}
+                               person=person, selected_date=selected_date, selected_view=selected_view, next_date=next_date, previous_date=previous_date, start_date=start_date, end_date=end_date)
+    return render_template('calendar.html', person=person, selected_date=selected_date, selected_view=selected_view, next_date=next_date, previous_date=previous_date, start_date=start_date, end_date=end_date)
 
 
 @ app.route("/person/<int:person_id>/workout/<int:workout_id>/modal", methods=['GET'])
@@ -291,9 +291,9 @@ def settings():
 def my_utility_processor():
 
     def is_selected_page(url):
-        if htmx:
-            parsed_url = urlparse(htmx.current_url)
-            return 'bg-gray-200' if url == parsed_url.path else ''
+        # if htmx:
+        #    parsed_url = urlparse(htmx.current_url)
+        #    return 'bg-gray-200' if url == parsed_url.path else ''
         if url == request.path:
             return 'bg-gray-200'
         return ''

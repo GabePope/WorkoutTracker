@@ -87,7 +87,8 @@
                     <div class="flex-1 px-3 bg-white divide-y space-y-1">
                         <div class="space-y-2 pt-2">
                             <a hx-get="{{ url_for('dashboard') }}" hx-push-url="true" hx-target="#container"
-                                class="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group cursor-pointer {{ is_selected_page(url_for('dashboard')) }}">
+                                class="text-base text-gray-900 font-normal rounded-lg flex items-center p-2 hover:bg-gray-100 group cursor-pointer {{ is_selected_page(url_for('dashboard')) }}"
+                                _="on click toggle .bg-gray-200 on me">
                                 <svg class="w-6 h-6 text-gray-500 group-hover:text-gray-900 transition duration-75"
                                     fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
@@ -104,7 +105,8 @@
                         </ul>
                         <div class="space-y-2 pt-2">
                             <a hx-get="{{ url_for('settings') }}" hx-push-url="true" hx-target="#container"
-                                class="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 group transition duration-75 flex items-center p-2 cursor-pointer {{ is_selected_page(url_for('settings')) }}">
+                                class="text-base text-gray-900 font-normal rounded-lg hover:bg-gray-100 group transition duration-75 flex items-center p-2 cursor-pointer {{ is_selected_page(url_for('settings')) }}"
+                                _="on click toggle .bg-gray-200 on me">
                                 <svg class="w-6 h-6 text-gray-500 group-hover:text-gray-900 transition duration-75"
                                     fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"
                                     data-darkreader-inline-fill="" style="--darkreader-inline-fill:currentColor;">
