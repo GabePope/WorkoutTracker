@@ -42,6 +42,7 @@
             Edit
         </a>
         <a hx-delete="{{ url_for('delete_topset', person_id=person_id, workout_id=workout_id, topset_id=topset_id) }}"
+            hx-confirm="Are you sure you wish to delete this topset?"
             class="text-sm font-medium text-cyan-600 hover:bg-gray-100 rounded-lg inline-flex items-center p-2 cursor-pointer">
             Delete
         </a>
