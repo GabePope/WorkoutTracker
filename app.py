@@ -63,7 +63,7 @@ def get_person(person_id):
 
     selected_exercise_ids = [int(i)
                              for i in request.args.getlist('exercise_id')]
-    if not selected_exercise_ids and not htmx:
+    if not selected_exercise_ids and htmx.trigger_name != 'exercise_id':
         selected_exercise_ids = [e['ExerciseId'] for e in person['Exercises']]
 
     person['Workouts'] = [filter_workout_topsets(workout, selected_exercise_ids) for workout in person['Workouts'] if
