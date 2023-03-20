@@ -90,8 +90,9 @@
 
 
                                     <div class="w-full">
-                                        <select id="workout-exercise-select" data-te-select-init
-                                            data-te-select-filter="true" name="exercise_id"
+                                        <select id="workout-exercise-select-{{ workout['WorkoutId'] }}"
+                                            data-te-select-init data-te-select-filter="true" data-te-select-size="lg"
+                                            name="exercise_id"
                                             class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
                                             {% for e in workout['Exercises'] %}
                                             <option value="{{ e['ExerciseId'] }}">{{
@@ -101,7 +102,7 @@
                                         </select>
                                     </div>
                                     <script>
-                                        te.Select.getOrCreateInstance(document.querySelector("#workout-exercise-select"));
+                                        te.Select.getOrCreateInstance(document.querySelector("#workout-exercise-select-{{ workout['WorkoutId'] }}"));
                                     </script>
                                 </div>
                             </div>
@@ -112,7 +113,7 @@
                                     Reps
                                 </label>
                                 <input
-                                    class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                    class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                     id="grid-city" type="number" name="repetitions">
                             </div>
 
@@ -122,7 +123,7 @@
                                     Weight
                                 </label>
                                 <input
-                                    class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                    class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                     id="grid-zip" type="number" name="weight" step="any">
                             </div>
                         </div>

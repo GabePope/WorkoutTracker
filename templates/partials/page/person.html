@@ -34,8 +34,8 @@
                     <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-city">
                         Exercises
                     </label>
-                    <select id="multiSelection" data-te-select-init data-te-select-filter="true" name="exercise_id"
-                        class="bg-gray-50 border border-gray-300 " multiple
+                    <select id="multiSelection" data-te-select-init data-te-select-filter="true"
+                        data-te-select-size="lg" name="exercise_id" class="bg-gray-50 border border-gray-300 " multiple
                         hx-get="{{ url_for('get_person', person_id=person['PersonId']) }}"
                         hx-include="[name='min_date'],[name='max_date']" hx-target="#container" hx-push-url="true">
                         {% for e in person['Exercises'] %}
@@ -64,7 +64,7 @@
                         </svg>
                     </div>
                     <input type="date"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 py-2 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-full"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-full"
                         name="min_date" value="{{ min_date }}"
                         hx-get="{{ url_for('get_person', person_id=person['PersonId']) }}"
                         hx-include="[name='exercise_id'],[name='min_date'],[name='max_date']" hx-target="#container"
@@ -85,7 +85,7 @@
                         </svg>
                     </div>
                     <input type="date"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 py-2 px-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-full"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-full"
                         name="max_date" value="{{ max_date }}"
                         hx-get="{{ url_for('get_person', person_id=person['PersonId']) }}"
                         hx-include="[name='exercise_id'],[name='min_date'],[name='max_date']" hx-target="#container"
