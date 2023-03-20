@@ -69,6 +69,10 @@ def get_person(person_id):
 
     active_exercise_ids = get_exercise_ids_from_workouts(person['Workouts'])
 
+    # Filter out workouts that dont contain any of the selected exercises
+    person['Workouts'] = [workout for workout in person['Workouts'] if
+                          workout['TopSets']]
+
     filtered_exercises = filter(
         lambda e: e['ExerciseId'] in active_exercise_ids, person['Exercises'])
     person['FilteredExercises'] = list(filtered_exercises)
