@@ -62,7 +62,8 @@ def get_person(person_id):
         'max_date'), '%Y-%m-%d') or max_date
 
     selected_exercise_ids = [int(i)
-                             for i in request.args.getlist('exercise_id')] or [e['ExerciseId'] for e in person['Exercises']]
+                             for i in request.args.getlist('exercise_id')]
+    # or [e['ExerciseId'] for e in person['Exercises']]
 
     person['Workouts'] = [filter_workout_topsets(workout, selected_exercise_ids) for workout in person['Workouts'] if
                           workout['StartDate'] <= max_date and workout['StartDate'] >= min_date]
@@ -310,15 +311,18 @@ def my_utility_processor():
                 return element
         return None
 
-    def is_checked(val, checked_vals):
+    def in_list(val, checked_vals, attr='checked'):
         if not checked_vals:
-            return 'checked'
-        return 'checked' if val in checked_vals else ''
+            return attr
+        return attr if val in checked_vals else ''
 
     def strftime(date, format="%b %d %Y"):
         return date.strftime(format)
 
-    return dict(get_list_of_people_and_workout_count=get_list_of_people_and_workout_count, is_selected_page=is_selected_page, get_first_element_from_list_with_matching_attribute=get_first_element_from_list_with_matching_attribute, is_checked=is_checked, strftime=strftime, datetime=datetime, timedelta=timedelta, relativedelta=relativedelta, first_and_last_visible_days_in_month=first_and_last_visible_days_in_month)
+    def list_to_string(list):
+        return [str(i) for i in list]
+
+    return dict(get_list_of_people_and_workout_count=get_list_of_people_and_workout_count, is_selected_page=is_selected_page, get_first_element_from_list_with_matching_attribute=get_first_element_from_list_with_matching_attribute, in_list=in_list, strftime=strftime, datetime=datetime, timedelta=timedelta, relativedelta=relativedelta, first_and_last_visible_days_in_month=first_and_last_visible_days_in_month, list_to_string=list_to_string)
 
 
 if __name__ == '__main__':

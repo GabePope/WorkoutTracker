@@ -26,22 +26,31 @@
         <div class="flex">
             {% set exercise_list = person['FilteredExercises'] %}
 
-            {% for e in person['Exercises'] %}
-            <div class="flex items-center mr-4" hx-get="{{ url_for('get_person', person_id=person['PersonId']) }}"
-                hx-include="[name='exercise_id'],[name='min_date'],[name='max_date']" hx-target="#container"
-                hx-push-url="true">
-                <input {{ is_checked(e['ExerciseId'], selected_exercise_ids) }} type="checkbox" name="exercise_id"
-                    value="{{ e['ExerciseId'] }}"
-                    class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                <label for="inline-checked-checkbox"
-                    class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ e['ExerciseName']
-                    }}</label>
-            </div>
-            {% endfor %}
         </div>
 
-        <div class="flex flex-wrap -mx-3 mb-2 mt-4">
-            <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+        <div class="flex flex-wrap -mx-3 mb-2">
+            <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+                <div class="mb-3 w-full">
+                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-city">
+                        Exercises
+                    </label>
+                    <select id="multiSelection" data-te-select-init name="exercise_id"
+                        class="bg-gray-50 border border-gray-300 " multiple hx-trigger="change"
+                        hx-get="{{ url_for('get_person', person_id=person['PersonId']) }}"
+                        hx-include="[name='min_date'],[name='max_date']" hx-target="#container" hx-push-url="true">
+                        {% for e in person['Exercises'] %}
+                        <option value="{{ e['ExerciseId'] }}" {{ in_list(e['ExerciseId'],
+                            selected_exercise_ids, 'selected' ) }}>{{
+                            e['ExerciseName']
+                            }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <script>
+                    te.Select.getOrCreateInstance(document.querySelector("#multiSelection")).setValue({{ list_to_string(selected_exercise_ids) | safe }});
+                </script>
+            </div>
+            <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-city">
                     Min date
                 </label>
@@ -62,7 +71,7 @@
                         hx-push-url="true" hx-trigger="change">
                 </div>
             </div>
-            <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+            <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-zip">
                     Max date
                 </label>
