@@ -62,8 +62,7 @@ def get_person(person_id):
         'max_date'), '%Y-%m-%d') or max_date
 
     selected_exercise_ids = [int(i)
-                             for i in request.args.getlist('exercise_id')]
-    # or [e['ExerciseId'] for e in person['Exercises']]
+                             for i in request.args.getlist('exercise_id')] or [e['ExerciseId'] for e in person['Exercises']]
 
     person['Workouts'] = [filter_workout_topsets(workout, selected_exercise_ids) for workout in person['Workouts'] if
                           workout['StartDate'] <= max_date and workout['StartDate'] >= min_date]

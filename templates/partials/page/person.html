@@ -34,8 +34,8 @@
                     <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-city">
                         Exercises
                     </label>
-                    <select id="multiSelection" data-te-select-init name="exercise_id"
-                        class="bg-gray-50 border border-gray-300 " multiple hx-trigger="change"
+                    <select id="multiSelection" data-te-select-init data-te-select-filter="true" name="exercise_id"
+                        class="bg-gray-50 border border-gray-300 " multiple
                         hx-get="{{ url_for('get_person', person_id=person['PersonId']) }}"
                         hx-include="[name='min_date'],[name='max_date']" hx-target="#container" hx-push-url="true">
                         {% for e in person['Exercises'] %}
