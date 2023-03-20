@@ -73,21 +73,24 @@ def get_rep_maxes_for_person(person_topsets):
     return rep_maxes_in_exercises
 
 
-def get_people_and_exercise_rep_maxes(topsets):
+def get_people_and_exercise_rep_maxes(topsets, selected_person_ids, selected_exercise_ids, min_date, max_date):
     # Get all unique workout_ids (No duplicates)
-    people_ids = set([t['PersonId'] for t in topsets])
+    people_ids = set([t['PersonId']
+                     for t in topsets])
+    filtered_people_ids = [p for p in people_ids if p in selected_person_ids]
 
     # Group topsets into workouts
     people = []
-    for person_id in people_ids:
+    for person_id in filtered_people_ids:
         workouts_for_person = [
-            t for t in topsets if t['PersonId'] == person_id]
-        people.append({
-            'PersonId': person_id,
-            'PersonName': workouts_for_person[0]['PersonName'],
-            'NumberOfWorkouts': len(list(set([t['WorkoutId'] for t in workouts_for_person if t['WorkoutId'] is not None]))),
-            'Exercises': get_rep_maxes_for_person(workouts_for_person)
-        })
+            t for t in topsets if t['PersonId'] == person_id and t['ExerciseId'] in selected_exercise_ids and t['StartDate'] >= min_date and t['StartDate'] <= max_date]
+        if workouts_for_person:
+            people.append({
+                'PersonId': person_id,
+                'PersonName': workouts_for_person[0]['PersonName'],
+                'NumberOfWorkouts': len(list(set([t['WorkoutId'] for t in workouts_for_person if t['WorkoutId'] is not None]))),
+                'Exercises': get_rep_maxes_for_person(workouts_for_person)
+            })
     return {"People": people, "Stats": get_stats_from_topsets(topsets)}
 
 

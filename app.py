@@ -35,12 +35,32 @@ def response_minify(response):
 @ app.route("/")
 def dashboard():
     all_topsets = db.get_all_topsets()
+
+    exercises = db.get_exercises()
+    people = db.get_people()
+
+    selected_person_ids = [int(i)
+                           for i in request.args.getlist('person_id')]
+    if not selected_person_ids and htmx.trigger_name != 'person_id':
+        selected_person_ids = [p['PersonId'] for p in people]
+
+    selected_exercise_ids = [int(i)
+                             for i in request.args.getlist('exercise_id')]
+    if not selected_exercise_ids and htmx.trigger_name != 'exercise_id':
+        selected_exercise_ids = [e['ExerciseId'] for e in exercises]
+
+    min_date = convert_str_to_date(request.args.get(
+        'min_date'), '%Y-%m-%d') or min([t['StartDate'] for t in all_topsets])
+    max_date = convert_str_to_date(request.args.get(
+        'max_date'), '%Y-%m-%d') or max([t['StartDate'] for t in all_topsets])
+
     people_and_exercise_rep_maxes = get_people_and_exercise_rep_maxes(
-        all_topsets)
+        all_topsets, selected_person_ids, selected_exercise_ids, min_date, max_date)
+
     if htmx:
         return render_template('partials/page/dashboard.html',
-                               model=people_and_exercise_rep_maxes), 200, {"HX-Trigger": "updatedPeople"}
-    return render_template('dashboard.html', model=people_and_exercise_rep_maxes)
+                               model=people_and_exercise_rep_maxes, people=people, exercises=exercises, min_date=min_date, max_date=max_date, selected_person_ids=selected_person_ids, selected_exercise_ids=selected_exercise_ids), 200, {"HX-Trigger": "updatedPeople"}
+    return render_template('dashboard.html', model=people_and_exercise_rep_maxes, people=people, exercises=exercises, min_date=min_date, max_date=max_date, selected_person_ids=selected_person_ids, selected_exercise_ids=selected_exercise_ids)
 
 
 @ app.route("/person/list", methods=['GET'])

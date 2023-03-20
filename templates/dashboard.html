@@ -3,6 +3,7 @@
 {% block content %}
 
 {{ render_partial('partials/page/dashboard.html',
-model=model) }}
+model=model, people=people, exercises=exercises, min_date=min_date, max_date=max_date,
+selected_person_ids=selected_person_ids, selected_exercise_ids=selected_exercise_ids) }}
 
 {% endblock %}

@@ -1,3 +1,85 @@
+<div class="bg-white shadow rounded-lg p-4 w-full mb-4 flex flex-wrap">
+    <div class="w-full lg:w-1/4 sm:w-full px-3 mb-6 md:mb-0">
+        <div class="flex flex-wrap -mx-3">
+            <div class="w-full px-3">
+                <div class="mb-3 w-full"><label
+                        class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                        for="grid-city">People</label>
+                    <select class="bg-gray-50 border border-gray-300 hidden" data-te-select-filter="true"
+                        data-te-select-init="" data-te-select-size="lg" hx-get="{{ url_for('dashboard') }}"
+                        hx-include="[name='min_date'],[name='max_date'],[name='exercise_id']" hx-push-url="true"
+                        hx-target="#container" id="dashboard-people-multi-select" multiple="" name="person_id">
+                        {% for p in people %}
+                        <option value="{{ p['PersonId'] }}">{{
+                            p['Name']
+                            }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <script>te.Select.getOrCreateInstance(document.querySelector("#dashboard-people-multi-select")).setValue({{ list_to_string(selected_person_ids) | safe}})</script>
+        </div>
+    </div>
+    <div class="w-full lg:w-1/4 sm:w-full px-3 mb-6 md:mb-0">
+        <div class="flex flex-wrap -mx-3">
+            <div class="w-full px-3">
+                <div class="mb-3 w-full"><label
+                        class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                        for="grid-city">Exercises</label>
+                    <select class="bg-gray-50 border border-gray-300 hidden" data-te-select-filter="true"
+                        data-te-select-init="" data-te-select-size="lg" hx-get="{{ url_for('dashboard') }}"
+                        hx-include="[name='min_date'],[name='max_date'],[name='person_id']" hx-push-url="true"
+                        hx-target="#container" id="dashboard-exercise-multi-select" multiple="" name="exercise_id">
+                        {% for e in exercises %}
+                        <option value="{{ e['ExerciseId'] }}">{{
+                            e['Name']
+                            }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <script>te.Select.getOrCreateInstance(document.querySelector("#dashboard-exercise-multi-select")).setValue({{ list_to_string(selected_exercise_ids) | safe}})</script>
+        </div>
+    </div>
+    <div class="w-full lg:w-1/4 sm:w-full  px-3 mb-6 md:mb-0"><label
+            class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-city">Min
+            date</label>
+        <div class="relative">
+            <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"><svg
+                    class="w-5 h-5 text-gray-500 dark:text-gray-400" viewBox="0 0 20 20" aria-hidden="true"
+                    fill="currentColor" xmlns="http://www.w3.org/2000/svg" data-darkreader-inline-fill=""
+                    style="--darkreader-inline-fill:currentColor;">
+                    <path
+                        d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                        clip-rule="evenodd" fill-rule="evenodd"></path>
+                </svg></div><input
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-full"
+                hx-get="{{ url_for('dashboard') }}"
+                hx-include="[name='min_date'],[name='max_date'],[name='person_id'],[name='exercise_id']"
+                hx-push-url="true" hx-target="#container" hx-trigger="change" name="min_date" type="date"
+                value="{{ min_date }}">
+        </div>
+    </div>
+    <div class="w-full lg:w-1/4 sm:w-full  px-3 mb-6 md:mb-0"><label
+            class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-zip">Max
+            date</label>
+        <div class="relative">
+            <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"><svg
+                    class="w-5 h-5 text-gray-500 dark:text-gray-400" viewBox="0 0 20 20" aria-hidden="true"
+                    fill="currentColor" xmlns="http://www.w3.org/2000/svg" data-darkreader-inline-fill=""
+                    style="--darkreader-inline-fill:currentColor;">
+                    <path
+                        d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                        clip-rule="evenodd" fill-rule="evenodd"></path>
+                </svg></div><input
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-full"
+                hx-get="{{ url_for('dashboard') }}" hx-push-url="true" hx-target="#container" hx-trigger="change"
+                name="max_date" type="date" value="{{ max_date }}">
+        </div>
+    </div>
+</div>
+
+
 <div class="w-full grid grid-cols-1 xl:grid-cols-3 2xl:grid-cols-3 gap-4">
     {% for p in model['People'] %}
     <div class="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
