@@ -3,15 +3,20 @@
         {% if is_edit|default(false, true) == false %}
         {{ exercise_name }}
         {% else %}
-        <select
-            class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-            name="exercise_id">
-            {% for exercise in exercises|default([], true) %}
-            <option value="{{ exercise['ExerciseId'] }}" {% if exercise['Name']==exercise_name %} selected {% endif %}>
-                {{exercise['Name']}}
-            </option>
-            {% endfor %}
-        </select>
+        <div class="w-full">
+            <select id="topset-exercise-select-{{ topset_id }}" data-te-select-init data-te-select-filter="true"
+                data-te-select-size="lg" name="exercise_id"
+                class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                {% for exercise in exercises|default([], true) %}
+                <option value="{{ exercise['ExerciseId'] }}">{{
+                    exercise['Name']
+                    }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <script>
+            te.Select.getOrCreateInstance(document.querySelector("#topset-exercise-select-{{ topset_id }}")).setValue("{{ exercise_id }}");
+        </script>
         {% endif %}
     </td>
     <td class="p-4 whitespace-nowrap text-sm font-semibold text-gray-900">
