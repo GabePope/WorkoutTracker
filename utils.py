@@ -102,7 +102,8 @@ def get_stats_from_topsets(topsets):
     workout_start_dates = [t['StartDate']
                            for t in topsets if t['StartDate'] is not None]
 
-    stats = [{"Text": "Total Workouts", "Value": workout_count}]
+    stats = [{"Text": "Total Workouts", "Value": workout_count},
+             {"Text": "Total Sets", "Value": len(topsets)}]
     if people_count > 1:
         stats.append({"Text": "People tracked", "Value": people_count})
     if workout_count > 0:
@@ -115,11 +116,15 @@ def get_stats_from_topsets(topsets):
             stats.append({"Text": "Days Since Last Workout",
                           "Value": (
                               date.today() - last_workout_date).days})
+            average_number_sets_per_workout = round(
+                len(topsets) / workout_count, 1)
+            stats.append({"Text": "Average sets per workout",
+                         "Value": average_number_sets_per_workout})
 
             training_duration = last_workout_date - first_workout_date
             if training_duration > timedelta(days=0):
                 average_workouts_per_week = round(
-                    workout_count / (training_duration.days / 7), 2)
+                    workout_count / (training_duration.days / 7), 1)
                 stats.append({"Text": "Average Workouts Per Week",
                               "Value": average_workouts_per_week})
 
