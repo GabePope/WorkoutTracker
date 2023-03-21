@@ -253,3 +253,25 @@ class DataBase():
             LEFT JOIN Exercise E ON T.exercise_id=E.exercise_id""")
 
         return all_topsets
+
+    def get_tags_for_person(self, person_id):
+        return self.execute("""
+            SELECT
+                T.tag_id AS "TagId",
+                T.person_id AS "PersonId",
+                T.name AS "TagName",
+                T.filter AS "TagFilter"
+            FROM
+                Tag T
+            WHERE
+                T.person_id = %s
+            ORDER BY
+                T.name""", [person_id])
+
+    def add_tag_for_person(self, person_id, tag_name, tag_filter):
+        self.execute('INSERT INTO Tag (person_id, name, filter) VALUES (%s, %s, %s)', [
+            person_id, tag_name, tag_filter], commit=True)
+
+    def delete_tag_for_person(self, person_id, tag_id):
+        self.execute('DELETE FROM Tag WHERE person_id=%s AND tag_id=%s', [
+            person_id, tag_id], commit=True)

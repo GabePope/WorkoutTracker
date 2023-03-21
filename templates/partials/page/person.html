@@ -28,9 +28,9 @@
 
         </div>
 
-        <div class="flex flex-wrap -mx-3 mb-2">
+        <div class="flex flex-wrap -mx-3 mb-1">
             <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-                <div class="mb-3 w-full">
+                <div class="mb-1 w-full">
                     <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-city">
                         Exercises
                     </label>
@@ -94,7 +94,83 @@
             </div>
         </div>
 
-        <div class="flex flex-col mt-8">
+        <div class="flex w-full flex-wrap justify-center">
+
+            {% for t in tags %}
+            <div data-te-chip-init data-te-ripple-init
+                class="[word-wrap: break-word] my-[5px] mr-4 flex h-[32px] cursor-pointer items-center justify-between rounded-[16px] border border-[#9fa6b2] bg-[#eceff1] bg-[transparent] py-0 px-[12px] text-[13px] font-normal normal-case leading-loose text-[#4f4f4f] shadow-none transition-[opacity] duration-300 ease-linear hover:border-[#9fa6b2] hover:!shadow-none dark:text-neutral-200"
+                data-te-ripple-color="dark">
+                <span hx-get="{{ url_for('goto_tag', person_id=person['PersonId']) }}"
+                    hx-vals='{"filter": "{{ t["TagFilter"] }}"}' hx-target="#container" hx-push-url="true">{{
+                    t['TagName'] }}</span>
+
+
+                <span
+                    class="float-right w-4 cursor-pointer pl-[8px] text-[16px] text-[#afafaf] opacity-[.53] transition-all duration-200 ease-in-out hover:text-[#8b8b8b] dark:text-neutral-400 dark:hover:text-neutral-100"
+                    hx-get="{{ url_for('delete_tag', person_id=person['PersonId'], tag_id=t['TagId']) }}"
+                    hx-vals='{"filter": "{{ t["TagFilter"] }}"}' hx-target="#container" hx-push-url="true" _="on htmx:confirm(issueRequest)
+             halt the event
+             call Swal.fire({title: 'Confirm', text:'Are you sure you want to delete {{ t['TagName'] }} tag?'})
+             if result.isConfirmed issueRequest()">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="h-3 w-3">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </span>
+            </div>
+            {% endfor %}
+
+            <div class="flex justify-center space-x-2">
+                <div>
+                    <button type="button" data-te-ripple-init data-te-ripple-color="light"
+                        class="inline-block rounded-full bg-primary p-2 uppercase leading-normal text-white shadow-md transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
+                        id="add-tag">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                        </svg>
+
+                    </button>
+                </div>
+            </div>
+        </div>
+        <script>
+            document.querySelector('#add-tag').addEventListener('click', function () {
+                Swal.fire({
+                    title: 'Create a tag',
+                    input: 'text',
+                    inputAttributes: {
+                        autocapitalize: 'off'
+                    },
+                    showCancelButton: true,
+                    confirmButtonText: 'Add',
+                    showLoaderOnConfirm: true,
+                    preConfirm: (tag) => {
+                        return fetch(`{{ url_for('add_tag', person_id=person['PersonId']) }}?tag=${encodeURIComponent(tag)}&filter=${encodeURIComponent(window.location.search)}`)
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error(response.statusText)
+                                }
+                                return response.text()
+                            })
+                            .catch(error => {
+                                Swal.showValidationMessage(
+                                    `Request failed: ${error}`
+                                )
+                            })
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        htmx.ajax('GET', `{{ url_for('get_person', person_id=person['PersonId']) + '?' + request.query_string.decode() }}`, '#container')
+                    }
+                })
+
+            })
+        </script>
+
+        <div class="flex flex-col mt-3">
             <div class="overflow-x-auto rounded-lg">
                 <div class="align-middle inline-block min-w-full">
                     <div class="shadow overflow-hidden sm:rounded-lg">

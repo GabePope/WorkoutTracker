@@ -8,7 +8,7 @@ from db import DataBase
 from utils import get_people_and_exercise_rep_maxes, convert_str_to_date, get_earliest_and_latest_workout_date, filter_workout_topsets, get_exercise_ids_from_workouts, first_and_last_visible_days_in_month
 from flask_htmx import HTMX
 import minify_html
-from urllib.parse import urlparse
+from urllib.parse import urlparse, unquote, quote
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
@@ -73,6 +73,7 @@ def get_person_list():
 @ validate_person
 def get_person(person_id):
     person = db.get_person(person_id)
+    tags = db.get_tags_for_person(person_id)
 
     (min_date, max_date) = get_earliest_and_latest_workout_date(person)
 
@@ -100,9 +101,9 @@ def get_person(person_id):
     person['FilteredExercises'] = list(filtered_exercises)
     if htmx:
         return render_template('partials/page/person.html',
-                               person=person, selected_exercise_ids=active_exercise_ids, max_date=max_date, min_date=min_date), 200, {"HX-Trigger": "updatedPeople"}
+                               person=person, selected_exercise_ids=active_exercise_ids, max_date=max_date, min_date=min_date, tags=tags), 200, {"HX-Trigger": "updatedPeople"}
 
-    return render_template('person.html', person=person, selected_exercise_ids=active_exercise_ids, max_date=max_date, min_date=min_date), 200, {"HX-Trigger": "updatedPeople"}
+    return render_template('person.html', person=person, selected_exercise_ids=active_exercise_ids, max_date=max_date, min_date=min_date, tags=tags), 200, {"HX-Trigger": "updatedPeople"}
 
 
 @ app.route("/person/<int:person_id>/calendar")
@@ -313,6 +314,30 @@ def settings():
     return render_template('settings.html', people=people, exercises=exercises)
 
 
+@ app.route("/person/<int:person_id>/tag/redirect", methods=['GET'])
+@ validate_person
+def goto_tag(person_id):
+    tag_filter = request.args.get('filter')
+    return redirect(url_for('get_person', person_id=person_id) + tag_filter)
+
+
+@ app.route("/person/<int:person_id>/tag/add", methods=['GET'])
+@ validate_person
+def add_tag(person_id):
+    tag = request.args.get('tag')
+    tag_filter = request.args.get('filter')
+    db.add_tag_for_person(person_id, tag, tag_filter)
+    return ""
+
+
+@ app.route("/person/<int:person_id>/tag/<int:tag_id>/delete", methods=['GET'])
+@ validate_person
+def delete_tag(person_id, tag_id):
+    tag_filter = request.args.get("filter")
+    db.delete_tag_for_person(person_id=person_id, tag_id=tag_id)
+    return redirect(url_for('get_person', person_id=person_id) + tag_filter)
+
+
 @ app.context_processor
 def my_utility_processor():
 
@@ -347,7 +372,7 @@ def my_utility_processor():
     def list_to_string(list):
         return [str(i) for i in list]
 
-    return dict(get_list_of_people_and_workout_count=get_list_of_people_and_workout_count, is_selected_page=is_selected_page, get_first_element_from_list_with_matching_attribute=get_first_element_from_list_with_matching_attribute, in_list=in_list, strftime=strftime, datetime=datetime, timedelta=timedelta, relativedelta=relativedelta, first_and_last_visible_days_in_month=first_and_last_visible_days_in_month, list_to_string=list_to_string)
+    return dict(get_list_of_people_and_workout_count=get_list_of_people_and_workout_count, is_selected_page=is_selected_page, get_first_element_from_list_with_matching_attribute=get_first_element_from_list_with_matching_attribute, in_list=in_list, strftime=strftime, datetime=datetime, timedelta=timedelta, relativedelta=relativedelta, first_and_last_visible_days_in_month=first_and_last_visible_days_in_month, list_to_string=list_to_string, quote=quote)
 
 
 if __name__ == '__main__':
