@@ -130,7 +130,7 @@
         {% set last_day_of_month = date + relativedelta(day=31) %}
         {% set (first_day, last_day) = first_and_last_visible_days_in_month(first_day_of_month, last_day_of_month)
         %}
-        <div class="w-auto mx-3 my-3 border-solid border-grey-light rounded border shadow-sm">
+        <div class="w-96 mx-3 my-3 border-solid border-grey-light rounded border shadow-sm">
             <div class="bg-grey-lighter px-2 py-2 border-solid border-grey-light border-b text-center cursor-pointer"
                 hx-get="{{ url_for('get_calendar', person_id=person['PersonId']) }}" hx-target="#container"
                 hx-vals='{"date": "{{ first_day_of_month }}", "view": "month"}' hx-push-url="true">{{
