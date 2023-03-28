@@ -11,14 +11,19 @@
                 <span class="text-base font-normal text-gray-500">List of workouts</span>
             </div>
             <div>
-                <select
-                    class="block appearance-none w-40 bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 mr-5"
-                    name="view" hx-get="{{ url_for('get_calendar', person_id=person['PersonId']) }}"
-                    hx-target="#container" hx-push-url="true">
-                    <option value="month">Month</option>
-                    <option value="year">Year</option>
-                    <option value="all" selected>All</option>
-                </select>
+                <div>
+                    <select id="workout-view-picker" data-te-select-init data-te-select-filter="true"
+                        data-te-select-size="lg" name="view"
+                        hx-get="{{ url_for('get_calendar', person_id=person['PersonId']) }}" hx-target="#container"
+                        hx-push-url="true">
+                        <option value="month">Month</option>
+                        <option value="year">Year</option>
+                        <option value="all" selected>All</option>
+                    </select>
+                    <script>
+                        te.Select.getOrCreateInstance(document.querySelector("#workout-view-picker")).setValue("all");
+                    </script>
+                </div>
             </div>
         </div>
 
