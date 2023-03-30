@@ -3,180 +3,176 @@
     id="refreshViewElement"></a>
 
 <div class="flex flex-grow flex-col bg-white sm:rounded shadow overflow-hidden">
-    <div class="">
-        <div class="flex items-center justify-between pt-2 pb-2">
-            <div class="flex">
-                <div class="flex ml-6">
-                    <button hx-get="{{ url_for('get_calendar', person_id=person['PersonId']) }}" hx-target="#container"
-                        hx-vals='{"date": "{{ previous_date }}"}' hx-include="[name='view']" hx-push-url="true">
-                        <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor" data-darkreader-inline-stroke=""
-                            style="--darkreader-inline-stroke:currentColor;">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7">
-                            </path>
-                        </svg>
-                    </button>
-                    <button hx-get="{{ url_for('get_calendar', person_id=person['PersonId']) }}" hx-target="#container"
-                        hx-vals='{"date": "{{ next_date }}"}' hx-include="[name='view']" hx-push-url="true">
-                        <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor" data-darkreader-inline-stroke=""
-                            style="--darkreader-inline-stroke:currentColor;">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
-                            </path>
-                        </svg>
-                    </button>
-                </div>
-
-                {% if selected_view == 'month' %}
-                <h2 class="ml-2 text-xl font-bold leading-none">{{ strftime(selected_date, '%B, %Y') }}</h2>
-                {% else %}
-                <h2 class="ml-2 text-xl font-bold leading-none">{{ strftime(selected_date, '%Y') }}</h2>
-                {% endif %}
-                <span
-                    class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-5">{{
-                    person['PersonName']}}</span>
-            </div>
-
-            <div>
-                <select id="workout-view-picker" data-te-select-init data-te-select-filter="true"
-                    data-te-select-size="lg" name="view"
-                    hx-get="{{ url_for('get_calendar', person_id=person['PersonId']) }}" hx-target="#container"
-                    hx-vals='{"date": "{{ selected_date }}"}' hx-push-url="true">
-                    <option value="month" {% if selected_view=='month' %}selected{% endif %}>Month</option>
-                    <option value="year" {% if selected_view=='year' %}selected{% endif %}>Year</option>
-                    <option value="all">All</option>
-                </select>
-                <script>
-                    te.Select.getOrCreateInstance(document.querySelector("#workout-view-picker")).setValue({{ selected_view | safe }});
-                </script>
-            </div>
-
-        </div>
-
-    </div>
-</div>
-{% if selected_view == 'month' %}
-<div class="flex flex-col px-2 py-2 -mb-px">
-    <div class="grid grid-cols-7 pl-2 pr-2">
-
-        <div class="p-2 h-10 text-center font-bold">
-            <span class="xl:block lg:block md:block sm:block hidden">Sunday</span>
-            <span class="xl:hidden lg:hidden md:hidden sm:hidden block">Sun</span>
-        </div>
-        <div class="p-2 h-10 text-center font-bold">
-            <span class="xl:block lg:block md:block sm:block hidden">Monday</span>
-            <span class="xl:hidden lg:hidden md:hidden sm:hidden block">Mon</span>
-        </div>
-        <div class="p-2 h-10 text-center font-bold">
-            <span class="xl:block lg:block md:block sm:block hidden">Tuesday</span>
-            <span class="xl:hidden lg:hidden md:hidden sm:hidden block">Tue</span>
-        </div>
-        <div class="p-2 h-10 text-center font-bold">
-            <span class="xl:block lg:block md:block sm:block hidden">Wednesday</span>
-            <span class="xl:hidden lg:hidden md:hidden sm:hidden block">Wed</span>
-        </div>
-        <div class="p-2 h-10 text-center font-bold">
-            <span class="xl:block lg:block md:block sm:block hidden">Thursday</span>
-            <span class="xl:hidden lg:hidden md:hidden sm:hidden block">Thu</span>
-        </div>
-        <div class="p-2 h-10 text-center font-bold">
-            <span class="xl:block lg:block md:block sm:block hidden">Friday</span>
-            <span class="xl:hidden lg:hidden md:hidden sm:hidden block">Fri</span>
-        </div>
-        <div class="p-2 h-10 text-center font-bold">
-            <span class="xl:block lg:block md:block sm:block hidden">Saturday</span>
-            <span class="xl:hidden lg:hidden md:hidden sm:hidden block">Sat</span>
-        </div>
-    </div>
-
-    <div class="grid grid-cols-7 overflow-hidden flex-1 pl-2 pr-2 w-full">
-
-        {% for i in range((end_date-start_date).days + 1) %}
-        {% set date = start_date + timedelta(days=i) %}
-        {% set workout =
-        get_first_element_from_list_with_matching_attribute(person['Workouts'],
-        'StartDate',
-        date) %}
-        <div class="{% if date == datetime.today().date() %}rounded-md border-4 border-green-50{% endif %} border flex flex-col h-50 sm:h-40 md:h-30 lg:h-30 mx-auto mx-auto overflow-hidden w-full pt-2 pl-1 cursor-pointer {% if selected_date.month != date.month %}bg-gray-100{% endif %}"
-            {% if workout %}
-            hx-get="{{ url_for('get_workout_modal', person_id=person['PersonId'], workout_id=workout['WorkoutId']) }}"
-            hx-target='body' hx-swap='beforeend' {% endif %}>
-            <div class="top h-5 w-full">
-                <span class="text-gray-500 font-semibold">{{ date.day }}</span>
-            </div>
-            <div class="bottom flex-grow py-1 w-full">
-                {% if workout['TopSets']|length > 0 %}
-                {% for topset in workout['TopSets'] %}
-                <button
-                    class="flex flex-col xl:flex-row items-start lg:items-center flex-shrink-0 px-0 sm:px-0.5 md:px-0.5 lg:px-0.5 text-xs">
-                    <span class="ml-0 sm:ml-0.5 md:ml-2 lg:ml-2 font-medium leading-none truncate">{{
-                        topset['ExerciseName'] }}</span>
-                    <span class="ml-0 sm:ml-0.5 md:ml-2 lg:ml-2 font-light leading-none">{{ topset['Repetitions'] }} x
-                        {{
-                        topset['Weight']
-                        }}kg</span>
+    <div class="flex items-center justify-between pt-2 pb-2">
+        <div class="flex">
+            <div class="flex ml-6">
+                <button hx-get="{{ url_for('get_calendar', person_id=person['PersonId']) }}" hx-target="#container"
+                    hx-vals='{"date": "{{ previous_date }}"}' hx-include="[name='view']" hx-push-url="true">
+                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" data-darkreader-inline-stroke=""
+                        style="--darkreader-inline-stroke:currentColor;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7">
+                        </path>
+                    </svg>
                 </button>
-                {% endfor %}
-                {% endif %}
+                <button hx-get="{{ url_for('get_calendar', person_id=person['PersonId']) }}" hx-target="#container"
+                    hx-vals='{"date": "{{ next_date }}"}' hx-include="[name='view']" hx-push-url="true">
+                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" data-darkreader-inline-stroke=""
+                        style="--darkreader-inline-stroke:currentColor;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+
+            {% if selected_view == 'month' %}
+            <h2 class="ml-2 text-xl font-bold leading-none">{{ strftime(selected_date, '%B, %Y') }}</h2>
+            {% else %}
+            <h2 class="ml-2 text-xl font-bold leading-none">{{ strftime(selected_date, '%Y') }}</h2>
+            {% endif %}
+            <span
+                class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-5">{{
+                person['PersonName']}}</span>
+        </div>
+
+        <div class="mr-4">
+            <select id="workout-view-picker" data-te-select-init data-te-select-filter="true" data-te-select-size="lg"
+                name="view" hx-get="{{ url_for('get_calendar', person_id=person['PersonId']) }}" hx-target="#container"
+                hx-vals='{"date": "{{ selected_date }}"}' hx-push-url="true">
+                <option value="month" {% if selected_view=='month' %}selected{% endif %}>Month</option>
+                <option value="year" {% if selected_view=='year' %}selected{% endif %}>Year</option>
+                <option value="all">All</option>
+            </select>
+            <script>
+                te.Select.getOrCreateInstance(document.querySelector("#workout-view-picker")).setValue("{{ selected_view | safe }}");
+            </script>
+        </div>
+    </div>
+
+    {% if selected_view == 'month' %}
+    <div class="flex flex-col px-2 py-2 -mb-px">
+        <div class="grid grid-cols-7 pl-2 pr-2">
+
+            <div class="p-2 h-10 text-center font-bold">
+                <span class="xl:block lg:block md:block sm:block hidden">Sunday</span>
+                <span class="xl:hidden lg:hidden md:hidden sm:hidden block">Sun</span>
+            </div>
+            <div class="p-2 h-10 text-center font-bold">
+                <span class="xl:block lg:block md:block sm:block hidden">Monday</span>
+                <span class="xl:hidden lg:hidden md:hidden sm:hidden block">Mon</span>
+            </div>
+            <div class="p-2 h-10 text-center font-bold">
+                <span class="xl:block lg:block md:block sm:block hidden">Tuesday</span>
+                <span class="xl:hidden lg:hidden md:hidden sm:hidden block">Tue</span>
+            </div>
+            <div class="p-2 h-10 text-center font-bold">
+                <span class="xl:block lg:block md:block sm:block hidden">Wednesday</span>
+                <span class="xl:hidden lg:hidden md:hidden sm:hidden block">Wed</span>
+            </div>
+            <div class="p-2 h-10 text-center font-bold">
+                <span class="xl:block lg:block md:block sm:block hidden">Thursday</span>
+                <span class="xl:hidden lg:hidden md:hidden sm:hidden block">Thu</span>
+            </div>
+            <div class="p-2 h-10 text-center font-bold">
+                <span class="xl:block lg:block md:block sm:block hidden">Friday</span>
+                <span class="xl:hidden lg:hidden md:hidden sm:hidden block">Fri</span>
+            </div>
+            <div class="p-2 h-10 text-center font-bold">
+                <span class="xl:block lg:block md:block sm:block hidden">Saturday</span>
+                <span class="xl:hidden lg:hidden md:hidden sm:hidden block">Sat</span>
             </div>
         </div>
-        {% endfor %}
 
-    </div>
-</div>
-{% elif selected_view == 'year'%}
-<div class="flex px-2 py-2 -mb-px">
+        <div class="grid grid-cols-7 overflow-hidden flex-1 pl-2 pr-2 w-full">
 
-    <div class="flex flex-wrap bg-white overflow-hidden">
-        {% for i in range(12) %}
-        {% set date = start_date + relativedelta(months=i) %}
-        {% set first_day_of_month = date.replace(day=1) %}
-        {% set last_day_of_month = date + relativedelta(day=31) %}
-        {% set (first_day, last_day) = first_and_last_visible_days_in_month(first_day_of_month, last_day_of_month)
-        %}
-        <div class="w-96 mx-3 my-3 border-solid border-grey-light rounded border shadow-sm">
-            <div class="bg-grey-lighter px-2 py-2 border-solid border-grey-light border-b text-center cursor-pointer"
-                hx-get="{{ url_for('get_calendar', person_id=person['PersonId']) }}" hx-target="#container"
-                hx-vals='{"date": "{{ first_day_of_month }}", "view": "month"}' hx-push-url="true">{{
-                strftime(first_day_of_month, '%B %Y') }}
-            </div>
-            <div class="">
-                <div class="grid grid-cols-7 border-b font-semibold">
-                    <div class="py-3 px-4">S</div>
-                    <div class="py-3 px-4">M</div>
-                    <div class="py-3 px-4">T</div>
-                    <div class="py-3 px-4">W</div>
-                    <div class="py-3 px-4">T</div>
-                    <div class="py-3 px-4">F</div>
-                    <div class="py-3 px-4">S</div>
+            {% for i in range((end_date-start_date).days + 1) %}
+            {% set date = start_date + timedelta(days=i) %}
+            {% set workout =
+            get_first_element_from_list_with_matching_attribute(person['Workouts'],
+            'StartDate',
+            date) %}
+            <div class="{% if date == datetime.today().date() %}rounded-md border-4 border-green-50{% endif %} border flex flex-col h-50 sm:h-40 md:h-30 lg:h-30 mx-auto mx-auto overflow-hidden w-full pt-2 pl-1 cursor-pointer {% if selected_date.month != date.month %}bg-gray-100{% endif %}"
+                {% if workout %}
+                hx-get="{{ url_for('get_workout_modal', person_id=person['PersonId'], workout_id=workout['WorkoutId']) }}"
+                hx-target='body' hx-swap='beforeend' {% endif %}>
+                <div class="top h-5 w-full">
+                    <span class="text-gray-500 font-semibold">{{ date.day }}</span>
                 </div>
-
-                <div class="grid grid-cols-7 overflow-hidden flex-1 pl-2 pr-2 w-full">
-                    {% for i in range((last_day-first_day).days + 1) %}
-                    {% set day_date = first_day + timedelta(days=i) %}
-                    {% set workout =
-                    get_first_element_from_list_with_matching_attribute(person['Workouts'],
-                    'StartDate',
-                    day_date) %}
-                    {% set is_in_month = day_date.month == first_day_of_month.month%}
-                    <div class="{% if day_date == datetime.today().date() and is_in_month %}rounded-md border-4 border-green-50 border{% endif %} py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer rounded-md {% if workout and is_in_month %}bg-green-100{% endif %}"
-                        {% if workout %}
-                        hx-get="{{ url_for('get_workout_modal', person_id=person['PersonId'], workout_id=workout['WorkoutId']) }}"
-                        hx-target='body' hx-swap='beforeend' {% endif %}>
-                        {% if is_in_month %}
-                        {{ day_date.day }} {% endif %}</div>
+                <div class="bottom flex-grow py-1 w-full">
+                    {% if workout['TopSets']|length > 0 %}
+                    {% for topset in workout['TopSets'] %}
+                    <button
+                        class="flex flex-col xl:flex-row items-start lg:items-center flex-shrink-0 px-0 sm:px-0.5 md:px-0.5 lg:px-0.5 text-xs">
+                        <span class="ml-0 sm:ml-0.5 md:ml-2 lg:ml-2 font-medium leading-none truncate">{{
+                            topset['ExerciseName'] }}</span>
+                        <span class="ml-0 sm:ml-0.5 md:ml-2 lg:ml-2 font-light leading-none">{{ topset['Repetitions'] }}
+                            x
+                            {{
+                            topset['Weight']
+                            }}kg</span>
+                    </button>
                     {% endfor %}
+                    {% endif %}
                 </div>
             </div>
+            {% endfor %}
+
         </div>
-
-        {% endfor %}
-
     </div>
-</div>
-{% endif %}
-</div>
+    {% elif selected_view == 'year'%}
+    <div class="flex px-2 py-2 -mb-px">
 
+        <div class="flex flex-wrap bg-white overflow-hidden">
+            {% for i in range(12) %}
+            {% set date = start_date + relativedelta(months=i) %}
+            {% set first_day_of_month = date.replace(day=1) %}
+            {% set last_day_of_month = date + relativedelta(day=31) %}
+            {% set (first_day, last_day) = first_and_last_visible_days_in_month(first_day_of_month, last_day_of_month)
+            %}
+            <div class="w-96 mx-3 my-3 border-solid border-grey-light rounded border shadow-sm">
+                <div class="bg-grey-lighter px-2 py-2 border-solid border-grey-light border-b text-center cursor-pointer"
+                    hx-get="{{ url_for('get_calendar', person_id=person['PersonId']) }}" hx-target="#container"
+                    hx-vals='{"date": "{{ first_day_of_month }}", "view": "month"}' hx-push-url="true">{{
+                    strftime(first_day_of_month, '%B %Y') }}
+                </div>
+                <div class="">
+                    <div class="grid grid-cols-7 border-b font-semibold">
+                        <div class="py-3 px-4">S</div>
+                        <div class="py-3 px-4">M</div>
+                        <div class="py-3 px-4">T</div>
+                        <div class="py-3 px-4">W</div>
+                        <div class="py-3 px-4">T</div>
+                        <div class="py-3 px-4">F</div>
+                        <div class="py-3 px-4">S</div>
+                    </div>
+
+                    <div class="grid grid-cols-7 overflow-hidden flex-1 pl-2 pr-2 w-full">
+                        {% for i in range((last_day-first_day).days + 1) %}
+                        {% set day_date = first_day + timedelta(days=i) %}
+                        {% set workout =
+                        get_first_element_from_list_with_matching_attribute(person['Workouts'],
+                        'StartDate',
+                        day_date) %}
+                        {% set is_in_month = day_date.month == first_day_of_month.month%}
+                        <div class="{% if day_date == datetime.today().date() and is_in_month %}rounded-md border-4 border-green-50 border{% endif %} py-3 px-4 hover:bg-blue hover:text-white text-center cursor-pointer rounded-md {% if workout and is_in_month %}bg-green-100{% endif %}"
+                            {% if workout %}
+                            hx-get="{{ url_for('get_workout_modal', person_id=person['PersonId'], workout_id=workout['WorkoutId']) }}"
+                            hx-target='body' hx-swap='beforeend' {% endif %}>
+                            {% if is_in_month %}
+                            {{ day_date.day }} {% endif %}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            {% endfor %}
+
+        </div>
+    </div>
+    {% endif %}
+</div>
+</div>
 {{ render_partial('partials/stats.html', stats=person['Stats']) }}
 
 <button
